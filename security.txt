@@ -1,0 +1,19 @@
+Contact: mailto:vophuvinh15012007@gmail.com
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: vi, en
+Canonical: https://fortress07.github.io/profile/security.txt
+
+# -----BEGIN FORTRESS FLAG-----
+# U2FsdGVkX1+yUV8A/m/uwE5mbxOdObsYTsnQ+ZQ3H6c+xhzmuqkt9WVWJsoHcn/K
+# l4ACiP1g45GvLa3Kx7cpbA==
+# -----END FORTRESS FLAG-----
+#
+# aes-256-cbc / pbkdf2 / 100000 iterations
+#
+# Khoá là ba con số đã mở ba cánh cửa ngoài đời thật, xếp theo thứ tự
+# thế giới biết tới chúng, nối lại theo cách một mã CVE nối các phần
+# của chính nó.
+#
+# The key is the three numbers that opened three doors out in the real
+# world, in the order the world learned of them, joined the way a CVE
+# identifier joins its own parts.
