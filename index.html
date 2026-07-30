@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fortress - Võ Phú Vinh | Security Researcher</title>
+<meta name="description" id="metaDesc" content="Võ Phú Vinh (Fortress) - sinh viên An toàn thông tin HCMUTE, security researcher với nhiều CVE được ghi nhận.">
+<meta name="theme-color" content="#0a0709">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%B0%3C/text%3E%3C/svg%3E">
+<link rel="canonical" href="https://fortress07.github.io/profile/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Fortress - Võ Phú Vinh | Security Researcher">
+<meta property="og:description" content="Sinh viên An toàn thông tin HCMUTE - vulnerability research & responsible disclosure, với nhiều CVE được ghi nhận.">
+<meta property="og:url" content="https://fortress07.github.io/profile/">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0709;
+    --surface:rgba(255,255,255,.032);
+    --surface-2:rgba(255,255,255,.055);
+    --line:rgba(255,255,255,.085);
+    --line-soft:rgba(255,255,255,.05);
+    --text:#ece7e9;
+    --text-dim:#c3bbc0;
+    --muted:#938a90;
+    --red:#ff3b5c;
+    --red-soft:#ff8095;
+    --orange:#ff7a45;
+    --gold:#f5b544;
+    --green:#4ade80;
+    --grad:linear-gradient(120deg,#ff3b5c 0%,#ff6b47 100%);
+    --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+    --nav-h:64px;
+    --ease:cubic-bezier(.22,.9,.3,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body{
+    font-family:'Be Vietnam Pro',system-ui,sans-serif;
+    background:var(--bg);color:var(--text);
+    font-size:16px;line-height:1.72;letter-spacing:.1px;
+    overflow-x:hidden;-webkit-font-smoothing:antialiased;
+    overscroll-behavior-y:none;
+  }
+  ::selection{background:rgba(255,59,92,.32);color:#fff}
+  a{color:inherit}
+  svg{display:block;max-width:100%}
+  button{font-family:inherit}
+
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:#0a0709}
+  ::-webkit-scrollbar-thumb{background:#2b1c22;border-radius:99px;border:2px solid #0a0709}
+  ::-webkit-scrollbar-thumb:hover{background:#4a2530}
+
+  .bg-fx{
+    position:fixed;inset:0;z-index:-3;
+    background:
+      radial-gradient(48rem 48rem at 88% -10%,rgba(255,59,92,.10),transparent 62%),
+      radial-gradient(40rem 40rem at -6% 48%,rgba(140,16,41,.10),transparent 62%),
+      radial-gradient(44rem 44rem at 62% 112%,rgba(255,122,69,.055),transparent 62%),
+      var(--bg);
+  }
+  .bg-fx::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+    background-size:46px 46px;
+    -webkit-mask-image:radial-gradient(ellipse 92% 70% at 50% 22%,#000 30%,transparent 100%);
+    mask-image:radial-gradient(ellipse 92% 70% at 50% 22%,#000 30%,transparent 100%);
+  }
+  .bg-fx::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px);
+    opacity:.45;
+  }
+  .blob{
+    position:fixed;z-index:-2;border-radius:50%;filter:blur(110px);opacity:.2;
+    pointer-events:none;will-change:transform;
+  }
+  .blob.b1{width:400px;height:400px;background:#a01033;top:-140px;right:-90px}
+  .blob.b2{width:320px;height:320px;background:#5e0f22;bottom:-120px;left:-110px}
+
+  .spotlight{
+    position:fixed;z-index:-1;width:520px;height:520px;border-radius:50%;
+    pointer-events:none;opacity:0;transition:opacity .6s ease;
+    background:radial-gradient(circle,rgba(255,59,92,.055),transparent 68%);
+    transform:translate(-50%,-50%);
+  }
+
+  #progress{
+    position:fixed;top:0;left:0;height:2px;width:0;z-index:120;
+    background:var(--grad);box-shadow:0 0 10px rgba(255,59,92,.7);
+  }
+
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:110;height:var(--nav-h);
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:0 clamp(14px,5vw,60px);
+    background:rgba(10,7,9,.62);
+    -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--line-soft);
+    transition:background .35s ease,border-color .35s ease;
+  }
+  nav.scrolled{background:rgba(10,7,9,.9);border-bottom-color:rgba(255,59,92,.16)}
+  .logo{
+    font-family:var(--mono);font-weight:700;font-size:.92rem;flex:none;
+    text-decoration:none;letter-spacing:.2px;color:var(--text-dim);
+    transition:color .25s;white-space:nowrap;
+  }
+  .logo:hover{color:var(--text)}
+  .logo b{color:var(--red);font-weight:700}
+  .nav-right{display:flex;align-items:center;gap:10px;flex:none}
+  .nav-links{display:flex;gap:2px;list-style:none}
+  .nav-links a{
+    position:relative;display:block;color:var(--muted);text-decoration:none;
+    font-size:.86rem;font-weight:500;padding:7px 13px;border-radius:8px;
+    transition:color .25s,background .25s;white-space:nowrap;
+  }
+  .nav-links a::after{
+    content:"";position:absolute;left:13px;right:13px;bottom:2px;height:1.5px;
+    background:var(--red);border-radius:2px;
+    transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);
+  }
+  .nav-links a:hover{color:var(--text-dim)}
+  .nav-links a.active{color:var(--text)}
+  .nav-links a.active::after{transform:scaleX(1)}
+
+  .lang-btn{
+    display:inline-flex;align-items:center;gap:2px;flex:none;cursor:pointer;
+    padding:3px;border-radius:9px;background:var(--surface);border:1px solid var(--line);
+    font-family:var(--mono);font-size:.685rem;font-weight:700;letter-spacing:.05em;
+    transition:border-color .25s;
+  }
+  .lang-btn:hover{border-color:rgba(255,59,92,.32)}
+  .lang-btn span{
+    padding:4px 9px;border-radius:6px;color:var(--muted);line-height:1.4;
+    transition:background .3s var(--ease),color .3s;
+  }
+  .lang-btn span.on{background:var(--grad);color:#180509}
+
+  .burger{display:none;background:none;border:0;cursor:pointer;width:42px;height:42px;border-radius:9px;transition:background .25s;flex:none}
+  .burger:hover{background:var(--surface-2)}
+  .burger span{display:block;width:19px;height:1.8px;background:var(--text);margin:5px auto;border-radius:2px;transition:transform .3s var(--ease),opacity .2s}
+  .burger.open span:nth-child(1){transform:translateY(6.8px) rotate(45deg)}
+  .burger.open span:nth-child(2){opacity:0}
+  .burger.open span:nth-child(3){transform:translateY(-6.8px) rotate(-45deg)}
+
+  main{max-width:1120px;margin:0 auto;padding:0 clamp(16px,5vw,40px)}
+  section{padding:clamp(58px,9vh,104px) 0;scroll-margin-top:var(--nav-h)}
+  .sec-tag{
+    display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);
+    font-size:.735rem;font-weight:500;letter-spacing:.06em;
+    color:var(--red-soft);margin-bottom:12px;
+  }
+  .sec-tag::before{content:"//";color:var(--muted);opacity:.7}
+  h2{
+    position:relative;font-size:clamp(1.55rem,3.6vw,2.15rem);font-weight:700;
+    line-height:1.26;letter-spacing:-.015em;margin-bottom:14px;padding-bottom:14px;
+  }
+  h2::after{
+    content:"";position:absolute;left:0;bottom:0;width:52px;height:2px;border-radius:2px;
+    background:var(--grad);transform:scaleX(0);transform-origin:left;
+    transition:transform .8s var(--ease) .15s;
+  }
+  h2.show::after{transform:scaleX(1)}
+  .sec-sub{color:var(--muted);font-size:.94rem;max-width:64ch;margin-bottom:34px}
+  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  #hero{min-height:100svh;display:flex;align-items:center;padding-top:calc(var(--nav-h) + 18px);padding-bottom:56px}
+  .hero-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(30px,5vw,58px);align-items:center;width:100%}
+  .status-chip{
+    display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);
+    font-size:.71rem;letter-spacing:.04em;color:var(--muted);
+    padding:6px 14px;border-radius:99px;
+    background:var(--surface);border:1px solid var(--line);margin-bottom:20px;
+  }
+  .status-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2.4s infinite;flex:none}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}
+    70%{box-shadow:0 0 0 8px rgba(74,222,128,0)}
+    100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}
+  }
+  .hero-name{
+    font-size:clamp(2.1rem,5.6vw,3.6rem);font-weight:800;
+    line-height:1.14;letter-spacing:-.03em;margin-bottom:8px;
+  }
+  .glitch{position:relative;display:inline-block}
+  .glitch::before,.glitch::after{
+    content:attr(data-text);position:absolute;inset:0;opacity:0;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .glitch::before{animation:gl1 6s infinite}
+  .glitch::after{animation:gl2 6s infinite}
+  @keyframes gl1{
+    0%,95%,100%{opacity:0;transform:none}
+    96%{opacity:.7;transform:translate(-2px,1px)}
+    98%{opacity:.7;transform:translate(2px,-1px)}
+    99%{opacity:0}
+  }
+  @keyframes gl2{
+    0%,96%,100%{opacity:0;transform:none}
+    97%{opacity:.5;transform:translate(2px,1px)}
+    99%{opacity:0}
+  }
+  .handle{
+    font-family:var(--mono);font-size:clamp(.82rem,2vw,.96rem);
+    color:var(--red-soft);margin-bottom:18px;letter-spacing:.03em;
+  }
+  .typing-line{
+    font-family:var(--mono);font-size:clamp(.78rem,1.9vw,.93rem);
+    color:var(--muted);min-height:2.2em;margin-bottom:20px;letter-spacing:.01em;
+  }
+  .typing-line .prompt{color:var(--red)}
+  .typing{color:var(--text-dim)}
+  .caret{display:inline-block;width:8px;height:1.05em;background:var(--red);vertical-align:-2px;margin-left:3px;animation:blink 1.1s step-end infinite}
+  @keyframes blink{50%{opacity:0}}
+  .hero-desc{color:var(--muted);max-width:52ch;margin-bottom:28px}
+  .hero-desc strong{color:var(--text-dim);font-weight:600}
+  .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    min-height:46px;padding:12px 24px;border-radius:11px;font-size:.9rem;font-weight:600;
+    text-decoration:none;cursor:pointer;border:1px solid transparent;text-align:center;
+    transition:transform .3s var(--ease),box-shadow .3s,background .3s,border-color .3s;
+  }
+  .btn-primary{background:var(--grad);color:#180509;box-shadow:0 6px 22px -8px rgba(255,59,92,.5)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(255,59,92,.65)}
+  .btn-ghost{background:var(--surface);color:var(--text-dim);border-color:var(--line)}
+  .btn-ghost:hover{transform:translateY(-2px);background:var(--surface-2);border-color:rgba(255,59,92,.3);color:var(--text)}
+  .socials{display:flex;gap:10px}
+  .socials a{
+    width:46px;height:46px;border-radius:11px;display:grid;place-items:center;
+    background:var(--surface);border:1px solid var(--line);color:var(--muted);
+    transition:transform .3s var(--ease),color .3s,border-color .3s,background .3s;
+  }
+  .socials a:hover{color:var(--text);transform:translateY(-3px);border-color:rgba(255,59,92,.42);background:rgba(255,59,92,.1)}
+  .socials svg{width:19px;height:19px;fill:currentColor}
+
+  .hero-visual{display:flex;justify-content:center;width:100%;min-width:0}
+  .terminal{
+    width:min(470px,100%);border-radius:13px;overflow:hidden;text-align:left;
+    background:rgba(14,10,13,.93);border:1px solid var(--line);
+    box-shadow:0 24px 56px -22px rgba(0,0,0,.8),0 0 32px -22px rgba(255,59,92,.5);
+    font-family:var(--mono);font-size:.765rem;
+  }
+  .term-bar{display:flex;align-items:center;gap:7px;padding:10px 13px;background:rgba(255,255,255,.035);border-bottom:1px solid var(--line-soft)}
+  .term-bar i{width:10px;height:10px;border-radius:50%;flex:none}
+  .term-bar i:nth-child(1){background:#ff5f57}
+  .term-bar i:nth-child(2){background:#febc2e}
+  .term-bar i:nth-child(3){background:#28c840}
+  .term-bar span{margin-left:auto;color:var(--muted);font-size:.67rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .term-body{padding:15px 16px 18px;line-height:2;overflow-x:auto}
+  .term-body .ln{display:block;white-space:nowrap}
+  .t-red{color:var(--red)}
+  .t-green{color:var(--green)}
+  .t-gold{color:var(--gold)}
+  .t-dim{color:var(--muted)}
+  .t-txt{color:var(--text-dim)}
+
+  .card{
+    position:relative;background:var(--surface);border:1px solid var(--line);
+    border-radius:15px;padding:24px;
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    transition:transform .4s var(--ease),border-color .4s,box-shadow .4s;
+  }
+  .card::before,.cve::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    opacity:0;transition:opacity .5s;
+    background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(255,59,92,.085),transparent 65%);
+  }
+  .card:hover{transform:translateY(-4px);border-color:rgba(255,59,92,.3);box-shadow:0 18px 40px -20px rgba(0,0,0,.6)}
+  .card:hover::before,.cve:hover::before{opacity:1}
+  .card.focus,.cve.focus{border-color:rgba(255,59,92,.26)}
+  .card.focus::before,.cve.focus::before{
+    opacity:1;background:radial-gradient(300px circle at 50% 26%,rgba(255,59,92,.07),transparent 66%);
+  }
+
+  .about-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:22px;align-items:start}
+  .about-text p{color:var(--muted);margin-bottom:13px;max-width:60ch}
+  .about-text p:last-child{margin-bottom:0}
+  .about-text strong{color:var(--text-dim);font-weight:600}
+  .facts{display:grid;gap:11px}
+  .fact{display:flex;align-items:center;gap:13px;padding:15px 16px}
+  .fact .ico{
+    width:40px;height:40px;flex:none;border-radius:11px;display:grid;place-items:center;
+    background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.16);font-size:1rem;
+  }
+  .fact .txt{min-width:0}
+  .fact b{display:block;font-size:.89rem;font-weight:600;line-height:1.5}
+  .fact small{display:block;color:var(--muted);font-size:.79rem;line-height:1.55;word-break:break-word}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:22px}
+  .stat{text-align:center;padding:22px 14px}
+  .stat .num{font-family:var(--mono);font-size:1.65rem;font-weight:700;line-height:1.3;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .lbl{font-size:.785rem;color:var(--muted);margin-top:2px;line-height:1.5}
+
+  .cve-list{display:grid;gap:20px}
+  .cve{
+    position:relative;display:grid;grid-template-columns:148px 1fr;gap:24px;
+    padding:24px;border-radius:17px;
+    background:var(--surface);border:1px solid var(--line);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    transition:transform .4s var(--ease),border-color .4s,box-shadow .4s;
+  }
+  .cve:hover{transform:translateY(-4px);border-color:rgba(255,59,92,.32);box-shadow:0 20px 46px -22px rgba(0,0,0,.7)}
+  .cve.featured{
+    border-color:rgba(255,59,92,.34);
+    background:linear-gradient(160deg,rgba(255,59,92,.055),transparent 46%),var(--surface);
+  }
+  .cve.featured::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    border:1px solid transparent;
+    background:conic-gradient(from var(--ang),transparent 0 66%,rgba(255,59,92,.75) 82%,rgba(255,122,69,.5) 90%,transparent 100%) border-box;
+    -webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);
+    mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    animation:spin 7s linear infinite;
+  }
+  @property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
+  @keyframes spin{to{--ang:360deg}}
+
+  .score{display:flex;flex-direction:column;align-items:center;gap:11px}
+  .ring{
+    position:relative;width:116px;height:116px;border-radius:50%;display:grid;place-items:center;flex:none;
+    background:conic-gradient(var(--sev) calc(var(--p,0) * 1%),rgba(255,255,255,.055) 0);
+    transition:background 1.5s var(--ease);
+  }
+  .ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#100b0e}
+  .ring .inner{position:relative;text-align:center;line-height:1.25}
+  .ring .val{display:block;font-family:var(--mono);font-size:1.42rem;font-weight:700;color:var(--sev)}
+  .ring .of{display:block;font-family:var(--mono);font-size:.59rem;color:var(--muted);letter-spacing:.04em;margin-top:1px}
+  .sev-label{
+    font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+    padding:4px 12px;border-radius:6px;color:var(--sev);white-space:nowrap;
+    background:color-mix(in srgb,var(--sev) 12%,transparent);
+    border:1px solid color-mix(in srgb,var(--sev) 34%,transparent);
+  }
+
+  .cve-main{display:flex;flex-direction:column;gap:13px;min-width:0}
+  .cve-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .cve-id{font-family:var(--mono);font-weight:700;font-size:clamp(.97rem,2.2vw,1.16rem);letter-spacing:.01em;line-height:1.4}
+  .cve.featured .cve-id{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .badge{
+    font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.09em;
+    padding:3px 9px;border-radius:5px;text-transform:uppercase;white-space:nowrap;
+    background:rgba(245,181,68,.12);color:var(--gold);border:1px solid rgba(245,181,68,.34);
+  }
+  .pkg{
+    display:inline-flex;align-items:center;gap:7px;align-self:flex-start;max-width:100%;
+    font-family:var(--mono);font-size:.765rem;color:var(--red-soft);
+    padding:5px 12px;border-radius:7px;
+    background:rgba(255,59,92,.07);border:1px solid rgba(255,59,92,.18);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .block h4{
+    font-size:.695rem;font-family:var(--mono);letter-spacing:.11em;text-transform:uppercase;
+    color:var(--red-soft);margin-bottom:6px;font-weight:600;
+  }
+  .block p{color:var(--muted);font-size:.89rem;line-height:1.78;max-width:74ch}
+  code{
+    font-family:var(--mono);font-size:.87em;color:var(--text-dim);
+    background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px;
+    word-break:break-word;
+  }
+  .cwe-row{display:flex;flex-wrap:wrap;gap:7px}
+  .tag{
+    font-family:var(--mono);font-size:.68rem;font-weight:500;letter-spacing:.01em;
+    padding:4px 10px;border-radius:6px;color:var(--text-dim);line-height:1.7;
+    background:var(--surface-2);border:1px solid var(--line);
+  }
+  .vector{
+    font-family:var(--mono);font-size:.705rem;color:var(--muted);line-height:1.7;
+    background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-radius:8px;
+    padding:10px 12px;overflow-x:auto;white-space:nowrap;
+  }
+  .vector b{color:var(--text-dim);font-weight:600}
+  .ver-row{display:flex;flex-wrap:wrap;gap:8px;font-family:var(--mono);font-size:.705rem}
+  .ver{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:6px;border:1px solid;line-height:1.7}
+  .ver.bad{color:var(--red-soft);background:rgba(255,59,92,.06);border-color:rgba(255,59,92,.24)}
+  .ver.ok{color:var(--green);background:rgba(74,222,128,.055);border-color:rgba(74,222,128,.24)}
+
+  .code-toggle{
+    display:inline-flex;align-items:center;gap:9px;align-self:flex-start;cursor:pointer;
+    min-height:42px;font-family:var(--mono);font-size:.75rem;font-weight:600;letter-spacing:.02em;
+    color:var(--text-dim);background:var(--surface-2);border:1px solid var(--line);
+    padding:8px 15px;border-radius:9px;transition:background .28s,border-color .28s,color .28s;
+  }
+  .code-toggle:hover{background:rgba(255,59,92,.1);border-color:rgba(255,59,92,.32);color:var(--text)}
+  .code-toggle .arrow{display:inline-block;transition:transform .35s var(--ease);color:var(--red);flex:none}
+  .code-toggle[aria-expanded="true"] .arrow{transform:rotate(90deg)}
+  .code-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease)}
+  .code-wrap.open{grid-template-rows:1fr}
+  .code-inner{overflow:hidden;min-height:0}
+  .code{
+    margin-top:12px;border-radius:11px;overflow:hidden;
+    background:#0c0810;border:1px solid var(--line);
+  }
+  .code + .code{margin-top:10px}
+  .code-bar{
+    display:flex;align-items:center;gap:9px;padding:9px 12px;
+    background:rgba(255,255,255,.035);border-bottom:1px solid var(--line-soft);
+  }
+  .code-bar .path{font-family:var(--mono);font-size:.7rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .code-bar .lang{
+    font-family:var(--mono);font-size:.61rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--red-soft);background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.2);
+    padding:2px 8px;border-radius:4px;flex:none;
+  }
+  .copy{
+    margin-left:auto;flex:none;cursor:pointer;font-family:var(--mono);font-size:.655rem;
+    color:var(--muted);background:transparent;border:1px solid var(--line);
+    padding:5px 10px;border-radius:6px;transition:color .25s,border-color .25s,background .25s;
+  }
+  .copy:hover{color:var(--text);border-color:rgba(255,59,92,.35);background:rgba(255,59,92,.08)}
+  .copy.done{color:var(--green);border-color:rgba(74,222,128,.4)}
+  pre{
+    margin:0;padding:14px 16px;overflow-x:auto;
+    font-family:var(--mono);font-size:.745rem;line-height:1.85;
+    color:var(--text-dim);tab-size:2;-webkit-overflow-scrolling:touch;
+  }
+  pre .c{color:#6f6470;font-style:italic}
+  pre .k{color:#ff6b8a}
+  pre .s{color:#8fd694}
+  pre .f{color:#ffc46b}
+  pre .n{color:#c99bff}
+  pre .hl{
+    display:inline-block;min-width:100%;
+    background:rgba(255,59,92,.13);
+    box-shadow:inset 3px 0 0 var(--red);
+    padding-left:7px;margin-left:-10px;
+  }
+  .code-note{
+    display:flex;flex-wrap:wrap;gap:6px;padding:11px 13px;font-size:.805rem;line-height:1.7;
+    color:var(--muted);background:rgba(255,59,92,.05);
+    border-top:1px solid var(--line-soft);
+  }
+  .code-note b{color:var(--red-soft);font-weight:600;flex:none}
+
+  .cve-link{
+    display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+    min-height:44px;font-family:var(--mono);font-size:.78rem;font-weight:600;text-decoration:none;
+    color:var(--red-soft);padding:10px 17px;border-radius:10px;
+    border:1px solid rgba(255,59,92,.3);background:rgba(255,59,92,.06);text-align:center;
+    transition:transform .3s var(--ease),background .3s,box-shadow .3s,color .3s;
+  }
+  .cve-link:hover{background:rgba(255,59,92,.15);color:var(--text);transform:translateY(-2px)}
+  .cve.featured .cve-link{background:var(--grad);color:#180509;border-color:transparent;box-shadow:0 6px 20px -8px rgba(255,59,92,.55)}
+  .cve.featured .cve-link:hover{transform:translateY(-2px);box-shadow:0 12px 26px -8px rgba(255,59,92,.7)}
+
+  .timeline{position:relative;padding-left:30px}
+  .timeline::before{content:"";position:absolute;left:8px;top:8px;bottom:8px;width:1.5px;background:linear-gradient(180deg,var(--red),rgba(140,16,41,.5),transparent)}
+  .tl-item{position:relative;padding:0 0 30px 24px}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-item::before{
+    content:"";position:absolute;left:-28px;top:7px;width:14px;height:14px;border-radius:50%;
+    background:var(--bg);border:2.5px solid var(--dot,var(--red));
+    box-shadow:0 0 0 4px rgba(255,59,92,.09);
+    transition:box-shadow .4s,transform .4s var(--ease);
+  }
+  .tl-item:hover::before,.tl-item.focus::before{transform:scale(1.18);box-shadow:0 0 0 6px rgba(255,59,92,.14)}
+  .tl-time{
+    display:inline-flex;align-items:center;font-family:var(--mono);font-size:.675rem;
+    font-weight:600;letter-spacing:.06em;color:var(--dot,var(--red));
+    padding:3px 11px;border-radius:6px;line-height:1.8;
+    background:color-mix(in srgb,var(--dot,var(--red)) 9%,transparent);
+    border:1px solid color-mix(in srgb,var(--dot,var(--red)) 26%,transparent);
+    margin-bottom:9px;
+  }
+  .tl-item h3{font-family:var(--mono);font-size:.96rem;font-weight:700;line-height:1.5;margin-bottom:3px;word-break:break-word}
+  .tl-item .sub{font-family:var(--mono);font-size:.735rem;color:var(--dot,var(--red));opacity:.85;margin-bottom:6px;line-height:1.6}
+  .tl-item p{color:var(--muted);font-size:.875rem;line-height:1.75;max-width:66ch}
+
+  .contact-card{
+    text-align:center;padding:clamp(30px,6vw,56px);
+    background:radial-gradient(400px 190px at 50% 0%,rgba(255,59,92,.12),transparent),var(--surface);
+  }
+  .contact-card .sec-tag{justify-content:center}
+  .contact-card h2{padding-bottom:0;margin-bottom:12px}
+  .contact-card h2::after{left:50%;transform:translateX(-50%) scaleX(0);bottom:-10px}
+  .contact-card h2.show::after{transform:translateX(-50%) scaleX(1)}
+  .contact-card>p{color:var(--muted);max-width:56ch;margin:0 auto 24px}
+  .contact-mail{font-family:var(--mono);font-size:clamp(.76rem,2.4vw,1rem);font-weight:700;word-break:break-all}
+  .contact-socials{display:flex;gap:10px;justify-content:center;margin-top:20px}
+
+  footer{
+    text-align:center;padding:28px 20px;color:var(--muted);font-size:.765rem;
+    border-top:1px solid var(--line-soft);margin-top:30px;font-family:var(--mono);line-height:1.9;
+  }
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+  .reveal.show{opacity:1;transform:none}
+  .reveal.from-l{transform:translateX(-26px)}
+  .reveal.from-r{transform:translateX(26px)}
+  .reveal.d1{transition-delay:.07s}
+  .reveal.d2{transition-delay:.14s}
+  .reveal.d3{transition-delay:.21s}
+
+  #toTop{
+    position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:11px;
+    background:var(--grad);color:#180509;border:0;cursor:pointer;font-size:1.15rem;
+    display:grid;place-items:center;z-index:95;
+    opacity:0;pointer-events:none;transform:translateY(10px);
+    transition:opacity .35s,transform .35s var(--ease),box-shadow .3s;
+    box-shadow:0 8px 22px -8px rgba(255,59,92,.55);
+  }
+  #toTop.show{opacity:1;pointer-events:auto;transform:none}
+  #toTop:hover{box-shadow:0 12px 28px -8px rgba(255,59,92,.75)}
+
+  @media (hover:none){
+    .card:hover,.cve:hover,.btn:hover,.socials a:hover,.cve-link:hover{transform:none}
+    .card:active,.cve:active{border-color:rgba(255,59,92,.4)}
+    .btn:active,.cve-link:active,.code-toggle:active{transform:scale(.985)}
+  }
+
+  @media (max-width:980px){
+    .hero-grid{grid-template-columns:1fr;text-align:center;gap:32px}
+    .hero-visual{order:-1}
+    .hero-desc{margin-inline:auto}
+    .btn-row,.socials{justify-content:center}
+    #hero .status-chip{margin-inline:auto}
+    .about-grid{grid-template-columns:1fr}
+    .about-text p{max-width:none}
+    .cve{grid-template-columns:1fr;gap:18px}
+    .score{flex-direction:row;justify-content:flex-start;gap:15px}
+    .ring{width:94px;height:94px}
+    .ring::before{inset:8px}
+    .ring .val{font-size:1.18rem}
+    .ring .of{font-size:.55rem}
+    .reveal.from-l,.reveal.from-r{transform:translateY(24px)}
+  }
+  @media (max-width:860px){
+    .nav-links{
+      position:fixed;top:var(--nav-h);left:0;right:0;flex-direction:column;gap:2px;
+      padding:12px 16px 18px;background:rgba(10,7,9,.98);
+      -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--line);
+      max-height:calc(100svh - var(--nav-h));overflow-y:auto;
+      transform:translateY(-10px);opacity:0;pointer-events:none;transition:.3s var(--ease);
+    }
+    .nav-links.open{transform:none;opacity:1;pointer-events:auto}
+    .nav-links a{padding:12px 14px;font-size:.92rem}
+    .nav-links a::after{display:none}
+    .nav-links a.active{background:rgba(255,59,92,.1)}
+    .burger{display:block}
+  }
+  @media (max-width:640px){
+    body{font-size:15.5px}
+    section{padding:54px 0}
+    .stats{grid-template-columns:1fr;gap:10px}
+    .stat{display:flex;align-items:center;justify-content:space-between;text-align:left;padding:15px 18px;gap:14px}
+    .stat .num{font-size:1.5rem}
+    .stat .lbl{margin-top:0}
+    .btn{width:100%}
+    .btn-row{flex-direction:column;gap:10px}
+    .terminal{font-size:.685rem}
+    .term-body{padding:13px 14px 15px;line-height:1.95}
+    .cve{padding:20px 16px}
+    .score{flex-direction:row;align-items:center;gap:14px}
+    .ring{width:82px;height:82px}
+    .ring::before{inset:7px}
+    .ring .val{font-size:1.05rem}
+    .cve-link,.code-toggle{width:100%;justify-content:center}
+    .code-bar{flex-wrap:wrap;gap:7px}
+    .code-bar .path{order:3;width:100%;font-size:.66rem}
+    pre{font-size:.7rem;padding:12px 13px}
+    .code-note{font-size:.775rem;padding:10px 12px}
+    .timeline{padding-left:24px}
+    .tl-item{padding-left:18px;padding-bottom:26px}
+    .tl-item::before{left:-25px;width:12px;height:12px}
+    .contact-socials{margin-top:18px}
+    #toTop{right:14px;bottom:14px;width:44px;height:44px}
+  }
+  @media (max-width:400px){
+    .logo{font-size:.78rem}
+    .lang-btn{font-size:.64rem}
+    .lang-btn span{padding:4px 7px}
+    .hero-name{font-size:1.95rem}
+    .cve{padding:18px 14px}
+    .card{padding:20px 17px}
+    .score{flex-direction:column;align-items:flex-start}
+    .sev-label{font-size:.6rem}
+    pre{font-size:.655rem}
+    .fact{padding:13px 14px;gap:11px}
+    .fact .ico{width:36px;height:36px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+    html{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-fx"></div>
+<div class="blob b1" id="blob1"></div>
+<div class="blob b2" id="blob2"></div>
+<div class="spotlight" id="spotlight"></div>
+<div id="progress"></div>
+
+<nav id="nav">
+  <a class="logo" href="#hero"><b>root</b>@fortress:~#</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#hero" class="active" data-i18n="nav.home">Trang chủ</a></li>
+    <li><a href="#about" data-i18n="nav.about">Về tôi</a></li>
+    <li><a href="#cve" data-i18n="nav.cve">Thành tựu</a></li>
+    <li><a href="#journey" data-i18n="nav.journey">Hành trình</a></li>
+    <li><a href="#contact" data-i18n="nav.contact">Liên hệ</a></li>
+  </ul>
+  <div class="nav-right">
+    <button type="button" class="lang-btn" id="langBtn" aria-label="Switch to English">
+      <span class="vi on">VI</span><span class="en">EN</span>
+    </button>
+    <button type="button" class="burger" id="burger" aria-label="Mở menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main>
+
+  <section id="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="status-chip reveal from-l"><span class="dot"></span> STATUS: ONLINE</div>
+        <h1 class="hero-name reveal from-l d1"><span class="glitch grad-text" data-text="Võ Phú Vinh">Võ Phú Vinh</span></h1>
+        <div class="handle reveal from-l d1">[ Fortress ]</div>
+        <div class="typing-line reveal from-l d2"><span class="prompt">$ whoami ›</span> <span class="typing" id="typing"></span><span class="caret"></span></div>
+        <p class="hero-desc reveal from-l d2" data-i18n="hero.desc">
+          Sinh viên năm 2 ngành <strong>An toàn thông tin</strong> tại HCMUTE.
+          Mình tìm và báo cáo có trách nhiệm các lỗ hổng trong dự án mã nguồn mở -
+          đến nay đã có <strong>nhiều CVE được ghi nhận</strong>.
+        </p>
+        <div class="btn-row reveal from-l d3">
+          <a class="btn btn-primary" href="#cve" data-i18n="hero.btn1">Thành tựu</a>
+          <a class="btn btn-ghost" href="#contact" data-i18n="hero.btn2">Liên hệ</a>
+        </div>
+        <div class="socials reveal from-l d3">
+          <a href="https://github.com/fortress07" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="github.com/fortress07">
+            <svg viewBox="0 0 24 24"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.54-3.87-1.54-.53-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.5 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/f0r7r355" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="facebook.com/f0r7r355">
+            <svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg>
+          </a>
+          <a href="mailto:vophuvinh15012007@gmail.com" aria-label="Email" title="Email">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.24-8 5-8-5V6.4l8 5 8-5v1.84z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-visual reveal from-r d1">
+        <div class="terminal">
+          <div class="term-bar"><i></i><i></i><i></i><span>root@fortress: ~</span></div>
+          <div class="term-body">
+            <span class="ln"><span class="t-red">$</span> <span class="t-txt">./recon --target fortress</span></span>
+            <span class="ln t-dim">[*] Enumerating profile...</span>
+            <span class="ln"><span class="t-green">[+]</span> <span class="t-dim">handle&nbsp;&nbsp;:</span> <span class="t-txt">fortress</span></span>
+            <span class="ln"><span class="t-green">[+]</span> <span class="t-dim">major&nbsp;&nbsp;&nbsp;:</span> <span class="t-txt">Information Security</span></span>
+            <span class="ln"><span class="t-green">[+]</span> <span class="t-dim">school&nbsp;&nbsp;:</span> <span class="t-txt">HCMUTE - year 2</span></span>
+            <span class="ln"><span class="t-green">[+]</span> <span class="t-dim">cve_ack&nbsp;:</span> <span class="t-gold js-cve-count">3</span></span>
+            <span class="ln"><span class="t-green">[+]</span> <span class="t-dim">cwe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span> <span class="t-txt">78, 306, 1059,...</span></span>
+            <span class="ln t-dim">[*] Done. <span class="js-cve-count">3</span> records found.</span>
+            <span class="ln"><span class="t-red">$</span> <span class="caret"></span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="sec-tag reveal">cat about.txt</div>
+    <h2 class="reveal" data-i18n="about.h2">Về <span class="grad-text">tôi</span></h2>
+    <p class="sec-sub reveal d1" data-i18n="about.sub">Một chút về người đứng sau những báo cáo lỗ hổng bên dưới.</p>
+    <div class="about-grid">
+      <div class="card about-text reveal">
+        <p data-i18n="about.p1">
+          Mình là <strong>Võ Phú Vinh</strong> <strong>(Fortress)</strong>.
+          Hiện là <strong>sinh viên năm 2</strong> chuyên ngành <strong>An toàn thông tin</strong> tại
+          <strong>Trường Đại học Công nghệ Kỹ thuật TP.HCM (HCMUTE)</strong>.
+        </p>
+        <p data-i18n="about.p2">
+          Hướng đi hiện tại mình đang theo đuổi là đọc source code của các dự án mã nguồn mở để tìm lỗ hổng,
+          rồi <strong>báo cáo có trách nhiệm</strong> cho maintainer trước khi công bố.
+        </p>
+      </div>
+      <div class="facts">
+        <div class="fact card reveal d1">
+          <div class="ico">🎓</div>
+          <div class="txt">
+            <b data-i18n="fact1.k">Học vấn</b>
+            <small data-i18n="fact1.v">Sinh viên năm 2 - An toàn thông tin, HCMUTE</small>
+          </div>
+        </div>
+        <div class="fact card reveal d2">
+          <div class="ico">🛡️</div>
+          <div class="txt">
+            <b data-i18n="fact2.k">Hướng nghiên cứu</b>
+            <small data-i18n="fact2.v">Vulnerability research &amp; responsible disclosure</small>
+          </div>
+        </div>
+        <div class="fact card reveal d3">
+          <div class="ico">✉️</div>
+          <div class="txt">
+            <b data-i18n="fact3.k">Email</b>
+            <small>vophuvinh15012007@gmail.com</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat card reveal"><div class="num" data-stat="cve" data-count="3">0</div><div class="lbl" data-i18n="stat1">CVE được ghi nhận</div></div>
+      <div class="stat card reveal d1"><div class="num" data-stat="pkg" data-count="3">0</div><div class="lbl" data-i18n="stat2">Dự án mã nguồn mở</div></div>
+      <div class="stat card reveal d2"><div class="num" data-stat="cwe" data-count="3">0</div><div class="lbl" data-i18n="stat3">Lớp CWE khác nhau</div></div>
+    </div>
+  </section>
+
+  <section id="cve">
+    <div class="sec-tag reveal">ls -la ./achievements</div>
+    <h2 class="reveal" data-i18n="cve.h2"><span class="grad-text">Thành tựu</span></h2>
+    <p class="sec-sub reveal d1" data-i18n="cve.sub">Mỗi card bên dưới gồm tóm tắt kỹ thuật, ảnh hưởng và đoạn code gốc gây ra lỗ hổng. Bấm "Xem đoạn code lỗi" để mở rộng.</p>
+    <div class="cve-list">
+
+      <article class="cve featured reveal" style="--sev:var(--orange)">
+        <div class="score">
+          <div class="ring" data-p="85">
+            <div class="inner"><span class="val">8.5</span><span class="of">CVSS 4.0</span></div>
+          </div>
+          <span class="sev-label">High</span>
+        </div>
+        <div class="cve-main">
+          <div class="cve-head">
+            <span class="cve-id">CVE-2026-55849</span>
+            <span class="badge">★ Featured</span>
+          </div>
+          <span class="pkg">@cyclonedx/cyclonedx-npm</span>
+
+          <div class="block">
+            <h4 data-i18n="label.summary">Tóm tắt</h4>
+            <p data-i18n="c1.summary">
+              Chèn lệnh hệ điều hành qua option <code>--workspace &lt;value&gt;</code>.
+              Khi biến môi trường <code>npm_execpath</code> được set, tool gọi thẳng npm executable nên an toàn.
+              Nhưng nếu <code>npm_execpath</code> rỗng hoặc không set, tool rơi vào nhánh fallback:
+              spawn một subshell và nối thẳng chuỗi <code>'npm ' + args.join(' ')</code> mà không escape.
+              Các ký tự đặc biệt của shell như <code>;</code>, <code>&amp;&amp;</code>, <code>|</code>
+              được shell diễn giải, cho phép thoát khỏi câu lệnh dự kiến.
+            </p>
+          </div>
+
+          <div class="block">
+            <h4 data-i18n="label.impact">Ảnh hưởng</h4>
+            <p data-i18n="c1.impact">
+              Thực thi lệnh tùy ý với quyền của user đang chạy CLI - rút dữ liệu, sửa hoặc xóa file,
+              và tùy cách triển khai có thể dẫn tới leo thang đặc quyền. Đặc biệt đáng lo trong môi trường
+              CI/CD, vì đây là tool sinh SBOM thường chạy tự động trong pipeline.
+            </p>
+          </div>
+
+          <button type="button" class="code-toggle" aria-expanded="false"><span class="arrow">▸</span> <span class="lbl">Xem đoạn code lỗi</span></button>
+          <div class="code-wrap"><div class="code-inner">
+            <div class="code">
+              <div class="code-bar"><span class="lang">TypeScript</span><span class="path" data-i18n="c1.path1">src/npmRunner.ts - trước v5.0.0</span><button type="button" class="copy">Copy</button></div>
+<pre><span class="c">// not shell-save - but this is okay four our use case</span>
+<span class="c">// - since we have complete control over `args`</span>
+<span class="hl"><span class="k">return</span> (args, options) =&gt; <span class="f">execSync</span>(<span class="s">'npm '</span> + args.<span class="f">join</span>(<span class="s">' '</span>), options)</span></pre>
+              <div class="code-note" data-i18n="c1.note1"><b>Vấn đề:</b> <span><code>args</code> chứa giá trị <code>--workspace</code> do người dùng cung cấp, nhưng lại được nối thành chuỗi rồi đưa qua shell. Giả định “ta kiểm soát hoàn toàn args” trong comment là sai.</span></div>
+            </div>
+            <div class="code">
+              <div class="code-bar"><span class="lang">Fix v5.0.0</span><span class="path">src/npmRunner.ts</span><button type="button" class="copy">Copy</button></div>
+<pre><span class="k">return</span> (args, options) =&gt; <span class="f">execFileSync</span>(execPath, args, options)</pre>
+              <div class="code-note" data-i18n="c1.note2"><b>Cách sửa:</b> <span>Thay <code>execSync</code> (đi qua shell) bằng <code>execFileSync</code> - truyền tham số dưới dạng mảng nên shell không còn diễn giải metacharacter.</span></div>
+            </div>
+          </div></div>
+
+          <div class="cwe-row">
+            <span class="tag">CWE-78 · OS Command Injection</span>
+          </div>
+          <div class="vector"><b>CVSS 4.0</b>&nbsp; AV:L/AC:L/AT:N/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N</div>
+          <div class="ver-row">
+            <span class="ver bad" data-i18n="c1.ver1">Bị ảnh hưởng: ≥ 2.1.0, &lt; 5.0.0</span>
+            <span class="ver ok" data-i18n="c1.ver2">Đã sửa: 5.0.0</span>
+            <span class="ver ok" data-i18n="c1.ver3">Tạm thời: set npm_execpath</span>
+          </div>
+          <a class="cve-link" href="https://www.cve.org/CVERecord?id=CVE-2026-55849" target="_blank" rel="noopener noreferrer" data-i18n="link.cve">
+            Xem bản ghi trên cve.org ↗
+          </a>
+        </div>
+      </article>
+
+      <article class="cve reveal d1" style="--sev:var(--red)">
+        <div class="score">
+          <div class="ring" data-p="91">
+            <div class="inner"><span class="val">9.1</span><span class="of">CVSS 3.1</span></div>
+          </div>
+          <span class="sev-label">Critical</span>
+        </div>
+        <div class="cve-main">
+          <div class="cve-head">
+            <span class="cve-id">CVE-2026-55640</span>
+          </div>
+          <span class="pkg">nextcloud-mcp-server</span>
+
+          <div class="block">
+            <h4 data-i18n="label.summary">Tóm tắt</h4>
+            <p data-i18n="c2.summary">
+              Endpoint <code>POST /webhooks/nextcloud</code> không xác thực theo mặc định, do hai nguyên nhân
+              chồng lên nhau. Thứ nhất, <code>webhook_secret</code> mặc định là <code>None</code> và không có
+              startup validator nào bắt buộc nó, kể cả khi vector sync đang bật. Thứ hai, toàn bộ phần kiểm tra
+              nằm trong nhánh <code>if secret:</code> - nên khi secret không được set, nhánh kiểm tra bị bỏ qua
+              hoàn toàn, chỉ ghi một dòng warning rồi vẫn xử lý request bình thường.
+            </p>
+          </div>
+
+          <div class="block">
+            <h4 data-i18n="label.impact">Ảnh hưởng</h4>
+            <p data-i18n="c2.impact">
+              Attacker không cần credential, chỉ cần tiếp cận được port 8000 là có thể xóa hoặc ép re-index
+              vector embedding của bất kỳ user nào trong Qdrant. Kết hợp với việc <code>user_id</code> được lấy
+              thẳng từ payload do attacker gửi, có thể giả mạo uid rồi loop qua doc ID để phá sạch semantic
+              search index của toàn bộ user - muốn khôi phục phải re-scan lại từ đầu.
+            </p>
+          </div>
+
+          <button type="button" class="code-toggle" aria-expanded="false"><span class="arrow">▸</span> <span class="lbl">Xem đoạn code lỗi</span></button>
+          <div class="code-wrap"><div class="code-inner">
+            <div class="code">
+              <div class="code-bar"><span class="lang">Python</span><span class="path">vector/webhook_receiver.py - v0.117.1</span><button type="button" class="copy">Copy</button></div>
+<pre>secret = <span class="f">get_settings</span>().webhook_secret
+<span class="hl"><span class="k">if</span> secret:</span>
+    provided = request.headers.<span class="f">get</span>(<span class="s">"authorization"</span>, <span class="s">""</span>).<span class="f">encode</span>(<span class="s">"utf-8"</span>)
+    expected = <span class="s">f"Bearer {secret}"</span>.<span class="f">encode</span>(<span class="s">"utf-8"</span>)
+    <span class="k">if not</span> hmac.<span class="f">compare_digest</span>(provided, expected):
+        logger.<span class="f">warning</span>(<span class="s">"Webhook rejected: missing or invalid Authorization header"</span>)
+        <span class="k">return</span> <span class="n">JSONResponse</span>({<span class="s">"status"</span>: <span class="s">"unauthorized"</span>}, status_code=<span class="n">401</span>)
+<span class="hl"><span class="k">else</span>:</span>
+<span class="hl">    <span class="f">_warn_missing_secret_once</span>()</span></pre>
+              <div class="code-note" data-i18n="c2.note1"><b>Vấn đề:</b> <span>Không có secret thì rơi vào nhánh <code>else</code> - chỉ log cảnh báo rồi tiếp tục xử lý request. Fail-open thay vì fail-closed.</span></div>
+            </div>
+            <div class="code">
+              <div class="code-bar"><span class="lang">Python</span><span class="path">vector/webhook_parser.py - v0.117.1</span><button type="button" class="copy">Copy</button></div>
+<pre><span class="k">try</span>:
+    event = payload[<span class="s">"event"</span>]
+    event_class = event[<span class="s">"class"</span>]
+<span class="hl">    user_id = payload[<span class="s">"user"</span>][<span class="s">"uid"</span>]</span>
+    time = <span class="f">int</span>(payload.<span class="f">get</span>(<span class="s">"time"</span>, <span class="n">0</span>) <span class="k">or</span> <span class="n">0</span>)
+<span class="k">except</span> (<span class="n">KeyError</span>, <span class="n">TypeError</span>, <span class="n">ValueError</span>):</pre>
+              <div class="code-note" data-i18n="c2.note2"><b>Vấn đề:</b> <span>Danh tính người dùng lấy thẳng từ body request, không đối chiếu với session hay token nào - vi phạm trust boundary, cho phép spoof uid.</span></div>
+            </div>
+          </div></div>
+
+          <div class="cwe-row">
+            <span class="tag">CWE-306 · Missing Authentication</span>
+            <span class="tag">Trust boundary violation</span>
+          </div>
+          <div class="vector"><b>CVSS 3.1</b>&nbsp; AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H</div>
+          <div class="ver-row">
+            <span class="ver bad" data-i18n="c2.ver1">Bị ảnh hưởng: ≤ 0.117.1</span>
+            <span class="ver ok" data-i18n="c2.ver2">Đã sửa: 0.117.2</span>
+          </div>
+          <a class="cve-link" href="https://github.com/cbcoutinho/nextcloud-mcp-server/security/advisories/GHSA-8vh3-g2qg-2h2c" target="_blank" rel="noopener noreferrer" data-i18n="link.ghsa">
+            Xem advisory GHSA ↗
+          </a>
+        </div>
+      </article>
+
+      <article class="cve reveal d2" style="--sev:var(--gold)">
+        <div class="score">
+          <div class="ring" data-p="59">
+            <div class="inner"><span class="val">5.9</span><span class="of">CVSS 3.1</span></div>
+          </div>
+          <span class="sev-label">Moderate</span>
+        </div>
+        <div class="cve-main">
+          <div class="cve-head">
+            <span class="cve-id">CVE-2026-57207</span>
+          </div>
+          <span class="pkg">netbox-mcp-server</span>
+
+          <div class="block">
+            <h4 data-i18n="label.summary">Tóm tắt</h4>
+            <p data-i18n="c3.summary">
+              Khi chạy với <code>TRANSPORT=http</code>, endpoint MCP không có bất kỳ lớp xác thực nào.
+              Project chỉ gắn <code>CORSMiddleware</code> và không bao giờ set <code>mcp.auth</code>,
+              trong khi FastMCP chỉ bật auth middleware nếu <code>mcp.auth</code> có giá trị.
+              Kết quả là ai chạm được tới port đều mở được session hợp lệ và gọi được cả 4 tool NetBox.
+              Nghiêm trọng hơn, README hướng dẫn chạy Docker với <code>HOST=0.0.0.0</code> và
+              <code>-p 8000:8000</code> ở ba chỗ mà không hề nhắc tới xác thực.
+            </p>
+          </div>
+
+          <div class="block">
+            <h4 data-i18n="label.impact">Ảnh hưởng</h4>
+            <p data-i18n="c3.impact">
+              Đọc được toàn bộ dữ liệu NetBox mà không cần credential - devices, IP, VLAN, rack, circuit, VM,
+              và cả changelog có chứa username. Mất hoàn toàn tính bí mật, không ảnh hưởng tới tính toàn vẹn
+              hay tính sẵn sàng.
+            </p>
+          </div>
+
+          <button type="button" class="code-toggle" aria-expanded="false"><span class="arrow">▸</span> <span class="lbl">Xem đoạn code lỗi</span></button>
+          <div class="code-wrap"><div class="code-inner">
+            <div class="code">
+              <div class="code-bar"><span class="lang">Python</span><span class="path">src/netbox_mcp_server/server.py - v1.2.0</span><button type="button" class="copy">Copy</button></div>
+<pre>mcp = <span class="n">FastMCP</span>(<span class="s">"NetBox"</span>)
+
+middleware = [
+    <span class="n">Middleware</span>(
+<span class="hl">        <span class="n">CORSMiddleware</span>,</span>
+        allow_origins=settings.cors_origins,
+        allow_methods=[<span class="s">"GET"</span>, <span class="s">"POST"</span>, <span class="s">"OPTIONS"</span>],
+        allow_headers=[<span class="s">"Authorization"</span>, <span class="s">"mcp-protocol-version"</span>, <span class="s">"mcp-session-id"</span>],
+        expose_headers=[<span class="s">"mcp-session-id"</span>],
+    )
+]
+
+<span class="hl">mcp.<span class="f">run</span>(transport=<span class="s">"http"</span>, host=settings.host, port=settings.port, middleware=middleware)</span></pre>
+              <div class="code-note" data-i18n="c3.note1"><b>Vấn đề:</b> <span>Không có dòng nào gán <code>mcp.auth</code> trong toàn bộ codebase. <code>"Authorization"</code> chỉ xuất hiện trong danh sách CORS header được phép - CORS là chính sách trình duyệt, không phải xác thực.</span></div>
+            </div>
+          </div></div>
+
+          <div class="cwe-row">
+            <span class="tag">CWE-306 · Missing Authentication</span>
+            <span class="tag">CWE-1059 · Insufficient Documentation</span>
+          </div>
+          <div class="vector"><b>CVSS 3.1</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N</div>
+          <div class="ver-row">
+            <span class="ver bad" data-i18n="c3.ver1">Bị ảnh hưởng: ≤ 1.2.0</span>
+            <span class="ver ok" data-i18n="c3.ver2">Đã sửa: 1.2.1</span>
+          </div>
+          <a class="cve-link" href="https://github.com/netboxlabs/netbox-mcp-server/security/advisories/GHSA-5qg7-j8mr-9477" target="_blank" rel="noopener noreferrer" data-i18n="link.ghsa">
+            Xem advisory GHSA ↗
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="journey">
+    <div class="sec-tag reveal">git log --oneline</div>
+    <h2 class="reveal" data-i18n="journey.h2">Hành <span class="grad-text">trình</span></h2>
+    <p class="sec-sub reveal d1" data-i18n="journey.sub">Các cột mốc theo thứ tự gần nhất trước, tính theo ngày advisory được công khai.</p>
+    <div class="timeline">
+      <div class="tl-item reveal" style="--dot:var(--gold)">
+        <span class="tl-time" data-i18n="tl1.time">Công khai 18/06/2026 · CVE-2026-57207 · MODERATE</span>
+        <h3>netbox-mcp-server</h3>
+        <div class="sub">CWE-306 + CWE-1059 · Missing Authentication</div>
+        <p data-i18n="tl1.p">
+          Endpoint MCP không xác thực khi chạy <code>TRANSPORT=http</code>, đọc được toàn bộ dữ liệu
+          hạ tầng NetBox mà không cần credential. Đã được sửa ở phiên bản 1.2.1.
+        </p>
+      </div>
+      <div class="tl-item reveal d1" style="--dot:var(--orange)">
+        <span class="tl-time" data-i18n="tl2.time">Công khai 16/06/2026 · CVE-2026-55849 · HIGH</span>
+        <h3>@cyclonedx/cyclonedx-npm</h3>
+        <div class="sub">CWE-78 · OS Command Injection</div>
+        <p data-i18n="tl2.p">
+          Chèn lệnh qua option <code>--workspace</code> khi <code>npm_execpath</code> không được set,
+          dẫn tới thực thi lệnh tùy ý ngay trong pipeline CI/CD sinh SBOM. Đã được sửa ở phiên bản 5.0.0.
+        </p>
+      </div>
+      <div class="tl-item reveal d2" style="--dot:var(--red)">
+        <span class="tl-time" data-i18n="tl3.time">Công khai 14/06/2026 · CVE-2026-55640 · CRITICAL</span>
+        <h3>nextcloud-mcp-server</h3>
+        <div class="sub">CWE-306 · Missing Authentication + uid spoofing</div>
+        <p data-i18n="tl3.p">
+          Webhook endpoint không xác thực theo mặc định, cộng với uid lấy thẳng từ payload -
+          cho phép phá sạch vector search index của mọi user. Đã được sửa ở phiên bản 0.117.2.
+        </p>
+      </div>
+      <div class="tl-item reveal d3" style="--dot:var(--muted)">
+        <span class="tl-time" data-i18n="tl4.time">NĂM NHẤT · HCMUTE</span>
+        <h3 data-i18n="tl4.h3">Bắt đầu nghiên cứu</h3>
+        <div class="sub" data-i18n="tl4.sub">An toàn thông tin - HCMUTE</div>
+        <p data-i18n="tl4.p">
+          Ngay từ năm nhất, mình bắt đầu học nền tảng An toàn thông tin và tập đọc source code
+          của các dự án mã nguồn mở để tìm lỗ hổng.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="card contact-card reveal">
+      <div class="sec-tag">ping fortress</div>
+      <h2 class="reveal" data-i18n="contact.h2">Cùng <span class="grad-text">kết nối</span> nhé</h2>
+      <p data-i18n="contact.p">
+        Nếu bạn muốn trao đổi về bảo mật, hợp tác nghiên cứu, hay đơn giản là làm quen -
+        gửi mình một email hoặc kết nối qua các kênh bên dưới.
+      </p>
+      <a class="btn btn-primary" style="max-width:440px;margin:0 auto" href="mailto:vophuvinh15012007@gmail.com">
+        <span class="contact-mail">vophuvinh15012007@gmail.com</span>
+      </a>
+      <div class="socials contact-socials">
+        <a href="https://github.com/fortress07" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="github.com/fortress07">
+          <svg viewBox="0 0 24 24"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.54-3.87-1.54-.53-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.5 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/f0r7r355" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="facebook.com/f0r7r355">
+          <svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  © 2026 Võ Phú Vinh - Fortress.
+</footer>
+
+<button type="button" id="toTop" aria-label="Lên đầu trang">↑</button>
+
+<script>
+const I18N = {
+  vi: {
+    "meta.title": "Fortress - Võ Phú Vinh | Security Researcher",
+    "meta.desc": "Võ Phú Vinh (Fortress) - sinh viên An toàn thông tin HCMUTE, security researcher với nhiều CVE được ghi nhận.",
+
+    "nav.home": "Trang chủ",
+    "nav.about": "Về tôi",
+    "nav.cve": "Thành tựu",
+    "nav.journey": "Hành trình",
+    "nav.contact": "Liên hệ",
+
+    "hero.desc": "Sinh viên năm 2 ngành <strong>An toàn thông tin</strong> tại HCMUTE. Mình tìm và báo cáo có trách nhiệm các lỗ hổng trong dự án mã nguồn mở - đến nay đã có <strong>nhiều CVE được ghi nhận</strong>.",
+    "hero.btn1": "Thành tựu",
+    "hero.btn2": "Liên hệ",
+
+    "about.h2": "Về <span class=\"grad-text\">tôi</span>",
+    "about.sub": "Một chút về người đứng sau những báo cáo lỗ hổng bên dưới.",
+    "about.p1": "Mình là <strong>Võ Phú Vinh</strong> <strong>(Fortress)</strong>. Hiện là <strong>sinh viên năm 2</strong> chuyên ngành <strong>An toàn thông tin</strong> tại <strong>Trường Đại học Công nghệ Kỹ thuật TP.HCM (HCMUTE)</strong>.",
+    "about.p2": "Hướng đi hiện tại mình đang theo đuổi là đọc source code của các dự án mã nguồn mở để tìm lỗ hổng, rồi <strong>báo cáo có trách nhiệm</strong> cho maintainer trước khi công bố.",
+    "fact1.k": "Học vấn",
+    "fact1.v": "Sinh viên năm 2 - An toàn thông tin, HCMUTE",
+    "fact2.k": "Hướng nghiên cứu",
+    "fact2.v": "Vulnerability research &amp; responsible disclosure",
+    "fact3.k": "Email",
+    "stat1": "CVE được ghi nhận",
+    "stat2": "Dự án mã nguồn mở",
+    "stat3": "Lớp CWE khác nhau",
+
+    "cve.h2": "<span class=\"grad-text\">Thành tựu</span>",
+    "cve.sub": "Mỗi card bên dưới gồm tóm tắt kỹ thuật, ảnh hưởng và đoạn code gốc gây ra lỗ hổng. Bấm \"Xem đoạn code lỗi\" để mở rộng.",
+    "label.summary": "Tóm tắt",
+    "label.impact": "Ảnh hưởng",
+
+    "c1.summary": "Chèn lệnh hệ điều hành qua option <code>--workspace &lt;value&gt;</code>. Khi biến môi trường <code>npm_execpath</code> được set, tool gọi thẳng npm executable nên an toàn. Nhưng nếu <code>npm_execpath</code> rỗng hoặc không set, tool rơi vào nhánh fallback: spawn một subshell và nối thẳng chuỗi <code>'npm ' + args.join(' ')</code> mà không escape. Các ký tự đặc biệt của shell như <code>;</code>, <code>&amp;&amp;</code>, <code>|</code> được shell diễn giải, cho phép thoát khỏi câu lệnh dự kiến.",
+    "c1.impact": "Thực thi lệnh tùy ý với quyền của user đang chạy CLI - rút dữ liệu, sửa hoặc xóa file, và tùy cách triển khai có thể dẫn tới leo thang đặc quyền. Đặc biệt đáng lo trong môi trường CI/CD, vì đây là tool sinh SBOM thường chạy tự động trong pipeline.",
+    "c1.path1": "src/npmRunner.ts - trước v5.0.0",
+    "c1.note1": "<b>Vấn đề:</b> <span><code>args</code> chứa giá trị <code>--workspace</code> do người dùng cung cấp, nhưng lại được nối thành chuỗi rồi đưa qua shell. Giả định “ta kiểm soát hoàn toàn args” trong comment là sai.</span>",
+    "c1.note2": "<b>Cách sửa:</b> <span>Thay <code>execSync</code> (đi qua shell) bằng <code>execFileSync</code> - truyền tham số dưới dạng mảng nên shell không còn diễn giải metacharacter.</span>",
+    "c1.ver1": "Bị ảnh hưởng: ≥ 2.1.0, &lt; 5.0.0",
+    "c1.ver2": "Đã sửa: 5.0.0",
+    "c1.ver3": "Tạm thời: set npm_execpath",
+
+    "c2.summary": "Endpoint <code>POST /webhooks/nextcloud</code> không xác thực theo mặc định, do hai nguyên nhân chồng lên nhau. Thứ nhất, <code>webhook_secret</code> mặc định là <code>None</code> và không có startup validator nào bắt buộc nó, kể cả khi vector sync đang bật. Thứ hai, toàn bộ phần kiểm tra nằm trong nhánh <code>if secret:</code> - nên khi secret không được set, nhánh kiểm tra bị bỏ qua hoàn toàn, chỉ ghi một dòng warning rồi vẫn xử lý request bình thường.",
+    "c2.impact": "Attacker không cần credential, chỉ cần tiếp cận được port 8000 là có thể xóa hoặc ép re-index vector embedding của bất kỳ user nào trong Qdrant. Kết hợp với việc <code>user_id</code> được lấy thẳng từ payload do attacker gửi, có thể giả mạo uid rồi loop qua doc ID để phá sạch semantic search index của toàn bộ user - muốn khôi phục phải re-scan lại từ đầu.",
+    "c2.note1": "<b>Vấn đề:</b> <span>Không có secret thì rơi vào nhánh <code>else</code> - chỉ log cảnh báo rồi tiếp tục xử lý request. Fail-open thay vì fail-closed.</span>",
+    "c2.note2": "<b>Vấn đề:</b> <span>Danh tính người dùng lấy thẳng từ body request, không đối chiếu với session hay token nào - vi phạm trust boundary, cho phép spoof uid.</span>",
+    "c2.ver1": "Bị ảnh hưởng: ≤ 0.117.1",
+    "c2.ver2": "Đã sửa: 0.117.2",
+
+    "c3.summary": "Khi chạy với <code>TRANSPORT=http</code>, endpoint MCP không có bất kỳ lớp xác thực nào. Project chỉ gắn <code>CORSMiddleware</code> và không bao giờ set <code>mcp.auth</code>, trong khi FastMCP chỉ bật auth middleware nếu <code>mcp.auth</code> có giá trị. Kết quả là ai chạm được tới port đều mở được session hợp lệ và gọi được cả 4 tool NetBox. Nghiêm trọng hơn, README hướng dẫn chạy Docker với <code>HOST=0.0.0.0</code> và <code>-p 8000:8000</code> ở ba chỗ mà không hề nhắc tới xác thực.",
+    "c3.impact": "Đọc được toàn bộ dữ liệu NetBox mà không cần credential - devices, IP, VLAN, rack, circuit, VM, và cả changelog có chứa username. Mất hoàn toàn tính bí mật, không ảnh hưởng tới tính toàn vẹn hay tính sẵn sàng.",
+    "c3.note1": "<b>Vấn đề:</b> <span>Không có dòng nào gán <code>mcp.auth</code> trong toàn bộ codebase. <code>\"Authorization\"</code> chỉ xuất hiện trong danh sách CORS header được phép - CORS là chính sách trình duyệt, không phải xác thực.</span>",
+    "c3.ver1": "Bị ảnh hưởng: ≤ 1.2.0",
+    "c3.ver2": "Đã sửa: 1.2.1",
+
+    "link.cve": "Xem bản ghi trên cve.org ↗",
+    "link.ghsa": "Xem advisory GHSA ↗",
+
+    "journey.h2": "Hành <span class=\"grad-text\">trình</span>",
+    "journey.sub": "Các cột mốc theo thứ tự gần nhất trước, tính theo ngày advisory được công khai.",
+    "tl1.time": "Công khai 18/06/2026 · CVE-2026-57207 · MODERATE",
+    "tl2.time": "Công khai 16/06/2026 · CVE-2026-55849 · HIGH",
+    "tl3.time": "Công khai 14/06/2026 · CVE-2026-55640 · CRITICAL",
+    "tl1.p": "Endpoint MCP không xác thực khi chạy <code>TRANSPORT=http</code>, đọc được toàn bộ dữ liệu hạ tầng NetBox mà không cần credential. Đã được sửa ở phiên bản 1.2.1.",
+    "tl2.p": "Chèn lệnh qua option <code>--workspace</code> khi <code>npm_execpath</code> không được set, dẫn tới thực thi lệnh tùy ý ngay trong pipeline CI/CD sinh SBOM. Đã được sửa ở phiên bản 5.0.0.",
+    "tl3.p": "Webhook endpoint không xác thực theo mặc định, cộng với uid lấy thẳng từ payload - cho phép phá sạch vector search index của mọi user. Đã được sửa ở phiên bản 0.117.2.",
+    "tl4.time": "NĂM NHẤT · HCMUTE",
+    "tl4.h3": "Bắt đầu nghiên cứu",
+    "tl4.sub": "An toàn thông tin - HCMUTE",
+    "tl4.p": "Ngay từ năm nhất, mình bắt đầu học nền tảng An toàn thông tin và tập đọc source code của các dự án mã nguồn mở để tìm lỗ hổng.",
+
+    "contact.h2": "Cùng <span class=\"grad-text\">kết nối</span> nhé",
+    "contact.p": "Nếu bạn muốn trao đổi về bảo mật, hợp tác nghiên cứu, hay đơn giản là làm quen - gửi mình một email hoặc kết nối qua các kênh bên dưới.",
+
+    "btn.viewCode": "Xem đoạn code lỗi",
+    "btn.hideCode": "Ẩn đoạn code lỗi",
+    "btn.copy": "Copy",
+    "btn.copied": "Đã copy",
+    "btn.copyFail": "Lỗi",
+    "aria.menuOpen": "Mở menu",
+    "aria.menuClose": "Đóng menu",
+    "aria.top": "Lên đầu trang",
+    "aria.lang": "Switch to English",
+    "roles": ["Security Researcher","Sinh viên An toàn thông tin @ HCMUTE","Vulnerability Researcher","Responsible Disclosure"]
+  },
+
+  en: {
+    "meta.title": "Fortress - Võ Phú Vinh | Security Researcher",
+    "meta.desc": "Võ Phú Vinh (Fortress) - Information Security student at HCMUTE, security researcher with multiple assigned CVEs.",
+
+    "nav.home": "Home",
+    "nav.about": "About",
+    "nav.cve": "Findings",
+    "nav.journey": "Journey",
+    "nav.contact": "Contact",
+
+    "hero.desc": "Second-year <strong>Information Security</strong> student at HCMUTE. I hunt for vulnerabilities in open-source projects and disclose them responsibly - <strong>multiple CVEs assigned</strong> so far.",
+    "hero.btn1": "View my CVEs",
+    "hero.btn2": "Get in touch",
+
+    "about.h2": "About <span class=\"grad-text\">me</span>",
+    "about.sub": "A little about the person behind the advisories below.",
+    "about.p1": "I'm <strong>Võ Phú Vinh</strong>, also known as <strong>Fortress</strong>. I'm currently a <strong>second-year student</strong> majoring in <strong>Information Security</strong> at <strong>Ho Chi Minh City University of Technology and Education (HCMUTE)</strong>.",
+    "about.p2": "What I do is read the source code of open-source projects to find vulnerabilities, then <strong>disclose them responsibly</strong> to the maintainers before going public. The CVEs below range from missing authentication to OS command injection.",
+    "fact1.k": "Education",
+    "fact1.v": "Second-year student - Information Security, HCMUTE",
+    "fact2.k": "Focus area",
+    "fact2.v": "Vulnerability research &amp; responsible disclosure",
+    "fact3.k": "Email",
+    "stat1": "CVEs assigned",
+    "stat2": "Open-source projects",
+    "stat3": "Distinct CWE classes",
+
+    "cve.h2": "<span class=\"grad-text\">Findings</span>",
+    "cve.sub": "Each card below covers the technical summary, the impact, and the original code that caused the vulnerability. Tap “View vulnerable code” to expand.",
+    "label.summary": "Summary",
+    "label.impact": "Impact",
+
+    "c1.summary": "OS command injection through the <code>--workspace &lt;value&gt;</code> option. When the <code>npm_execpath</code> environment variable is set, the tool invokes the npm executable directly and is safe. But if <code>npm_execpath</code> is empty or unset, the tool falls back to a path that spawns a subshell and concatenates <code>'npm ' + args.join(' ')</code> without escaping. Shell metacharacters such as <code>;</code>, <code>&amp;&amp;</code> and <code>|</code> are interpreted by the shell, letting an attacker break out of the intended command.",
+    "c1.impact": "Arbitrary command execution with the privileges of the user running the CLI - data exfiltration, modifying or deleting files, and depending on the deployment, possible privilege escalation. Especially concerning in CI/CD, since this is an SBOM generator that usually runs automatically inside pipelines.",
+    "c1.path1": "src/npmRunner.ts - before v5.0.0",
+    "c1.note1": "<b>The flaw:</b> <span><code>args</code> carries the user-supplied <code>--workspace</code> value, yet it is joined into a string and handed to a shell. The comment's assumption that “we have complete control over args” is simply wrong.</span>",
+    "c1.note2": "<b>The fix:</b> <span>Replace <code>execSync</code> (which goes through a shell) with <code>execFileSync</code> - arguments are passed as an array, so the shell never interprets metacharacters.</span>",
+    "c1.ver1": "Affected: ≥ 2.1.0, &lt; 5.0.0",
+    "c1.ver2": "Fixed in: 5.0.0",
+    "c1.ver3": "Workaround: set npm_execpath",
+
+    "c2.summary": "The <code>POST /webhooks/nextcloud</code> endpoint is unauthenticated by default, because two root causes stack up. First, <code>webhook_secret</code> defaults to <code>None</code> and no startup validator enforces it, even while vector sync is enabled. Second, the entire check sits inside an <code>if secret:</code> branch - so when the secret is unset, the check is skipped completely: it logs a single warning and then processes the request anyway.",
+    "c2.impact": "An attacker needs no credentials, only network access to port 8000, to delete or force a re-index of any user's vector embeddings in Qdrant. Combined with <code>user_id</code> being read straight from the attacker-supplied payload, they can spoof a uid and loop through document IDs to wipe every user's semantic search index - recovering requires a full re-scan.",
+    "c2.note1": "<b>The flaw:</b> <span>With no secret configured, execution falls into the <code>else</code> branch - it only logs a warning and keeps processing the request. Fail-open instead of fail-closed.</span>",
+    "c2.note2": "<b>The flaw:</b> <span>The user identity is read straight from the request body and never checked against a session or token - a trust boundary violation that allows uid spoofing.</span>",
+    "c2.ver1": "Affected: ≤ 0.117.1",
+    "c2.ver2": "Fixed in: 0.117.2",
+
+    "c3.summary": "When running with <code>TRANSPORT=http</code>, the MCP endpoint has no authentication layer at all. The project only attaches <code>CORSMiddleware</code> and never sets <code>mcp.auth</code>, while FastMCP enables its auth middleware only when <code>mcp.auth</code> has a value. As a result, anyone who can reach the port can open a valid session and call all four NetBox tools. Worse, the README documents Docker usage with <code>HOST=0.0.0.0</code> and <code>-p 8000:8000</code> in three places without mentioning authentication once.",
+    "c3.impact": "Full read access to all NetBox data without credentials - devices, IPs, VLANs, racks, circuits, VMs, and the changelog containing usernames. Complete loss of confidentiality; integrity and availability are unaffected.",
+    "c3.note1": "<b>The flaw:</b> <span>Nothing anywhere in the codebase assigns <code>mcp.auth</code>. <code>\"Authorization\"</code> appears only in the list of allowed CORS headers - and CORS is a browser policy, not authentication.</span>",
+    "c3.ver1": "Affected: ≤ 1.2.0",
+    "c3.ver2": "Fixed in: 1.2.1",
+
+    "link.cve": "View the record on cve.org ↗",
+    "link.ghsa": "View the GHSA advisory ↗",
+
+    "journey.h2": "My <span class=\"grad-text\">journey</span>",
+    "journey.sub": "Milestones, most recent first, dated by advisory publication.",
+    "tl1.time": "Disclosed Jun 18, 2026 · CVE-2026-57207 · MODERATE",
+    "tl2.time": "Disclosed Jun 16, 2026 · CVE-2026-55849 · HIGH",
+    "tl3.time": "Disclosed Jun 14, 2026 · CVE-2026-55640 · CRITICAL",
+    "tl1.p": "The MCP endpoint has no authentication when running <code>TRANSPORT=http</code>, exposing all NetBox infrastructure data without credentials. Fixed in version 1.2.1.",
+    "tl2.p": "Command injection through the <code>--workspace</code> option when <code>npm_execpath</code> is unset, leading to arbitrary command execution inside SBOM-generating CI/CD pipelines. Fixed in version 5.0.0.",
+    "tl3.p": "The webhook endpoint is unauthenticated by default, and the uid comes straight from the payload - allowing every user's vector search index to be wiped. Fixed in version 0.117.2.",
+    "tl4.time": "FIRST YEAR · HCMUTE",
+    "tl4.h3": "Where the research started",
+    "tl4.sub": "Information Security - HCMUTE",
+    "tl4.p": "From my very first year I started learning the fundamentals of Information Security and reading the source code of open-source projects to hunt for vulnerabilities.",
+
+    "contact.h2": "Let's <span class=\"grad-text\">connect</span>",
+    "contact.p": "If you'd like to talk security, collaborate on research, or just say hello - send me an email or reach out through the links below.",
+
+    "btn.viewCode": "View vulnerable code",
+    "btn.hideCode": "Hide vulnerable code",
+    "btn.copy": "Copy",
+    "btn.copied": "Copied",
+    "btn.copyFail": "Failed",
+    "aria.menuOpen": "Open menu",
+    "aria.menuClose": "Close menu",
+    "aria.top": "Back to top",
+    "aria.lang": "Chuyển sang tiếng Việt",
+    "roles": ["Security Researcher","Information Security student @ HCMUTE","Vulnerability Researcher","Responsible Disclosure"]
+  }
+};
+
+let lang = "vi";
+try{
+  const saved = localStorage.getItem("fortress-lang");
+  if(saved === "vi" || saved === "en") lang = saved;
+}catch(err){}
+
+const t = key => (I18N[lang][key] !== undefined ? I18N[lang][key] : I18N.vi[key]);
+
+const langBtn = document.getElementById("langBtn");
+const metaDesc = document.getElementById("metaDesc");
+const burger = document.getElementById("burger");
+const navLinks = document.getElementById("navLinks");
+const toTop = document.getElementById("toTop");
+const typingEl = document.getElementById("typing");
+
+// Các con số thống kê được đếm từ danh sách card trong #cve,
+// nên khi thêm CVE mới chỉ cần thêm card - không phải sửa số ở đâu khác.
+const statCounts = {
+  cve: document.querySelectorAll("#cve .cve").length,
+  pkg: new Set([...document.querySelectorAll("#cve .pkg")].map(el => el.textContent.trim())).size,
+  cwe: new Set(
+    [...document.querySelectorAll("#cve .cwe-row .tag")]
+      .map(el => (el.textContent.match(/CWE-\d+/) || [])[0])
+      .filter(Boolean)
+  ).size
+};
+document.querySelectorAll(".js-cve-count").forEach(el => { el.textContent = statCounts.cve; });
+document.querySelectorAll(".stat .num[data-stat]").forEach(el => {
+  if(statCounts[el.dataset.stat] !== undefined) el.dataset.count = statCounts[el.dataset.stat];
+});
+
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.title = t("meta.title");
+  metaDesc.setAttribute("content", t("meta.desc"));
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const v = t(el.dataset.i18n);
+    if(typeof v === "string") el.innerHTML = v;
+  });
+
+  document.querySelectorAll(".code-toggle").forEach(btn => {
+    const open = btn.getAttribute("aria-expanded") === "true";
+    btn.querySelector(".lbl").textContent = open ? t("btn.hideCode") : t("btn.viewCode");
+  });
+  document.querySelectorAll(".copy").forEach(btn => {
+    if(!btn.classList.contains("done")) btn.textContent = t("btn.copy");
+  });
+
+  const menuOpen = navLinks.classList.contains("open");
+  burger.setAttribute("aria-label", menuOpen ? t("aria.menuClose") : t("aria.menuOpen"));
+  toTop.setAttribute("aria-label", t("aria.top"));
+  langBtn.setAttribute("aria-label", t("aria.lang"));
+  langBtn.querySelector(".vi").classList.toggle("on", lang === "vi");
+  langBtn.querySelector(".en").classList.toggle("on", lang === "en");
+
+  restartTyping();
+}
+
+langBtn.addEventListener("click", () => {
+  lang = lang === "vi" ? "en" : "vi";
+  try{ localStorage.setItem("fortress-lang", lang); }catch(err){}
+  applyLang();
+});
+
+let typeTimer = null, ri = 0, ci = 0, deleting = false;
+function restartTyping(){
+  clearTimeout(typeTimer);
+  ri = 0; ci = 0; deleting = false;
+  typingEl.textContent = "";
+  typeStep();
+}
+function typeStep(){
+  const roles = t("roles");
+  const word = roles[ri % roles.length];
+  typingEl.textContent = word.slice(0, ci);
+  let delay;
+  if(!deleting && ci < word.length){ ci++; delay = 58; }
+  else if(!deleting){ deleting = true; delay = 1900; }
+  else if(ci > 0){ ci--; delay = 24; }
+  else { deleting = false; ri = (ri + 1) % roles.length; delay = 320; }
+  typeTimer = setTimeout(typeStep, delay);
+}
+
+function runCounter(el){
+  if(el.dataset.done) return;
+  el.dataset.done = "1";
+  const target = parseFloat(el.dataset.count);
+  const dur = 1200, t0 = performance.now();
+  (function tick(now){
+    const p = Math.min((now - t0) / dur, 1);
+    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+    if(p < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(!e.isIntersecting) return;
+    const el = e.target;
+    el.classList.add("show");
+    if(el.dataset.count) runCounter(el);
+    el.querySelectorAll("[data-count]").forEach(runCounter);
+    el.querySelectorAll(".ring").forEach(r => {
+      setTimeout(() => r.style.setProperty("--p", r.dataset.p), 200);
+    });
+    io.unobserve(el);
+  });
+}, {threshold:.15, rootMargin:"0px 0px -40px 0px"});
+document.querySelectorAll(".reveal, h2").forEach(el => io.observe(el));
+
+document.querySelectorAll(".code-toggle").forEach(btn => {
+  const wrap = btn.nextElementSibling;
+  btn.addEventListener("click", () => {
+    const open = wrap.classList.toggle("open");
+    btn.setAttribute("aria-expanded", String(open));
+    btn.querySelector(".lbl").textContent = open ? t("btn.hideCode") : t("btn.viewCode");
+  });
+});
+
+document.querySelectorAll(".copy").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const pre = btn.closest(".code").querySelector("pre");
+    try{
+      await navigator.clipboard.writeText(pre.innerText);
+      btn.textContent = t("btn.copied");
+      btn.classList.add("done");
+    }catch(err){
+      btn.textContent = t("btn.copyFail");
+    }
+    setTimeout(() => {
+      btn.textContent = t("btn.copy");
+      btn.classList.remove("done");
+    }, 1800);
+  });
+});
+
+const fine = matchMedia("(pointer:fine)").matches;
+if(fine){
+  const spotlight = document.getElementById("spotlight");
+  addEventListener("pointermove", e => {
+    spotlight.style.opacity = "1";
+    spotlight.style.left = e.clientX + "px";
+    spotlight.style.top = e.clientY + "px";
+  }, {passive:true});
+  document.querySelectorAll(".card, .cve").forEach(c => {
+    c.addEventListener("pointermove", e => {
+      const r = c.getBoundingClientRect();
+      c.style.setProperty("--mx", (e.clientX - r.left) + "px");
+      c.style.setProperty("--my", (e.clientY - r.top) + "px");
+    }, {passive:true});
+  });
+}else{
+  const focusIO = new IntersectionObserver(entries => {
+    entries.forEach(e => e.target.classList.toggle("focus", e.isIntersecting));
+  }, {rootMargin:"-38% 0px -38% 0px", threshold:0});
+  document.querySelectorAll(".card, .cve, .tl-item").forEach(el => focusIO.observe(el));
+}
+
+burger.addEventListener("click", () => {
+  const open = navLinks.classList.toggle("open");
+  burger.classList.toggle("open", open);
+  burger.setAttribute("aria-expanded", String(open));
+  burger.setAttribute("aria-label", open ? t("aria.menuClose") : t("aria.menuOpen"));
+});
+navLinks.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
+  burger.classList.remove("open");
+  navLinks.classList.remove("open");
+  burger.setAttribute("aria-expanded", "false");
+  burger.setAttribute("aria-label", t("aria.menuOpen"));
+}));
+
+const nav = document.getElementById("nav");
+const progress = document.getElementById("progress");
+const sections = [...document.querySelectorAll("section[id]")];
+const links = [...navLinks.querySelectorAll("a")];
+const blob1 = document.getElementById("blob1");
+const blob2 = document.getElementById("blob2");
+let ticking = false;
+
+function onScroll(){
+  const y = scrollY;
+  const max = document.documentElement.scrollHeight - innerHeight;
+  progress.style.width = (max > 0 ? (y / max) * 100 : 0) + "%";
+  nav.classList.toggle("scrolled", y > 20);
+  toTop.classList.toggle("show", y > 480);
+  blob1.style.transform = "translate3d(0," + (y * 0.16) + "px,0)";
+  blob2.style.transform = "translate3d(0," + (y * -0.1) + "px,0)";
+
+  const pos = y + innerHeight / 3;
+  let current = sections[0].id;
+  sections.forEach(s => { if(s.offsetTop <= pos) current = s.id; });
+  links.forEach(l => l.classList.toggle("active", l.getAttribute("href") === "#" + current));
+  ticking = false;
+}
+addEventListener("scroll", () => {
+  if(!ticking){ requestAnimationFrame(onScroll); ticking = true; }
+}, {passive:true});
+
+toTop.addEventListener("click", () => scrollTo({top:0, behavior:"smooth"}));
+
+applyLang();
+onScroll();
+</script>
+</body>
+</html>
