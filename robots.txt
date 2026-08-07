@@ -2,5 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://fortress07.github.io/profile/sitemap.xml
-
-Disallow: /profile/security.txt

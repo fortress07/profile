@@ -638,42 +638,6 @@
   .wu-step p{color:var(--muted);font-size:.865rem;line-height:1.78;max-width:72ch}
   .wu-steps{display:grid;gap:15px}
 
-  .secret-card{text-align:center;padding:clamp(28px,6vw,52px)}
-  .secret-card pre{
-    display:inline-block;text-align:left;margin:0 auto 18px;padding:0;
-    color:var(--red-soft);font-size:clamp(.4rem,1.9vw,.72rem);line-height:1.35;
-  }
-  .secret-card p{color:var(--muted);max-width:56ch;margin:0 auto 10px}
-  .secret-card .flag{
-    display:inline-block;margin-top:14px;font-family:var(--mono);font-size:clamp(.7rem,2.4vw,.9rem);
-    color:var(--green);background:rgba(74,222,128,.07);border:1px dashed rgba(74,222,128,.4);
-    padding:10px 16px;border-radius:9px;word-break:break-all;
-  }
-  .vault-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
-  #vaultKey{
-    flex:1;min-width:0;max-width:340px;min-height:46px;padding:12px 16px;border-radius:11px;
-    font-family:var(--mono);font-size:.85rem;letter-spacing:.04em;text-align:center;
-    color:var(--text);background:rgba(0,0,0,.32);border:1px solid var(--line);
-    transition:border-color .25s;
-  }
-  #vaultKey:focus{outline:none;border-color:rgba(255,59,92,.5)}
-  .vault-form .btn{flex:none}
-  .vault-msg{
-    min-height:1.6em;margin-top:16px;font-family:var(--mono);font-size:.76rem;line-height:1.7;
-  }
-  .vault-msg.bad{color:var(--red-soft)}
-  .vault-msg.ok{color:var(--green)}
-  .vault-msg.busy{color:var(--muted)}
-  .toast{
-    position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);z-index:130;
-    max-width:min(92vw,460px);padding:13px 18px;border-radius:12px;
-    font-family:var(--mono);font-size:.74rem;line-height:1.7;color:var(--text-dim);
-    background:rgba(16,11,14,.96);border:1px solid rgba(255,59,92,.32);
-    box-shadow:0 18px 40px -18px rgba(0,0,0,.85);
-    opacity:0;pointer-events:none;transition:opacity .35s,transform .35s var(--ease);
-  }
-  .toast.show{opacity:1;transform:translate(-50%,0)}
-
   .contact-card{
     text-align:center;padding:clamp(30px,6vw,56px);
     background:radial-gradient(400px 190px at 50% 0%,rgba(255,59,92,.12),transparent),var(--surface);
@@ -961,7 +925,7 @@
     </div>
 
     <div class="stats">
-      <div class="stat card reveal"><div class="num" data-stat="cve" data-count="3">0</div><div class="lbl" data-i18n="stat1">CVE được ghi nhận</div></div>
+      <div class="stat card reveal"><div class="num" data-stat="cve" data-count="4">0</div><div class="lbl" data-i18n="stat1">CVE được ghi nhận</div></div>
       <div class="stat card reveal d1"><div class="num" data-stat="pkg" data-count="3">0</div><div class="lbl" data-i18n="stat2">Dự án mã nguồn mở</div></div>
       <div class="stat card reveal d2"><div class="num" data-stat="cwe" data-count="3">0</div><div class="lbl" data-i18n="stat3">Lớp CWE khác nhau</div></div>
     </div>
@@ -976,6 +940,27 @@
       <div class="sb-item"><span class="sb-k" data-i18n="status.updated">Cập nhật gần đây</span><span class="sb-v" id="lastUpdate">—</span></div>
     </div>
     <div class="cve-list">
+
+      <article class="cve reveal" data-date="2026-07-07" data-slug="wu-71538" style="--sev:var(--orange)">
+        <div class="score">
+          <div class="ring" data-p="85">
+            <div class="inner"><span class="val">8.5</span><span class="of">CVSS 4.0</span></div>
+          </div>
+          <span class="sev-label">High</span>
+        </div>
+        <div class="cve-main">
+          <div class="cve-head">
+            <span class="cve-id">CVE-2026-71538</span>
+          </div>
+          <span class="pkg">@cyclonedx/cyclonedx-npm</span>
+          <p class="cve-teaser" data-i18n="c4.teaser"></p>
+          <div class="cwe-row">
+            <span class="tag">CWE-78 · OS Command Injection</span>
+            <span class="tag">Windows-only</span>
+          </div>
+          <a class="cve-link" href="#/wu-71538" data-i18n="link.more">Xem chi tiết →</a>
+        </div>
+      </article>
 
       <article class="cve featured reveal" data-date="2026-06-16" data-slug="wu-55849" style="--sev:var(--orange)">
         <div class="score">
@@ -1055,6 +1040,115 @@
     <h2 class="reveal" data-i18n="wu.h2">Nhật ký <span class="grad-text">săn lỗ hổng</span></h2>
     <p class="sec-sub reveal d1" data-i18n="wu.sub"></p>
     <div class="cve-list" id="wuIndex"></div>
+  </section>
+
+  </div>
+
+  <div class="page" id="page-wu-71538">
+
+  <section class="detail" style="--sev:var(--orange)">
+    <a class="back-link" href="#/writeup" data-i18n="link.back">← Quay lại danh sách writeup</a>
+    <div class="sec-tag reveal">cat ./writeups/CVE-2026-71538.md</div>
+    <h2 class="reveal"><span class="grad-text">CVE-2026-71538</span></h2>
+    <p class="sec-sub reveal d1" data-i18n="c4.teaser"></p>
+
+    <div class="card detail-top reveal">
+      <div class="score">
+          <div class="ring" data-p="85">
+            <div class="inner"><span class="val">8.5</span><span class="of">CVSS 4.0</span></div>
+          </div>
+          <span class="sev-label">High</span>
+        </div>
+      <div class="detail-facts">
+        <div class="cve-head">
+          <span class="pkg">@cyclonedx/cyclonedx-npm</span>
+        </div>
+        <div class="vector"><b>CVSS 4.0</b>&nbsp; AV:L/AC:L/AT:N/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N</div>
+        <div class="ver-row">
+                    <span class="ver bad" data-i18n="c4.ver1">Bị ảnh hưởng: 5.0.0 (chỉ trên Windows)</span>
+                    <span class="ver ok" data-i18n="c4.ver2">Đã sửa: 6.0.0</span>
+                    <span class="ver ok" data-i18n="c4.ver3">Tạm thời: trỏ npm_execpath tới npm-cli.js</span>
+                  </div>
+        <div class="cwe-row">
+                    <span class="tag">CWE-78 · OS Command Injection</span>
+                    <span class="tag">Windows-only</span>
+                  </div>
+      </div>
+    </div>
+
+    <div class="detail-body">
+      <div class="block">
+            <h4 data-i18n="label.summary">Tóm tắt</h4>
+            <p data-i18n="c4.summary">
+              Bản vá v5.0.0 của CVE-2026-55849 thay <code>execSync</code> bằng <code>execFileSync</code>,
+              nhưng đồng thời thêm một nhánh riêng cho Windows. Khi npm được phân giải thành một batch file
+              (<code>npm.cmd</code>), tool chạy <code>execFileSync('cmd.exe', ['/c', execPath, ...args])</code>.
+              Node escape tham số theo quy ước <code>CommandLineToArgvW</code>, nhưng <code>cmd.exe</code> lại
+              parse dòng lệnh bằng bộ luật riêng: nó xử lý các metacharacter <code>&amp;</code>,
+              <code>|</code>, <code>&gt;</code>, <code>^</code> trước và không hiểu escape kiểu <code>\"</code>.
+              Vì vậy giá trị <code>--workspace</code> do người dùng cung cấp vẫn thoát ra được khỏi câu lệnh
+              dự kiến - lần này chỉ trên Windows.
+            </p>
+          </div>
+
+      <div class="block">
+            <h4 data-i18n="label.impact">Ảnh hưởng</h4>
+            <p data-i18n="c4.impact">
+              Thực thi lệnh tùy ý với quyền của user đang chạy CLI trên máy Windows - rút dữ liệu,
+              sửa hoặc xóa file, và tùy cách triển khai có thể dẫn tới leo thang đặc quyền. Vì đây vẫn là
+              tool sinh SBOM chạy tự động trong pipeline, các Windows CI runner là mục tiêu trực tiếp.
+              Đáng chú ý: đây là bản vá của một CVE trước đó, nên những ai đã nâng cấp lên 5.0.0 để
+              tránh CVE-2026-55849 vẫn còn nằm trong vùng ảnh hưởng.
+            </p>
+          </div>
+
+      <h3 class="detail-h3" data-i18n="detail.code">Đoạn code gây ra lỗ hổng</h3>
+      <div class="code">
+              <div class="code-bar"><span class="lang">TypeScript</span><span class="path" data-i18n="c4.path1">src/npmRunner.ts - v5.0.0</span><button type="button" class="copy">Copy</button></div>
+<pre><span class="k">if</span> (NpmRunner.#<span class="f">isWindows</span>(process_) &amp;&amp; NpmRunner.#winCmdMatcher.<span class="f">test</span>(execPath)) {
+<span class="hl">  <span class="k">return</span> (args, options) =&gt; <span class="f">execFileSync</span>(<span class="s">'cmd.exe'</span>, [<span class="s">'/c'</span>, execPath, ...args], options)</span>
+}</pre>
+              <div class="code-note" data-i18n="c4.note1"><b>Vấn đề:</b> <span><code>execFileSync</code> không đi qua shell của Node - nhưng ở đây chính <code>cmd.exe</code> mới là shell. Toàn bộ <code>args</code> được ghép lại thành một command line rồi giao cho <code>cmd.exe /c</code> diễn giải lại theo luật của nó.</span></div>
+            </div>
+            <div class="code">
+              <div class="code-bar"><span class="lang">Fix v6.0.0</span><span class="path">src/npmRunner.ts</span><button type="button" class="copy">Copy</button></div>
+<pre><span class="k">if</span> (!NpmRunner.#jsMatcher.<span class="f">test</span>(npmJsPath)) {
+  <span class="k">throw new</span> <span class="n">Error</span>(<span class="s">`Unexpected npmJsPath ${JSON.stringify(npmJsPath)}`</span>)
+}
+<span class="hl"><span class="k">return</span> (args, options) =&gt; <span class="f">execFileSync</span>(
+  nodeExecPath, [<span class="s">'--'</span>, npmJsPath, ...args],
+  {...(options ?? {}), shell: <span class="k">false</span>, windowsHide: <span class="k">true</span>})</span></pre>
+              <div class="code-note" data-i18n="c4.note2"><b>Cách sửa:</b> <span>v6.0.0 bỏ hẳn nhánh <code>cmd.exe</code>. Chỉ chấp nhận đường dẫn tới npm CLI dạng <code>.js</code>, còn lại thì throw, và luôn gọi qua <code>node -- npm-cli.js</code> với <code>shell: false</code>. Không còn shell nào trong luồng thì không còn metacharacter nào để diễn giải.</span></div>
+            </div>
+
+      <h3 class="detail-h3" data-i18n="detail.process">Quá trình phát hiện</h3>
+      <div class="wu-steps">
+          <div class="wu-step"><span class="n">1</span><div>
+            <h4 data-i18n="wu4.s1h">Đọc lại chính bản vá của mình</h4>
+            <p data-i18n="wu4.s1p">Sau khi v5.0.0 ra mắt để vá CVE-2026-55849, mình không đóng hồ sơ mà đọc lại bản vá. Một thay đổi ở tầng sinh process là đúng chỗ dễ sinh ra lỗi mới nhất: người sửa đang bận nghĩ về lỗi cũ, không nghĩ về những đường đi khác.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">2</span><div>
+            <h4 data-i18n="wu4.s2h">Bản vá không chỉ là một dòng</h4>
+            <p data-i18n="wu4.s2p">v5.0.0 không đơn thuần đổi <code>execSync</code> thành <code>execFileSync</code>. Nó còn thêm một nhánh chỉ chạy trên Windows dành cho file <code>.cmd</code>/<code>.bat</code>, và nhánh đó gọi thẳng tên một shell: <code>cmd.exe</code>. Bất kỳ đoạn code nào tự tay gọi shell đều đáng xem lại lần hai.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">3</span><div>
+            <h4 data-i18n="wu4.s3h">Node và cmd.exe không nói cùng một ngôn ngữ</h4>
+            <p data-i18n="wu4.s3p">Node ghép mảng tham số thành command line theo quy ước <code>CommandLineToArgvW</code> - bọc dấu nháy kép, escape dấu nháy bằng <code>\</code>. Nhưng <code>cmd.exe</code> không dùng bộ luật đó: nó xử lý <code>&amp;</code>, <code>|</code>, <code>&gt;</code>, <code>^</code> trước, và không hiểu <code>\"</code>. Đây đúng là lớp lỗi mà chính Node.js đã phải vá ở CVE-2024-27980.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">4</span><div>
+            <h4 data-i18n="wu4.s4h">Nhánh nguy hiểm lại là nhánh mặc định</h4>
+            <p data-i18n="wu4.s4p">Điểm khiến mức nghiêm trọng không giảm so với CVE cũ: trên Windows, việc dò npm hệ thống chạy <code>where npm</code>, và lệnh này gần như luôn trả về <code>npm.cmd</code>. Nghĩa là nhánh <code>cmd.exe</code> không phải trường hợp hiếm - nó là đường đi bình thường của mọi người dùng Windows.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">5</span><div>
+            <h4 data-i18n="wu4.s5h">Báo cáo &amp; kết quả</h4>
+            <p data-i18n="wu4.s5p">Mình báo cáo lại cho maintainer kèm PoC chạy trên Windows. Lần này họ bỏ hẳn nhánh <code>cmd.exe</code> thay vì chỉ escape thêm: v6.0.0 luôn phân giải về npm CLI dạng <code>.js</code> rồi gọi qua <code>node</code> với <code>shell: false</code>. CVE được cấp với điểm CVSS 4.0 là 8.5 (High) - bằng đúng CVE trước đó.</p>
+          </div></div>
+        </div>
+
+      <a class="cve-link" href="https://github.com/CycloneDX/cyclonedx-node-npm/security/advisories/GHSA-q69g-4hcv-6jg4" target="_blank" rel="noopener noreferrer" data-i18n="link.ghsa">
+            Xem advisory GHSA ↗
+          </a>
+    </div>
   </section>
 
   </div>
@@ -1373,24 +1467,6 @@ middleware = [
 
   </div>
 
-  <div class="page" id="page-vault">
-
-  <section id="vault">
-    <div class="card secret-card reveal" id="vaultCard">
-      <div class="sec-tag" style="justify-content:center">authentication required</div>
-      <h2 data-i18n="vault.h2">Két <span class="grad-text">khoá</span></h2>
-      <p data-i18n="vault.p">Nội dung phía sau được mã hoá bằng chính khoá mà bạn phải tự dựng ra. Không có khoá thì không có gì để đọc, kể cả khi bạn xem toàn bộ source.</p>
-      <form class="vault-form" id="vaultForm" autocomplete="off">
-        <label class="sr-only" for="vaultKey">key</label>
-        <input id="vaultKey" type="text" spellcheck="false" autocomplete="off" placeholder="key">
-        <button class="btn btn-primary" type="submit" data-i18n="vault.submit">Giải mã</button>
-      </form>
-      <p class="vault-msg" id="vaultMsg"></p>
-    </div>
-  </section>
-
-  </div>
-
   <div class="page" id="page-journey">
 
   <section id="journey">
@@ -1398,7 +1474,16 @@ middleware = [
     <h2 class="reveal" data-i18n="journey.h2">Hành <span class="grad-text">trình</span></h2>
     <p class="sec-sub reveal d1" data-i18n="journey.sub">Các cột mốc theo thứ tự gần nhất trước, tính theo ngày advisory được công khai.</p>
     <div class="timeline">
-      <div class="tl-item reveal" style="--dot:var(--gold)">
+      <div class="tl-item reveal" style="--dot:var(--orange)">
+        <span class="tl-time" data-i18n="tl0.time">Công khai 07/07/2026 · CVE-2026-71538 · HIGH</span>
+        <h3>@cyclonedx/cyclonedx-npm</h3>
+        <div class="sub">CWE-78 · OS Command Injection (Windows)</div>
+        <p data-i18n="tl0.p">
+          Bản vá của CVE-2026-55849 để lại một nhánh <code>cmd.exe /c</code> chỉ có trên Windows -
+          <code>--workspace</code> vẫn chèn được lệnh. Đã được sửa ở phiên bản 6.0.0.
+        </p>
+      </div>
+      <div class="tl-item reveal d1" style="--dot:var(--gold)">
         <span class="tl-time" data-i18n="tl1.time">Công khai 18/06/2026 · CVE-2026-57207 · MODERATE</span>
         <h3>netbox-mcp-server</h3>
         <div class="sub">CWE-306 + CWE-1059 · Missing Authentication</div>
@@ -1407,7 +1492,7 @@ middleware = [
           hạ tầng NetBox mà không cần credential. Đã được sửa ở phiên bản 1.2.1.
         </p>
       </div>
-      <div class="tl-item reveal d1" style="--dot:var(--orange)">
+      <div class="tl-item reveal d2" style="--dot:var(--orange)">
         <span class="tl-time" data-i18n="tl2.time">Công khai 16/06/2026 · CVE-2026-55849 · HIGH</span>
         <h3>@cyclonedx/cyclonedx-npm</h3>
         <div class="sub">CWE-78 · OS Command Injection</div>
@@ -1416,7 +1501,7 @@ middleware = [
           dẫn tới thực thi lệnh tùy ý ngay trong pipeline CI/CD sinh SBOM. Đã được sửa ở phiên bản 5.0.0.
         </p>
       </div>
-      <div class="tl-item reveal d2" style="--dot:var(--red)">
+      <div class="tl-item reveal d3" style="--dot:var(--red)">
         <span class="tl-time" data-i18n="tl3.time">Công khai 14/06/2026 · CVE-2026-55640 · CRITICAL</span>
         <h3>nextcloud-mcp-server</h3>
         <div class="sub">CWE-306 · Missing Authentication + uid spoofing</div>
@@ -1512,11 +1597,21 @@ const I18N = {
     "link.back": "← Quay lại danh sách writeup",
     "detail.code": "Đoạn code gây ra lỗ hổng",
     "detail.process": "Quá trình phát hiện",
+    "c4.teaser": "Bản vá cho CVE-2026-55849 chặn được shell trên Linux nhưng để lại một nhánh <code>cmd.exe /c</code> chỉ có trên Windows - lệnh vẫn chèn được qua <code>--workspace</code>.",
     "c1.teaser": "Chèn lệnh hệ điều hành qua option <code>--workspace</code> của một tool sinh SBOM chạy tự động trong pipeline CI/CD.",
     "c2.teaser": "Webhook endpoint không xác thực theo mặc định, cộng thêm uid lấy thẳng từ payload - đủ để xoá sạch vector index của mọi user.",
     "c3.teaser": "Endpoint MCP mở toang khi chạy <code>TRANSPORT=http</code>, đọc được toàn bộ dữ liệu hạ tầng NetBox mà không cần credential.",
     "label.summary": "Tóm tắt",
     "label.impact": "Ảnh hưởng",
+
+    "c4.summary": "Bản vá v5.0.0 của CVE-2026-55849 thay <code>execSync</code> bằng <code>execFileSync</code>, nhưng đồng thời thêm một nhánh riêng cho Windows. Khi npm được phân giải thành một batch file (<code>npm.cmd</code>), tool chạy <code>execFileSync('cmd.exe', ['/c', execPath, ...args])</code>. Node escape tham số theo quy ước <code>CommandLineToArgvW</code>, nhưng <code>cmd.exe</code> lại parse dòng lệnh bằng bộ luật riêng: nó xử lý các metacharacter <code>&amp;</code>, <code>|</code>, <code>&gt;</code>, <code>^</code> trước và không hiểu escape kiểu <code>&#92;&quot;</code>. Vì vậy giá trị <code>--workspace</code> do người dùng cung cấp vẫn thoát ra được khỏi câu lệnh dự kiến - lần này chỉ trên Windows.",
+    "c4.impact": "Thực thi lệnh tùy ý với quyền của user đang chạy CLI trên máy Windows - rút dữ liệu, sửa hoặc xóa file, và tùy cách triển khai có thể dẫn tới leo thang đặc quyền. Vì đây vẫn là tool sinh SBOM chạy tự động trong pipeline, các Windows CI runner là mục tiêu trực tiếp. Đáng chú ý: đây là bản vá của một CVE trước đó, nên những ai đã nâng cấp lên 5.0.0 để tránh CVE-2026-55849 vẫn còn nằm trong vùng ảnh hưởng.",
+    "c4.path1": "src/npmRunner.ts - v5.0.0",
+    "c4.note1": "<b>Vấn đề:</b> <span><code>execFileSync</code> không đi qua shell của Node - nhưng ở đây chính <code>cmd.exe</code> mới là shell. Toàn bộ <code>args</code> được ghép lại thành một command line rồi giao cho <code>cmd.exe /c</code> diễn giải lại theo luật của nó.</span>",
+    "c4.note2": "<b>Cách sửa:</b> <span>v6.0.0 bỏ hẳn nhánh <code>cmd.exe</code>. Chỉ chấp nhận đường dẫn tới npm CLI dạng <code>.js</code>, còn lại thì throw, và luôn gọi qua <code>node -- npm-cli.js</code> với <code>shell: false</code>. Không còn shell nào trong luồng thì không còn metacharacter nào để diễn giải.</span>",
+    "c4.ver1": "Bị ảnh hưởng: 5.0.0 (chỉ trên Windows)",
+    "c4.ver2": "Đã sửa: 6.0.0",
+    "c4.ver3": "Tạm thời: trỏ npm_execpath tới npm-cli.js",
 
     "c1.summary": "Chèn lệnh hệ điều hành qua option <code>--workspace &lt;value&gt;</code>. Khi biến môi trường <code>npm_execpath</code> được set, tool gọi thẳng npm executable nên an toàn. Nhưng nếu <code>npm_execpath</code> rỗng hoặc không set, tool rơi vào nhánh fallback: spawn một subshell và nối thẳng chuỗi <code>'npm ' + args.join(' ')</code> mà không escape. Các ký tự đặc biệt của shell như <code>;</code>, <code>&amp;&amp;</code>, <code>|</code> được shell diễn giải, cho phép thoát khỏi câu lệnh dự kiến.",
     "c1.impact": "Thực thi lệnh tùy ý với quyền của user đang chạy CLI - rút dữ liệu, sửa hoặc xóa file, và tùy cách triển khai có thể dẫn tới leo thang đặc quyền. Đặc biệt đáng lo trong môi trường CI/CD, vì đây là tool sinh SBOM thường chạy tự động trong pipeline.",
@@ -1545,9 +1640,11 @@ const I18N = {
 
     "journey.h2": "Hành <span class=\"grad-text\">trình</span>",
     "journey.sub": "Các cột mốc theo thứ tự gần nhất trước, tính theo ngày advisory được công khai.",
+    "tl0.time": "Công khai 07/07/2026 · CVE-2026-71538 · HIGH",
     "tl1.time": "Công khai 18/06/2026 · CVE-2026-57207 · MODERATE",
     "tl2.time": "Công khai 16/06/2026 · CVE-2026-55849 · HIGH",
     "tl3.time": "Công khai 14/06/2026 · CVE-2026-55640 · CRITICAL",
+    "tl0.p": "Bản vá của CVE-2026-55849 để lại một nhánh <code>cmd.exe /c</code> chỉ có trên Windows - <code>--workspace</code> vẫn chèn được lệnh. Đã được sửa ở phiên bản 6.0.0.",
     "tl1.p": "Endpoint MCP không xác thực khi chạy <code>TRANSPORT=http</code>, đọc được toàn bộ dữ liệu hạ tầng NetBox mà không cần credential. Đã được sửa ở phiên bản 1.2.1.",
     "tl2.p": "Chèn lệnh qua option <code>--workspace</code> khi <code>npm_execpath</code> không được set, dẫn tới thực thi lệnh tùy ý ngay trong pipeline CI/CD sinh SBOM. Đã được sửa ở phiên bản 5.0.0.",
     "tl3.p": "Webhook endpoint không xác thực theo mặc định, cộng với uid lấy thẳng từ payload - cho phép phá sạch vector search index của mọi user. Đã được sửa ở phiên bản 0.117.2.",
@@ -1591,15 +1688,16 @@ const I18N = {
     "wu3.s4p": "README hướng dẫn chạy Docker với <code>HOST=0.0.0.0</code> và publish port ở ba chỗ khác nhau, không lần nào nhắc tới xác thực. Người dùng làm đúng theo tài liệu sẽ tự phơi dữ liệu hạ tầng của mình ra mạng - nên mình đưa thêm CWE-1059 vào báo cáo.",
     "wu3.s5h": "Báo cáo &amp; kết quả",
     "wu3.s5p": "NetBox Labs tiếp nhận và phát hành 1.2.1 kèm cập nhật tài liệu. CVE được cấp với điểm 5.9 (Moderate) - thấp hơn hai CVE trước vì chỉ ảnh hưởng tới tính bí mật.",
-
-    "vault.h2": "Két <span class=\"grad-text\">khoá</span>",
-    "vault.p": "Toàn bộ source của trang này là công khai - và cố tình như vậy. Thứ nằm sau đây được mã hoá bằng một khoá không tồn tại ở bất kỳ file nào trong repo. Đọc hết source cũng chỉ cho bạn thuật toán, không cho bạn khoá.",
-    "vault.submit": "Giải mã",
-    "vault.busy": "Đang dẫn xuất khoá...",
-    "vault.wrong": "Khoá sai. Két vẫn đóng.",
-    "vault.empty": "Nhập khoá đã.",
-    "vault.back": "← Quay lại trang chủ",
-    "vault.konami": "Mã Konami chuẩn đấy - nhưng cửa sau này đã được vá rồi. Thử bắt đầu lại từ /robots.txt xem sao.",
+    "wu4.s1h": "Đọc lại chính bản vá của mình",
+    "wu4.s1p": "Sau khi v5.0.0 ra mắt để vá CVE-2026-55849, mình không đóng hồ sơ mà đọc lại bản vá. Một thay đổi ở tầng sinh process là đúng chỗ dễ sinh ra lỗi mới nhất: người sửa đang bận nghĩ về lỗi cũ, không nghĩ về những đường đi khác.",
+    "wu4.s2h": "Bản vá không chỉ là một dòng",
+    "wu4.s2p": "v5.0.0 không đơn thuần đổi <code>execSync</code> thành <code>execFileSync</code>. Nó còn thêm một nhánh chỉ chạy trên Windows dành cho file <code>.cmd</code>/<code>.bat</code>, và nhánh đó gọi thẳng tên một shell: <code>cmd.exe</code>. Bất kỳ đoạn code nào tự tay gọi shell đều đáng xem lại lần hai.",
+    "wu4.s3h": "Node và cmd.exe không nói cùng một ngôn ngữ",
+    "wu4.s3p": "Node ghép mảng tham số thành command line theo quy ước <code>CommandLineToArgvW</code> - bọc dấu nháy kép, escape dấu nháy bằng dấu gạch chéo ngược. Nhưng <code>cmd.exe</code> không dùng bộ luật đó: nó xử lý <code>&amp;</code>, <code>|</code>, <code>&gt;</code>, <code>^</code> trước, và không hiểu <code>&#92;&quot;</code>. Đây đúng là lớp lỗi mà chính Node.js đã phải vá ở CVE-2024-27980.",
+    "wu4.s4h": "Nhánh nguy hiểm lại là nhánh mặc định",
+    "wu4.s4p": "Điểm khiến mức nghiêm trọng không giảm so với CVE cũ: trên Windows, việc dò npm hệ thống chạy <code>where npm</code>, và lệnh này gần như luôn trả về <code>npm.cmd</code>. Nghĩa là nhánh <code>cmd.exe</code> không phải trường hợp hiếm - nó là đường đi bình thường của mọi người dùng Windows.",
+    "wu4.s5h": "Báo cáo &amp; kết quả",
+    "wu4.s5p": "Mình báo cáo lại cho maintainer kèm PoC chạy trên Windows. Lần này họ bỏ hẳn nhánh <code>cmd.exe</code> thay vì chỉ escape thêm: v6.0.0 luôn phân giải về npm CLI dạng <code>.js</code> rồi gọi qua <code>node</code> với <code>shell: false</code>. CVE được cấp với điểm CVSS 4.0 là 8.5 (High) - bằng đúng CVE trước đó.",
 
     "av.cap1": "Nơi mọi thứ diễn ra - đọc source lúc nửa đêm",
     "av.cap2": "Sài Gòn - Dinh Độc Lập",
@@ -1641,9 +1739,7 @@ const I18N = {
     "term.cveHead": "CVE đã được ghi nhận:",
     "term.cveTail": "Xem chi tiết ở bản tin trang chủ.",
     "term.contact": "Kênh liên lạc:",
-    "term.goWriteup": "Đang mở nhật ký săn lỗ hổng...",
-    "term.denied": "Từ chối. Ở đây không có cửa sau nào để bạn bước qua.",
-    "term.recon": "Người biết việc thì không đoán mò. Họ bắt đầu từ /robots.txt."
+    "term.goWriteup": "Đang mở nhật ký săn lỗ hổng..."
   },
 
   en: {
@@ -1683,11 +1779,21 @@ const I18N = {
     "link.back": "← Back to all writeups",
     "detail.code": "The code behind the flaw",
     "detail.process": "How I found it",
+    "c4.teaser": "The patch for CVE-2026-55849 kept the shell out on Linux but left a Windows-only <code>cmd.exe /c</code> branch behind - <code>--workspace</code> still injects commands.",
     "c1.teaser": "OS command injection through the <code>--workspace</code> option of an SBOM generator that runs automatically inside CI/CD pipelines.",
     "c2.teaser": "A webhook endpoint left unauthenticated by default, plus a uid read straight from the payload - enough to wipe every user's vector index.",
     "c3.teaser": "An MCP endpoint wide open under <code>TRANSPORT=http</code>, exposing all NetBox infrastructure data without any credentials.",
     "label.summary": "Summary",
     "label.impact": "Impact",
+
+    "c4.summary": "The v5.0.0 patch for CVE-2026-55849 replaced <code>execSync</code> with <code>execFileSync</code>, but it also introduced a Windows-only branch. When npm resolves to a batch file (<code>npm.cmd</code>), the tool runs <code>execFileSync('cmd.exe', ['/c', execPath, ...args])</code>. Node escapes arguments following the <code>CommandLineToArgvW</code> convention, but <code>cmd.exe</code> parses the command line with a completely different set of rules: it handles the metacharacters <code>&amp;</code>, <code>|</code>, <code>&gt;</code> and <code>^</code> first, and it does not understand <code>&#92;&quot;</code> escaping. So the user-supplied <code>--workspace</code> value can still break out of the intended command - this time only on Windows.",
+    "c4.impact": "Arbitrary command execution with the privileges of the user running the CLI on Windows machines - data exfiltration, modifying or deleting files, and depending on the deployment, possible privilege escalation. Since this is still an SBOM generator running automatically inside pipelines, Windows CI runners are a direct target. Worth noting: this is the patch for an earlier CVE, so anyone who upgraded to 5.0.0 to escape CVE-2026-55849 is still in scope.",
+    "c4.path1": "src/npmRunner.ts - v5.0.0",
+    "c4.note1": "<b>The flaw:</b> <span><code>execFileSync</code> does not go through Node's shell - but here <code>cmd.exe</code> <em>is</em> the shell. All of <code>args</code> gets joined back into a single command line and handed to <code>cmd.exe /c</code>, which then re-parses it under its own rules.</span>",
+    "c4.note2": "<b>The fix:</b> <span>v6.0.0 removes the <code>cmd.exe</code> branch entirely. It accepts only a path to the npm CLI <code>.js</code> file and throws otherwise, always spawning <code>node -- npm-cli.js</code> with <code>shell: false</code>. With no shell left in the chain, there are no metacharacters left to interpret.</span>",
+    "c4.ver1": "Affected: 5.0.0 (Windows only)",
+    "c4.ver2": "Fixed in: 6.0.0",
+    "c4.ver3": "Workaround: point npm_execpath at npm-cli.js",
 
     "c1.summary": "OS command injection through the <code>--workspace &lt;value&gt;</code> option. When the <code>npm_execpath</code> environment variable is set, the tool invokes the npm executable directly and is safe. But if <code>npm_execpath</code> is empty or unset, the tool falls back to a path that spawns a subshell and concatenates <code>'npm ' + args.join(' ')</code> without escaping. Shell metacharacters such as <code>;</code>, <code>&amp;&amp;</code> and <code>|</code> are interpreted by the shell, letting an attacker break out of the intended command.",
     "c1.impact": "Arbitrary command execution with the privileges of the user running the CLI - data exfiltration, modifying or deleting files, and depending on the deployment, possible privilege escalation. Especially concerning in CI/CD, since this is an SBOM generator that usually runs automatically inside pipelines.",
@@ -1716,9 +1822,11 @@ const I18N = {
 
     "journey.h2": "My <span class=\"grad-text\">journey</span>",
     "journey.sub": "Milestones, most recent first, dated by advisory publication.",
+    "tl0.time": "Disclosed Jul 7, 2026 · CVE-2026-71538 · HIGH",
     "tl1.time": "Disclosed Jun 18, 2026 · CVE-2026-57207 · MODERATE",
     "tl2.time": "Disclosed Jun 16, 2026 · CVE-2026-55849 · HIGH",
     "tl3.time": "Disclosed Jun 14, 2026 · CVE-2026-55640 · CRITICAL",
+    "tl0.p": "The patch for CVE-2026-55849 left behind a Windows-only <code>cmd.exe /c</code> branch - <code>--workspace</code> still injects commands. Fixed in version 6.0.0.",
     "tl1.p": "The MCP endpoint has no authentication when running <code>TRANSPORT=http</code>, exposing all NetBox infrastructure data without credentials. Fixed in version 1.2.1.",
     "tl2.p": "Command injection through the <code>--workspace</code> option when <code>npm_execpath</code> is unset, leading to arbitrary command execution inside SBOM-generating CI/CD pipelines. Fixed in version 5.0.0.",
     "tl3.p": "The webhook endpoint is unauthenticated by default, and the uid comes straight from the payload - allowing every user's vector search index to be wiped. Fixed in version 0.117.2.",
@@ -1762,15 +1870,16 @@ const I18N = {
     "wu3.s4p": "The README shows Docker usage with <code>HOST=0.0.0.0</code> and a published port in three separate places, never once mentioning authentication. A user following the documentation correctly ends up exposing their own infrastructure data to the network - which is why I included CWE-1059 in the report.",
     "wu3.s5h": "Report &amp; outcome",
     "wu3.s5p": "NetBox Labs took it on and shipped 1.2.1 along with documentation updates. The CVE was assigned 5.9 (Moderate) - lower than the previous two because only confidentiality is affected.",
-
-    "vault.h2": "Locked <span class=\"grad-text\">vault</span>",
-    "vault.p": "Every line of this site's source is public, and deliberately so. What sits behind this is encrypted with a key that exists in no file of the repository. Reading the source gives you the algorithm, never the key.",
-    "vault.submit": "Decrypt",
-    "vault.busy": "Deriving key...",
-    "vault.wrong": "Wrong key. The vault stays shut.",
-    "vault.empty": "Enter a key first.",
-    "vault.back": "← Back to the home page",
-    "vault.konami": "That is the correct Konami code - but this back door has been patched. Try starting over at /robots.txt instead.",
+    "wu4.s1h": "Re-reading my own patch",
+    "wu4.s1p": "After v5.0.0 shipped to fix CVE-2026-55849, I did not close the file - I read the patch again. A change at the process-spawning layer is exactly where a fresh bug tends to appear: whoever writes the fix is busy thinking about the old flaw, not about the other paths through the code.",
+    "wu4.s2h": "The patch was more than one line",
+    "wu4.s2p": "v5.0.0 did not simply swap <code>execSync</code> for <code>execFileSync</code>. It also added a Windows-only branch for <code>.cmd</code>/<code>.bat</code> files, and that branch names a shell outright: <code>cmd.exe</code>. Any code that reaches for a shell by hand deserves a second look.",
+    "wu4.s3h": "Node and cmd.exe do not speak the same language",
+    "wu4.s3p": "Node joins the argument array into a command line following the <code>CommandLineToArgvW</code> convention - wrap in double quotes, escape quotes with a backslash. But <code>cmd.exe</code> does not use those rules: it processes <code>&amp;</code>, <code>|</code>, <code>&gt;</code> and <code>^</code> first, and it has no idea what <code>&#92;&quot;</code> means. This is precisely the bug class Node.js itself had to patch in CVE-2024-27980.",
+    "wu4.s4h": "The dangerous branch is the default one",
+    "wu4.s4p": "This is what kept the severity level with the previous CVE: on Windows, the system npm lookup runs <code>where npm</code>, and that command almost always returns <code>npm.cmd</code> first. So the <code>cmd.exe</code> branch is not a rare edge case - it is the ordinary path for every Windows user.",
+    "wu4.s5h": "Report &amp; outcome",
+    "wu4.s5p": "I reported back to the maintainers with a PoC that runs on Windows. This time they dropped the <code>cmd.exe</code> branch altogether rather than adding more escaping: v6.0.0 always resolves to the npm CLI <code>.js</code> file and spawns it through <code>node</code> with <code>shell: false</code>. The CVE was assigned a CVSS 4.0 score of 8.5 (High) - the same as the previous one.",
 
     "av.cap1": "Where it all happens - reading source at midnight",
     "av.cap2": "Saigon - Independence Palace",
@@ -1812,9 +1921,7 @@ const I18N = {
     "term.cveHead": "CVEs assigned:",
     "term.cveTail": "Full details are in the feed on the home page.",
     "term.contact": "Contact channels:",
-    "term.goWriteup": "Opening the bug hunting journal...",
-    "term.denied": "Denied. There is no back door here for you to walk through.",
-    "term.recon": "People who know what they are doing do not guess. They start at /robots.txt."
+    "term.goWriteup": "Opening the bug hunting journal..."
   }
 };
 
@@ -1899,7 +2006,6 @@ function applyLang(){
     if(!btn.classList.contains("done")) btn.textContent = t("btn.copy");
   });
   renderStatus();
-  if(typeof vaultOpen !== "undefined" && vaultOpen) renderVault(vaultOpen);
   if(typeof buildHints === "function"){
     buildHints();
     termOut.innerHTML = "";
@@ -2147,7 +2253,7 @@ const termInput = document.getElementById("termInput");
 const termHint = document.getElementById("termHint");
 const CMDS = ["help", "whoami", "cve", "writeup", "contact", "banner", "clear"];
 const HINTS = ["help", "whoami", "cve", "contact"];
-let history = [], histI = -1, secretHits = 0;
+let history = [], histI = -1;
 
 function esc(s){
   return String(s).replace(/[&<>]/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;"}[c]));
@@ -2213,12 +2319,6 @@ function termRun(raw){
     termPrint(termPair("fb", "facebook.com/f0r7r355", 7));
     return;
   }
-  if(cmd === "sudo" || cmd === "su" || cmd === "unlock" || cmd === "secret" || cmd === "flag"){
-    secretHits++;
-    termPrint(t("term.denied"), "t-red");
-    if(secretHits >= 2) termPrint(t("term.recon"), "t-dim");
-    return;
-  }
   termPrint('<span class="t-red">' + esc(cmd) + ":</span> " + t("term.notfound"), "t-dim");
 }
 
@@ -2256,143 +2356,6 @@ function buildHints(){
     termHint.appendChild(b);
   });
 }
-
-// ---- Toast -------------------------------------------------------------
-const toastEl = document.createElement("div");
-toastEl.className = "toast";
-document.body.appendChild(toastEl);
-let toastTimer = null;
-function toast(msg){
-  toastEl.textContent = msg;
-  toastEl.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toastEl.classList.remove("show"), 6000);
-}
-
-// ---- Konami code: không còn là cửa sau, chỉ là một gợi ý ----------------
-const KONAMI = ["arrowup","arrowup","arrowdown","arrowdown","arrowleft","arrowright","arrowleft","arrowright","b","a"];
-let kIdx = 0;
-addEventListener("keydown", e => {
-  if(e.target === termInput || e.target.id === "vaultKey") return;
-  const key = (e.key || "").toLowerCase();
-  kIdx = key === KONAMI[kIdx] ? kIdx + 1 : (key === KONAMI[0] ? 1 : 0);
-  if(kIdx === KONAMI.length){ kIdx = 0; toast(t("vault.konami")); }
-});
-
-// ---- Két: SHA-256 thuần JS, dùng cho cả dẫn xuất khoá lẫn keystream -----
-// Nội dung phía sau chỉ tồn tại dưới dạng bản mã; không có khoá đúng thì
-// đọc hết source cũng không lấy được gì.
-const VAULT_CT = "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";
-const VAULT_VER = "5696073f219e";
-const SHA_K = [
-  0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
-  0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
-  0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
-  0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
-  0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
-  0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
-  0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
-  0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2
-];
-function sha256(msg){
-  const l = msg.length, bits = l * 8;
-  const p = new Uint8Array((((l + 9) + 63) & ~63));
-  p.set(msg); p[l] = 0x80;
-  const dv = new DataView(p.buffer);
-  dv.setUint32(p.length - 4, bits >>> 0, false);
-  dv.setUint32(p.length - 8, Math.floor(bits / 4294967296), false);
-  let h0=0x6a09e667,h1=0xbb67ae85,h2=0x3c6ef372,h3=0xa54ff53a,
-      h4=0x510e527f,h5=0x9b05688c,h6=0x1f83d9ab,h7=0x5be0cd19;
-  const w = new Uint32Array(64);
-  for(let i = 0; i < p.length; i += 64){
-    for(let j = 0; j < 16; j++) w[j] = dv.getUint32(i + j * 4, false);
-    for(let j = 16; j < 64; j++){
-      const a = w[j-15], b = w[j-2];
-      const s0 = ((a>>>7)|(a<<25)) ^ ((a>>>18)|(a<<14)) ^ (a>>>3);
-      const s1 = ((b>>>17)|(b<<15)) ^ ((b>>>19)|(b<<13)) ^ (b>>>10);
-      w[j] = (w[j-16] + s0 + w[j-7] + s1) >>> 0;
-    }
-    let a=h0,b=h1,c=h2,d=h3,e=h4,f=h5,g=h6,h=h7;
-    for(let j = 0; j < 64; j++){
-      const S1 = ((e>>>6)|(e<<26)) ^ ((e>>>11)|(e<<21)) ^ ((e>>>25)|(e<<7));
-      const t1 = (h + S1 + ((e & f) ^ (~e & g)) + SHA_K[j] + w[j]) >>> 0;
-      const S0 = ((a>>>2)|(a<<30)) ^ ((a>>>13)|(a<<19)) ^ ((a>>>22)|(a<<10));
-      const t2 = (S0 + ((a & b) ^ (a & c) ^ (b & c))) >>> 0;
-      h=g; g=f; f=e; e=(d + t1) >>> 0; d=c; c=b; b=a; a=(t1 + t2) >>> 0;
-    }
-    h0=(h0+a)>>>0; h1=(h1+b)>>>0; h2=(h2+c)>>>0; h3=(h3+d)>>>0;
-    h4=(h4+e)>>>0; h5=(h5+f)>>>0; h6=(h6+g)>>>0; h7=(h7+h)>>>0;
-  }
-  const out = new Uint8Array(32), odv = new DataView(out.buffer);
-  [h0,h1,h2,h3,h4,h5,h6,h7].forEach((v, i) => odv.setUint32(i * 4, v, false));
-  return out;
-}
-function toHex(u8){ return [...u8].map(b => b.toString(16).padStart(2, "0")).join(""); }
-function stretchKey(pass){
-  let k = sha256(new TextEncoder().encode("fortress-vault/v2:" + pass));
-  for(let i = 0; i < 200000; i++) k = sha256(k);
-  return k;
-}
-function vaultDecrypt(key){
-  const ct = Uint8Array.from(atob(VAULT_CT), ch => ch.charCodeAt(0));
-  const buf = new Uint8Array(36); buf.set(key);
-  const out = new Uint8Array(ct.length);
-  for(let i = 0, c = 0; i < ct.length; i += 32, c++){
-    new DataView(buf.buffer).setUint32(32, c, false);
-    const blk = sha256(buf);
-    for(let j = 0; j < 32 && i + j < ct.length; j++) out[i + j] = ct[i + j] ^ blk[j];
-  }
-  return JSON.parse(new TextDecoder().decode(out));
-}
-
-const vaultCard = document.getElementById("vaultCard");
-const vaultForm = document.getElementById("vaultForm");
-const vaultKey = document.getElementById("vaultKey");
-const vaultMsg = document.getElementById("vaultMsg");
-let vaultOpen = null;
-
-function renderVault(data){
-  vaultOpen = data;
-  const c = data[lang] || data.vi;
-  vaultCard.innerHTML =
-    '<div class="sec-tag" style="justify-content:center">access granted</div>' +
-    '<pre>  ______         _\n |  ____|       | |\n | |__ ___  _ __| |_ _ __ ___  ___ ___\n' +
-    " |  __/ _ \\| '__| __| '__/ _ \\/ __/ __|\n | | | (_) | |  | |_| | |  __/\\__ \\__ \\\n" +
-    " |_|  \\___/|_|   \\__|_|  \\___||___/___/</pre>" +
-    "<h2>" + c.h2 + "</h2><p>" + c.p1 + "</p><p>" + c.p2 + "</p><p>" + c.p3 + "</p>" +
-    '<span class="flag">' + data.flag + "</span>" +
-    '<div style="margin-top:22px"><a class="btn btn-ghost" href="#/">' + t("vault.back") + "</a></div>";
-}
-
-vaultForm.addEventListener("submit", e => {
-  e.preventDefault();
-  const pass = vaultKey.value.trim();
-  if(!pass){ vaultMsg.className = "vault-msg bad"; vaultMsg.textContent = t("vault.empty"); return; }
-  vaultMsg.className = "vault-msg busy";
-  vaultMsg.textContent = t("vault.busy");
-  setTimeout(() => {
-    const key = stretchKey(pass);
-    if(toHex(sha256(key)).slice(0, 12) !== VAULT_VER){
-      vaultMsg.className = "vault-msg bad";
-      vaultMsg.textContent = t("vault.wrong");
-      return;
-    }
-    try{
-      renderVault(vaultDecrypt(key));
-      try{ sessionStorage.setItem("fortress-vault2", pass); }catch(err){}
-    }catch(err){
-      vaultMsg.className = "vault-msg bad";
-      vaultMsg.textContent = t("vault.wrong");
-    }
-  }, 40);
-});
-try{
-  const saved = sessionStorage.getItem("fortress-vault2");
-  if(saved){
-    const key = stretchKey(saved);
-    if(toHex(sha256(key)).slice(0, 12) === VAULT_VER) renderVault(vaultDecrypt(key));
-  }
-}catch(err){}
 
 const nav = document.getElementById("nav");
 const progress = document.getElementById("progress");
