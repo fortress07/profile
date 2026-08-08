@@ -952,8 +952,8 @@
         </div>
         <div class="cve-main">
           <div class="cve-head">
-            <span class="cve-id">HackerOne #3850031</span>
-            <span class="badge bounty">$1,000 Bounty</span>
+            <span class="cve-id">Mapbox Bug Bounty</span>
+            <span class="badge bounty" data-i18n="badge.rewarded">Đã được thưởng</span>
           </div>
           <span class="pkg">mapbox/pbf</span>
           <p class="cve-teaser" data-i18n="c5.teaser"></p>
@@ -1072,8 +1072,8 @@
 
   <section class="detail" style="--sev:var(--orange)">
     <a class="back-link" href="#/writeup" data-i18n="link.back">← Quay lại danh sách writeup</a>
-    <div class="sec-tag reveal">cat ./writeups/h1-3850031.md</div>
-    <h2 class="reveal"><span class="grad-text">HackerOne #3850031</span></h2>
+    <div class="sec-tag reveal">cat ./writeups/mapbox-pbf.md</div>
+    <h2 class="reveal"><span class="grad-text">Mapbox Bug Bounty</span></h2>
     <p class="sec-sub reveal d1" data-i18n="c5.teaser"></p>
 
     <div class="card detail-top reveal">
@@ -1086,9 +1086,9 @@
       <div class="detail-facts">
         <div class="cve-head">
           <span class="pkg">mapbox/pbf</span>
-          <span class="badge bounty">$1,000 Bounty</span>
+          <span class="badge bounty" data-i18n="badge.rewarded">Đã được thưởng</span>
         </div>
-        <div class="vector"><b>CVSS 3.1</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H</div>
+        <div class="vector" data-i18n="c5.vector"><b>CVSS 3.1 · tự chấm</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H</div>
         <div class="ver-row">
                     <span class="ver bad" data-i18n="c5.ver1">Bị ảnh hưởng: ≤ 5.1.1 (kiểm chứng trên 5.1.0)</span>
                     <span class="ver ok" data-i18n="c5.ver2">Đã sửa: 5.1.2</span>
@@ -1182,7 +1182,7 @@
           </div></div>
           <div class="wu-step"><span class="n">5</span><div>
             <h4 data-i18n="wu5.s5h">Báo cáo &amp; kết quả</h4>
-            <p data-i18n="wu5.s5p">Mình gửi báo cáo qua chương trình bug bounty của Mapbox trên HackerOne ngày 08/07/2026. Mapbox phân loại High (8.1) và xử lý gọn trong một ngày: 09/07/2026 report được đóng ở trạng thái Resolved, cũng đúng ngày v5.1.2 lên kệ với <code>validateTag()</code> thêm vào đúng vòng lặp đã có <code>validateIdentifier()</code>. Báo cáo được thưởng <b>$1,000</b>. Vì báo cáo để ở chế độ riêng tư, ở đây mình chỉ mô tả lớp lỗi và cách tiếp cận - không đăng PoC.</p>
+            <p data-i18n="wu5.s5p">Mình gửi báo cáo riêng qua chương trình bug bounty của Mapbox trên HackerOne. Họ xử lý rất nhanh: chỉ một ngày sau, v5.1.2 lên kệ với <code>validateTag()</code> thêm vào đúng vòng lặp đã có <code>validateIdentifier()</code>, kèm release note ghi rõ đây là bản vá cho một lỗ hổng của compiler. Báo cáo được ghi nhận hợp lệ và có thưởng. Điểm CVSS ở trên là mình tự chấm từ vector, không phải con số Mapbox công bố - và vì báo cáo gốc vẫn ở chế độ riêng tư, ở đây mình chỉ mô tả lớp lỗi, cách tiếp cận cùng bản vá công khai, không đăng PoC và không nêu chi tiết nội bộ của report.</p>
           </div></div>
         </div>
 
@@ -1625,9 +1625,9 @@ middleware = [
     <p class="sec-sub reveal d1" data-i18n="journey.sub">Các cột mốc theo thứ tự gần nhất trước, tính theo ngày advisory được công khai.</p>
     <div class="timeline">
       <div class="tl-item reveal" style="--dot:var(--green)">
-        <span class="tl-time" data-i18n="tlb.time">Resolved 09/07/2026 · HackerOne #3850031 · HIGH</span>
+        <span class="tl-time" data-i18n="tlb.time">Đã vá 09/07/2026 · Mapbox Bug Bounty · HIGH</span>
         <h3>mapbox/pbf</h3>
-        <div class="sub">CWE-94 · Code Injection ($1,000 bounty)</div>
+        <div class="sub">CWE-94 · Code Injection</div>
         <p data-i18n="tlb.p">
           <code>compile.js</code> sinh mã qua <code>new Function()</code> nhưng bỏ sót
           <code>field.tag</code> ở khâu kiểm định danh - một schema do attacker cung cấp chạy được
@@ -1774,6 +1774,8 @@ const I18N = {
     "c5.ver1": "Bị ảnh hưởng: ≤ 5.1.1 (kiểm chứng trên 5.1.0)",
     "c5.ver2": "Đã sửa: 5.1.2",
     "c5.ver3": "Không bị ảnh hưởng: luồng .proto qua schema.parse",
+    "c5.vector": "<b>CVSS 3.1 · tự chấm</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "badge.rewarded": "Đã được thưởng",
 
     "c4.summary": "Bản vá v5.0.0 của CVE-2026-55849 thay <code>execSync</code> bằng <code>execFileSync</code>, nhưng đồng thời thêm một nhánh riêng cho Windows. Khi npm được phân giải thành một batch file (<code>npm.cmd</code>), tool chạy <code>execFileSync('cmd.exe', ['/c', execPath, ...args])</code>. Node escape tham số theo quy ước <code>CommandLineToArgvW</code>, nhưng <code>cmd.exe</code> lại parse dòng lệnh bằng bộ luật riêng: nó xử lý các metacharacter <code>&amp;</code>, <code>|</code>, <code>&gt;</code>, <code>^</code> trước và không hiểu escape kiểu <code>&#92;&quot;</code>. Vì vậy giá trị <code>--workspace</code> do người dùng cung cấp vẫn thoát ra được khỏi câu lệnh dự kiến - lần này chỉ trên Windows.",
     "c4.impact": "Thực thi lệnh tùy ý với quyền của user đang chạy CLI trên máy Windows - rút dữ liệu, sửa hoặc xóa file, và tùy cách triển khai có thể dẫn tới leo thang đặc quyền. Vì đây vẫn là tool sinh SBOM chạy tự động trong pipeline, các Windows CI runner là mục tiêu trực tiếp. Đáng chú ý: đây là bản vá của một CVE trước đó, nên những ai đã nâng cấp lên 5.0.0 để tránh CVE-2026-55849 vẫn còn nằm trong vùng ảnh hưởng.",
@@ -1812,8 +1814,8 @@ const I18N = {
 
     "journey.h2": "Hành <span class=\"grad-text\">trình</span>",
     "journey.sub": "Các cột mốc theo thứ tự gần nhất trước, tính theo ngày advisory được công khai hoặc ngày báo cáo được ghi nhận.",
-    "tlb.time": "Resolved 09/07/2026 · HackerOne #3850031 · HIGH",
-    "tlb.p": "<code>compile.js</code> sinh mã qua <code>new Function()</code> nhưng bỏ sót <code>field.tag</code> ở khâu kiểm định danh - một schema do attacker cung cấp chạy được JavaScript tùy ý. Báo cáo ngày 08/07, Mapbox vá và đóng report ngay hôm sau ở phiên bản 5.1.2.",
+    "tlb.time": "Đã vá 09/07/2026 · Mapbox Bug Bounty · HIGH",
+    "tlb.p": "<code>compile.js</code> sinh mã qua <code>new Function()</code> nhưng bỏ sót <code>field.tag</code> ở khâu kiểm định danh - một schema do attacker cung cấp chạy được JavaScript tùy ý. Mapbox vá chỉ một ngày sau khi mình báo cáo, ở phiên bản 5.1.2.",
     "tl0.time": "Công khai 07/07/2026 · CVE-2026-71538 · HIGH",
     "tl1.time": "Công khai 18/06/2026 · CVE-2026-57207 · MODERATE",
     "tl2.time": "Công khai 16/06/2026 · CVE-2026-55849 · HIGH",
@@ -1882,7 +1884,7 @@ const I18N = {
     "wu5.s4h": "Vì sao lỗ hổng sống sót: kiểu dữ liệu nói dối",
     "wu5.s4p": "Tag về mặt khái niệm là số nguyên, nên không ai nghĩ nó cần lọc. Nhưng đây là JavaScript và schema chỉ là object thuần - không có gì bắt buộc <code>tag</code> phải là number. Thêm nữa, parser <code>.proto</code> luôn ép tag qua <code>Number()</code>, nên đúng luồng được tài liệu hóa thì lỗi không bao giờ lộ ra. Vector chỉ mở khi ứng dụng nhận schema dạng object từ bên ngoài.",
     "wu5.s5h": "Báo cáo &amp; kết quả",
-    "wu5.s5p": "Mình gửi báo cáo qua chương trình bug bounty của Mapbox trên HackerOne ngày 08/07/2026. Mapbox phân loại High (8.1) và xử lý gọn trong một ngày: 09/07/2026 report được đóng ở trạng thái Resolved, cũng đúng ngày v5.1.2 lên kệ với <code>validateTag()</code> thêm vào đúng vòng lặp đã có <code>validateIdentifier()</code>. Báo cáo được thưởng <b>$1,000</b>. Vì báo cáo để ở chế độ riêng tư, ở đây mình chỉ mô tả lớp lỗi và cách tiếp cận - không đăng PoC.",
+    "wu5.s5p": "Mình gửi báo cáo riêng qua chương trình bug bounty của Mapbox trên HackerOne. Họ xử lý rất nhanh: chỉ một ngày sau, v5.1.2 lên kệ với <code>validateTag()</code> thêm vào đúng vòng lặp đã có <code>validateIdentifier()</code>, kèm release note ghi rõ đây là bản vá cho một lỗ hổng của compiler. Báo cáo được ghi nhận hợp lệ và có thưởng. Điểm CVSS ở trên là mình tự chấm từ vector, không phải con số Mapbox công bố - và vì báo cáo gốc vẫn ở chế độ riêng tư, ở đây mình chỉ mô tả lớp lỗi, cách tiếp cận cùng bản vá công khai, không đăng PoC và không nêu chi tiết nội bộ của report.",
 
     "av.cap1": "Nơi mọi thứ diễn ra - đọc source lúc nửa đêm",
     "av.cap2": "Sài Gòn - Dinh Độc Lập",
@@ -1981,6 +1983,8 @@ const I18N = {
     "c5.ver1": "Affected: ≤ 5.1.1 (verified on 5.1.0)",
     "c5.ver2": "Fixed in: 5.1.2",
     "c5.ver3": "Not affected: the .proto path via schema.parse",
+    "c5.vector": "<b>CVSS 3.1 · self-scored</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "badge.rewarded": "Rewarded",
 
     "c4.summary": "The v5.0.0 patch for CVE-2026-55849 replaced <code>execSync</code> with <code>execFileSync</code>, but it also introduced a Windows-only branch. When npm resolves to a batch file (<code>npm.cmd</code>), the tool runs <code>execFileSync('cmd.exe', ['/c', execPath, ...args])</code>. Node escapes arguments following the <code>CommandLineToArgvW</code> convention, but <code>cmd.exe</code> parses the command line with a completely different set of rules: it handles the metacharacters <code>&amp;</code>, <code>|</code>, <code>&gt;</code> and <code>^</code> first, and it does not understand <code>&#92;&quot;</code> escaping. So the user-supplied <code>--workspace</code> value can still break out of the intended command - this time only on Windows.",
     "c4.impact": "Arbitrary command execution with the privileges of the user running the CLI on Windows machines - data exfiltration, modifying or deleting files, and depending on the deployment, possible privilege escalation. Since this is still an SBOM generator running automatically inside pipelines, Windows CI runners are a direct target. Worth noting: this is the patch for an earlier CVE, so anyone who upgraded to 5.0.0 to escape CVE-2026-55849 is still in scope.",
@@ -2019,8 +2023,8 @@ const I18N = {
 
     "journey.h2": "My <span class=\"grad-text\">journey</span>",
     "journey.sub": "Milestones, most recent first, dated by advisory publication or by the day the report was accepted.",
-    "tlb.time": "Resolved Jul 9, 2026 · HackerOne #3850031 · HIGH",
-    "tlb.p": "<code>compile.js</code> generates code through <code>new Function()</code> but skipped <code>field.tag</code> during identifier validation - an attacker-supplied schema could run arbitrary JavaScript. Reported on Jul 8; Mapbox patched and closed the report the very next day in version 5.1.2.",
+    "tlb.time": "Patched Jul 9, 2026 · Mapbox bug bounty · HIGH",
+    "tlb.p": "<code>compile.js</code> generates code through <code>new Function()</code> but skipped <code>field.tag</code> during identifier validation - an attacker-supplied schema could run arbitrary JavaScript. Mapbox shipped the fix in version 5.1.2 just one day after I reported it.",
     "tl0.time": "Disclosed Jul 7, 2026 · CVE-2026-71538 · HIGH",
     "tl1.time": "Disclosed Jun 18, 2026 · CVE-2026-57207 · MODERATE",
     "tl2.time": "Disclosed Jun 16, 2026 · CVE-2026-55849 · HIGH",
@@ -2089,7 +2093,7 @@ const I18N = {
     "wu5.s4h": "Why it survived: the type lies",
     "wu5.s4p": "A tag is conceptually an integer, so nobody thought it needed sanitising. But this is JavaScript and the schema is a plain object - nothing requires <code>tag</code> to be a number. On top of that, the <code>.proto</code> parser always coerces tags through <code>Number()</code>, so along the documented path the flaw never surfaces. The vector only opens when an application accepts a schema object from outside.",
     "wu5.s5h": "Report &amp; outcome",
-    "wu5.s5p": "I submitted the report through Mapbox's bug bounty programme on HackerOne on Jul 8, 2026. Mapbox triaged it as High (8.1) and wrapped it up within a day: on Jul 9, 2026 the report was closed as Resolved, the same day v5.1.2 shipped with <code>validateTag()</code> added to the very loop that already ran <code>validateIdentifier()</code>. The report was awarded a <b>$1,000</b> bounty. Since the report is private, I only describe the bug class and the approach here - no PoC.",
+    "wu5.s5p": "I submitted the report privately through Mapbox's bug bounty programme on HackerOne. They moved fast: just one day later v5.1.2 shipped with <code>validateTag()</code> added to the very loop that already ran <code>validateIdentifier()</code>, and the release notes state plainly that it fixes a vulnerability in the compiler. The report was accepted as valid and rewarded. The CVSS score above is my own, derived from the vector rather than published by Mapbox - and since the original report is still private, I only cover the bug class, the approach and the public patch here: no PoC and no internal report details.",
 
     "av.cap1": "Where it all happens - reading source at midnight",
     "av.cap2": "Saigon - Independence Palace",

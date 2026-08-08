@@ -1,10 +1,7 @@
-# Fortress — Võ Phú Vinh
+# Võ Phú Vinh ( Fortress )
 
-Trang portfolio cá nhân của **Võ Phú Vinh (Fortress)** — sinh viên An toàn thông tin,
+Trang portfolio cá nhân của **Võ Phú Vinh (Fortress)** - sinh viên An toàn thông tin tại HCMUTE,
 tập trung vào vulnerability research và responsible disclosure trên các dự án mã nguồn mở.
-
-Repo này chứa toàn bộ mã nguồn của trang, viết bằng HTML/CSS/JavaScript thuần trong một
-file duy nhất và deploy tĩnh bằng GitHub Pages.
 
 🔗 https://fortress07.github.io/profile/
 
