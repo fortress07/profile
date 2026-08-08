@@ -406,7 +406,7 @@
   .fact b{display:block;font-size:.89rem;font-weight:600;line-height:1.5}
   .fact small{display:block;color:var(--muted);font-size:.79rem;line-height:1.55;word-break:break-word}
 
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:22px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:13px;margin-top:22px}
   .stat{text-align:center;padding:22px 14px}
   .stat .num{font-family:var(--mono);font-size:1.65rem;font-weight:700;line-height:1.3;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .stat .lbl{font-size:.785rem;color:var(--muted);margin-top:2px;line-height:1.5}
@@ -474,6 +474,7 @@
     padding:3px 9px;border-radius:5px;text-transform:uppercase;white-space:nowrap;
     background:rgba(245,181,68,.12);color:var(--gold);border:1px solid rgba(245,181,68,.34);
   }
+  .badge.bounty{background:rgba(74,222,128,.1);color:var(--green);border-color:rgba(74,222,128,.32)}
   .pkg{
     display:inline-flex;align-items:center;gap:7px;align-self:flex-start;max-width:100%;
     font-family:var(--mono);font-size:.765rem;color:var(--red-soft);
@@ -926,8 +927,9 @@
 
     <div class="stats">
       <div class="stat card reveal"><div class="num" data-stat="cve" data-count="4">0</div><div class="lbl" data-i18n="stat1">CVE được ghi nhận</div></div>
-      <div class="stat card reveal d1"><div class="num" data-stat="pkg" data-count="3">0</div><div class="lbl" data-i18n="stat2">Dự án mã nguồn mở</div></div>
-      <div class="stat card reveal d2"><div class="num" data-stat="cwe" data-count="3">0</div><div class="lbl" data-i18n="stat3">Lớp CWE khác nhau</div></div>
+      <div class="stat card reveal d1"><div class="num" data-stat="bounty" data-count="1">0</div><div class="lbl" data-i18n="stat4">Bug bounty được thưởng</div></div>
+      <div class="stat card reveal d2"><div class="num" data-stat="pkg" data-count="4">0</div><div class="lbl" data-i18n="stat2">Dự án mã nguồn mở</div></div>
+      <div class="stat card reveal d3"><div class="num" data-stat="cwe" data-count="4">0</div><div class="lbl" data-i18n="stat3">Lớp CWE khác nhau</div></div>
     </div>
   </section>
 
@@ -940,6 +942,28 @@
       <div class="sb-item"><span class="sb-k" data-i18n="status.updated">Cập nhật gần đây</span><span class="sb-v" id="lastUpdate">—</span></div>
     </div>
     <div class="cve-list">
+
+      <article class="cve reveal" data-date="2026-07-09" data-slug="wu-h1-pbf" data-kind="bounty" style="--sev:var(--orange)">
+        <div class="score">
+          <div class="ring" data-p="81">
+            <div class="inner"><span class="val">8.1</span><span class="of">CVSS 3.1</span></div>
+          </div>
+          <span class="sev-label">High</span>
+        </div>
+        <div class="cve-main">
+          <div class="cve-head">
+            <span class="cve-id">HackerOne #3850031</span>
+            <span class="badge bounty">$1,000 Bounty</span>
+          </div>
+          <span class="pkg">mapbox/pbf</span>
+          <p class="cve-teaser" data-i18n="c5.teaser"></p>
+          <div class="cwe-row">
+            <span class="tag">CWE-94 · Code Injection</span>
+            <span class="tag">Bug bounty · Mapbox</span>
+          </div>
+          <a class="cve-link" href="#/wu-h1-pbf" data-i18n="link.more">Xem chi tiết →</a>
+        </div>
+      </article>
 
       <article class="cve reveal" data-date="2026-07-07" data-slug="wu-71538" style="--sev:var(--orange)">
         <div class="score">
@@ -1040,6 +1064,132 @@
     <h2 class="reveal" data-i18n="wu.h2">Nhật ký <span class="grad-text">săn lỗ hổng</span></h2>
     <p class="sec-sub reveal d1" data-i18n="wu.sub"></p>
     <div class="cve-list" id="wuIndex"></div>
+  </section>
+
+  </div>
+
+  <div class="page" id="page-wu-h1-pbf">
+
+  <section class="detail" style="--sev:var(--orange)">
+    <a class="back-link" href="#/writeup" data-i18n="link.back">← Quay lại danh sách writeup</a>
+    <div class="sec-tag reveal">cat ./writeups/h1-3850031.md</div>
+    <h2 class="reveal"><span class="grad-text">HackerOne #3850031</span></h2>
+    <p class="sec-sub reveal d1" data-i18n="c5.teaser"></p>
+
+    <div class="card detail-top reveal">
+      <div class="score">
+          <div class="ring" data-p="81">
+            <div class="inner"><span class="val">8.1</span><span class="of">CVSS 3.1</span></div>
+          </div>
+          <span class="sev-label">High</span>
+        </div>
+      <div class="detail-facts">
+        <div class="cve-head">
+          <span class="pkg">mapbox/pbf</span>
+          <span class="badge bounty">$1,000 Bounty</span>
+        </div>
+        <div class="vector"><b>CVSS 3.1</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H</div>
+        <div class="ver-row">
+                    <span class="ver bad" data-i18n="c5.ver1">Bị ảnh hưởng: ≤ 5.1.1 (kiểm chứng trên 5.1.0)</span>
+                    <span class="ver ok" data-i18n="c5.ver2">Đã sửa: 5.1.2</span>
+                    <span class="ver ok" data-i18n="c5.ver3">Không bị ảnh hưởng: luồng .proto qua schema.parse</span>
+                  </div>
+        <div class="cwe-row">
+                    <span class="tag">CWE-94 · Code Injection</span>
+                    <span class="tag">Bug bounty · Mapbox</span>
+                  </div>
+      </div>
+    </div>
+
+    <div class="detail-body">
+      <div class="block">
+            <h4 data-i18n="label.summary">Tóm tắt</h4>
+            <p data-i18n="c5.summary">
+              <code>compile.js</code> của pbf dựng mã JavaScript dưới dạng chuỗi rồi chạy nó qua
+              <code>new Function()</code>. Mọi định danh lấy từ schema - tên message, tên field,
+              tên oneof, tên enum value - đều đi qua <code>validateIdentifier()</code> trước,
+              riêng <code>field.tag</code> thì không. Giá trị tag được chèn thẳng vào mã sinh ra
+              mà không qua bất kỳ bước kiểm nào, nên một schema có <code>field.tag</code> là chuỗi
+              có thể mang JavaScript tùy ý vào cả reader lẫn writer được biên dịch.
+            </p>
+          </div>
+
+      <div class="block">
+            <h4 data-i18n="label.impact">Ảnh hưởng</h4>
+            <p data-i18n="c5.impact">
+              Bất kỳ ứng dụng nào gọi <code>compile()</code> / <code>compileRaw()</code> trên một schema
+              protobuf đến từ nguồn do người dùng kiểm soát - ví dụ schema descriptor nhận qua JSON hoặc
+              qua API - sẽ thực thi JavaScript của attacker ngay trong tiến trình của mình. Attacker chỉ
+              cần gửi một schema trong đó tag của một field là chuỗi được dựng sẵn; ngay khi nạn nhân
+              compile schema đó, code chạy với đúng quyền của tiến trình nạn nhân, mà message vẫn decode
+              ra giá trị bình thường nên injection không lộ ra ở output. Phạm vi: luồng
+              <code>.proto</code> được tài liệu hóa (<code>schema.parse</code>) không bị ảnh hưởng vì tag
+              luôn được ép qua <code>Number()</code> - vector nằm ở API nhận schema dạng object.
+            </p>
+          </div>
+
+      <h3 class="detail-h3" data-i18n="detail.code">Đoạn code gây ra lỗ hổng</h3>
+      <div class="code">
+              <div class="code-bar"><span class="lang">JavaScript</span><span class="path" data-i18n="c5.path1">compile.js - v5.1.1 trở về trước</span><button type="button" class="copy">Copy</button></div>
+<pre><span class="c">// every identifier from the schema is validated - the tag is not</span>
+<span class="k">for</span> (<span class="k">const</span> field <span class="k">of</span> proto.fields ?? []) {
+  <span class="f">validateIdentifier</span>(field.name);
+  <span class="k">if</span> (field.oneof) <span class="f">validateIdentifier</span>(field.oneof);
+}
+
+<span class="c">// ... and the tag lands straight inside the generated source</span>
+<span class="hl">code += <span class="s">`if (field === ${fields[i].tag}) ...`</span>;</span>
+<span class="hl"><span class="k">return</span> <span class="s">`pbf.${fn}(${field.tag}, ${name})`</span>;</span></pre>
+              <div class="code-note" data-i18n="c5.note1"><b>Vấn đề:</b> <span>Toàn bộ chuỗi trên cuối cùng được đưa vào <code>new Function()</code>. Tag về mặt khái niệm là số nguyên, nhưng schema chỉ là một object JavaScript thuần - không có gì bắt <code>tag</code> phải là number, nên nó trở thành một lối vào không ai canh.</span></div>
+            </div>
+            <div class="code">
+              <div class="code-bar"><span class="lang">Fix v5.1.2</span><span class="path">compile.js · PR #149</span><button type="button" class="copy">Copy</button></div>
+<pre><span class="c">// Per protobuf spec a tag is an integer in [1, 2^29 - 1].</span>
+<span class="c">// Validated to prevent code injection as field tags are</span>
+<span class="c">// interpolated directly into generated JS.</span>
+<span class="k">function</span> <span class="f">validateTag</span>(tag) {
+  <span class="k">const</span> n = <span class="k">typeof</span> tag === <span class="s">'string'</span> ? <span class="n">Number</span>(tag) : tag;
+  <span class="k">if</span> (!<span class="n">Number</span>.<span class="f">isInteger</span>(n) || n &lt; <span class="n">1</span> || n &gt; <span class="n">0x1fffffff</span>) {
+    <span class="k">throw new</span> <span class="n">Error</span>(<span class="s">`Invalid protobuf field tag: ${JSON.stringify(tag)}`</span>);
+  }
+}
+
+<span class="k">for</span> (<span class="k">const</span> field <span class="k">of</span> proto.fields ?? []) {
+  <span class="f">validateIdentifier</span>(field.name);
+  <span class="k">if</span> (field.oneof) <span class="f">validateIdentifier</span>(field.oneof);
+<span class="hl">  <span class="f">validateTag</span>(field.tag);</span>
+}</pre>
+              <div class="code-note" data-i18n="c5.note2"><b>Cách sửa:</b> <span>Bản vá thêm <code>validateTag()</code> vào đúng vòng lặp đã có sẵn <code>validateIdentifier()</code>: tag phải là số nguyên trong khoảng <code>[1, 2^29 - 1]</code>, chuỗi số vẫn được chấp nhận để không phá luồng <code>.proto</code>, còn lại thì throw.</span></div>
+            </div>
+
+      <h3 class="detail-h3" data-i18n="detail.process">Quá trình phát hiện</h3>
+      <div class="wu-steps">
+          <div class="wu-step"><span class="n">1</span><div>
+            <h4 data-i18n="wu5.s1h">Đổi lớp lỗi, giữ nguyên cách nghĩ</h4>
+            <p data-i18n="wu5.s1p">Sau mấy CVE về command injection, mình chuyển sang một lớp lỗi họ hàng: code injection. Cách chọn mục tiêu vẫn thế - tìm nơi chương trình tự sinh ra mã rồi chạy chính nó bằng <code>new Function()</code> hay <code>eval</code>. pbf là thư viện protobuf nằm dưới Mapbox GL JS và rất nhiều pipeline vector tile, và <code>compile.js</code> của nó đúng là một code generator.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">2</span><div>
+            <h4 data-i18n="wu5.s2h">Đã có hàng rào nghĩa là mối nguy đã được thừa nhận</h4>
+            <p data-i18n="wu5.s2p">Một phiên bản trước đó đã thêm <code>validateIdentifier()</code> để chặn injection qua tên field. Với mình, một hàng rào có sẵn là tin tốt chứ không phải dấu hiệu nên bỏ qua: nó xác nhận mô hình nguy cơ đã được chính tác giả thừa nhận, và việc còn lại chỉ là kiểm kê xem hàng rào có phủ hết mọi lối vào hay chưa.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">3</span><div>
+            <h4 data-i18n="wu5.s3h">Đối chiếu hai danh sách</h4>
+            <p data-i18n="wu5.s3p">Mình liệt kê mọi giá trị lấy từ schema được nội suy vào chuỗi mã sinh ra, rồi đặt cạnh danh sách những giá trị thực sự đi qua <code>validateIdentifier()</code>. Tên message, tên field, tên oneof, tên enum value đều có mặt ở cả hai. <code>field.tag</code> chỉ có ở danh sách đầu - và nó xuất hiện ở cả nhánh đọc lẫn nhánh ghi.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">4</span><div>
+            <h4 data-i18n="wu5.s4h">Vì sao lỗ hổng sống sót: kiểu dữ liệu nói dối</h4>
+            <p data-i18n="wu5.s4p">Tag về mặt khái niệm là số nguyên, nên không ai nghĩ nó cần lọc. Nhưng đây là JavaScript và schema chỉ là object thuần - không có gì bắt buộc <code>tag</code> phải là number. Thêm nữa, parser <code>.proto</code> luôn ép tag qua <code>Number()</code>, nên đúng luồng được tài liệu hóa thì lỗi không bao giờ lộ ra. Vector chỉ mở khi ứng dụng nhận schema dạng object từ bên ngoài.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">5</span><div>
+            <h4 data-i18n="wu5.s5h">Báo cáo &amp; kết quả</h4>
+            <p data-i18n="wu5.s5p">Mình gửi báo cáo qua chương trình bug bounty của Mapbox trên HackerOne ngày 08/07/2026. Mapbox phân loại High (8.1) và xử lý gọn trong một ngày: 09/07/2026 report được đóng ở trạng thái Resolved, cũng đúng ngày v5.1.2 lên kệ với <code>validateTag()</code> thêm vào đúng vòng lặp đã có <code>validateIdentifier()</code>. Báo cáo được thưởng <b>$1,000</b>. Vì báo cáo để ở chế độ riêng tư, ở đây mình chỉ mô tả lớp lỗi và cách tiếp cận - không đăng PoC.</p>
+          </div></div>
+        </div>
+
+      <a class="cve-link" href="https://github.com/mapbox/pbf/pull/149/files" target="_blank" rel="noopener noreferrer" data-i18n="link.patch">
+            Xem bản vá (PR #149) ↗
+          </a>
+    </div>
   </section>
 
   </div>
@@ -1474,7 +1624,17 @@ middleware = [
     <h2 class="reveal" data-i18n="journey.h2">Hành <span class="grad-text">trình</span></h2>
     <p class="sec-sub reveal d1" data-i18n="journey.sub">Các cột mốc theo thứ tự gần nhất trước, tính theo ngày advisory được công khai.</p>
     <div class="timeline">
-      <div class="tl-item reveal" style="--dot:var(--orange)">
+      <div class="tl-item reveal" style="--dot:var(--green)">
+        <span class="tl-time" data-i18n="tlb.time">Resolved 09/07/2026 · HackerOne #3850031 · HIGH</span>
+        <h3>mapbox/pbf</h3>
+        <div class="sub">CWE-94 · Code Injection ($1,000 bounty)</div>
+        <p data-i18n="tlb.p">
+          <code>compile.js</code> sinh mã qua <code>new Function()</code> nhưng bỏ sót
+          <code>field.tag</code> ở khâu kiểm định danh - một schema do attacker cung cấp chạy được
+          JavaScript tùy ý. Mapbox vá sau một ngày ở phiên bản 5.1.2.
+        </p>
+      </div>
+      <div class="tl-item reveal d1" style="--dot:var(--orange)">
         <span class="tl-time" data-i18n="tl0.time">Công khai 07/07/2026 · CVE-2026-71538 · HIGH</span>
         <h3>@cyclonedx/cyclonedx-npm</h3>
         <div class="sub">CWE-78 · OS Command Injection (Windows)</div>
@@ -1483,7 +1643,7 @@ middleware = [
           <code>--workspace</code> vẫn chèn được lệnh. Đã được sửa ở phiên bản 6.0.0.
         </p>
       </div>
-      <div class="tl-item reveal d1" style="--dot:var(--gold)">
+      <div class="tl-item reveal d2" style="--dot:var(--gold)">
         <span class="tl-time" data-i18n="tl1.time">Công khai 18/06/2026 · CVE-2026-57207 · MODERATE</span>
         <h3>netbox-mcp-server</h3>
         <div class="sub">CWE-306 + CWE-1059 · Missing Authentication</div>
@@ -1492,7 +1652,7 @@ middleware = [
           hạ tầng NetBox mà không cần credential. Đã được sửa ở phiên bản 1.2.1.
         </p>
       </div>
-      <div class="tl-item reveal d2" style="--dot:var(--orange)">
+      <div class="tl-item reveal d3" style="--dot:var(--orange)">
         <span class="tl-time" data-i18n="tl2.time">Công khai 16/06/2026 · CVE-2026-55849 · HIGH</span>
         <h3>@cyclonedx/cyclonedx-npm</h3>
         <div class="sub">CWE-78 · OS Command Injection</div>
@@ -1587,9 +1747,10 @@ const I18N = {
     "stat1": "CVE được ghi nhận",
     "stat2": "Dự án mã nguồn mở",
     "stat3": "Lớp CWE khác nhau",
+    "stat4": "Bug bounty được thưởng",
 
     "home.h2": "Bản tin <span class=\"grad-text\">lỗ hổng</span>",
-    "home.sub": "Các CVE mình tìm được - mới nhất xếp trước. Mỗi card gồm tóm tắt kỹ thuật, ảnh hưởng và đoạn code gốc gây ra lỗ hổng.",
+    "home.sub": "Các lỗ hổng mình tìm được - CVE và báo cáo bug bounty, mới nhất xếp trước. Mỗi card gồm tóm tắt kỹ thuật, ảnh hưởng và đoạn code gốc gây ra lỗ hổng.",
     "status.state": "Trạng thái",
     "status.updated": "Cập nhật gần đây",
     "feed.all": "Xem tất cả writeup →",
@@ -1597,12 +1758,22 @@ const I18N = {
     "link.back": "← Quay lại danh sách writeup",
     "detail.code": "Đoạn code gây ra lỗ hổng",
     "detail.process": "Quá trình phát hiện",
+    "c5.teaser": "Thư viện protobuf của Mapbox dựng mã bằng <code>new Function()</code>; mọi định danh trong schema đều được kiểm, riêng <code>field.tag</code> thì không - đủ để mang JavaScript tùy ý vào reader và writer.",
     "c4.teaser": "Bản vá cho CVE-2026-55849 chặn được shell trên Linux nhưng để lại một nhánh <code>cmd.exe /c</code> chỉ có trên Windows - lệnh vẫn chèn được qua <code>--workspace</code>.",
     "c1.teaser": "Chèn lệnh hệ điều hành qua option <code>--workspace</code> của một tool sinh SBOM chạy tự động trong pipeline CI/CD.",
     "c2.teaser": "Webhook endpoint không xác thực theo mặc định, cộng thêm uid lấy thẳng từ payload - đủ để xoá sạch vector index của mọi user.",
     "c3.teaser": "Endpoint MCP mở toang khi chạy <code>TRANSPORT=http</code>, đọc được toàn bộ dữ liệu hạ tầng NetBox mà không cần credential.",
     "label.summary": "Tóm tắt",
     "label.impact": "Ảnh hưởng",
+
+    "c5.summary": "<code>compile.js</code> của pbf dựng mã JavaScript dưới dạng chuỗi rồi chạy nó qua <code>new Function()</code>. Mọi định danh lấy từ schema - tên message, tên field, tên oneof, tên enum value - đều đi qua <code>validateIdentifier()</code> trước, riêng <code>field.tag</code> thì không. Giá trị tag được chèn thẳng vào mã sinh ra mà không qua bất kỳ bước kiểm nào, nên một schema có <code>field.tag</code> là chuỗi có thể mang JavaScript tùy ý vào cả reader lẫn writer được biên dịch.",
+    "c5.impact": "Bất kỳ ứng dụng nào gọi <code>compile()</code> / <code>compileRaw()</code> trên một schema protobuf đến từ nguồn do người dùng kiểm soát - ví dụ schema descriptor nhận qua JSON hoặc qua API - sẽ thực thi JavaScript của attacker ngay trong tiến trình của mình. Attacker chỉ cần gửi một schema trong đó tag của một field là chuỗi được dựng sẵn; ngay khi nạn nhân compile schema đó, code chạy với đúng quyền của tiến trình nạn nhân, mà message vẫn decode ra giá trị bình thường nên injection không lộ ra ở output. Phạm vi: luồng <code>.proto</code> được tài liệu hóa (<code>schema.parse</code>) không bị ảnh hưởng vì tag luôn được ép qua <code>Number()</code> - vector nằm ở API nhận schema dạng object.",
+    "c5.path1": "compile.js - v5.1.1 trở về trước",
+    "c5.note1": "<b>Vấn đề:</b> <span>Toàn bộ chuỗi trên cuối cùng được đưa vào <code>new Function()</code>. Tag về mặt khái niệm là số nguyên, nhưng schema chỉ là một object JavaScript thuần - không có gì bắt <code>tag</code> phải là number, nên nó trở thành một lối vào không ai canh.</span>",
+    "c5.note2": "<b>Cách sửa:</b> <span>Bản vá thêm <code>validateTag()</code> vào đúng vòng lặp đã có sẵn <code>validateIdentifier()</code>: tag phải là số nguyên trong khoảng <code>[1, 2^29 - 1]</code>, chuỗi số vẫn được chấp nhận để không phá luồng <code>.proto</code>, còn lại thì throw.</span>",
+    "c5.ver1": "Bị ảnh hưởng: ≤ 5.1.1 (kiểm chứng trên 5.1.0)",
+    "c5.ver2": "Đã sửa: 5.1.2",
+    "c5.ver3": "Không bị ảnh hưởng: luồng .proto qua schema.parse",
 
     "c4.summary": "Bản vá v5.0.0 của CVE-2026-55849 thay <code>execSync</code> bằng <code>execFileSync</code>, nhưng đồng thời thêm một nhánh riêng cho Windows. Khi npm được phân giải thành một batch file (<code>npm.cmd</code>), tool chạy <code>execFileSync('cmd.exe', ['/c', execPath, ...args])</code>. Node escape tham số theo quy ước <code>CommandLineToArgvW</code>, nhưng <code>cmd.exe</code> lại parse dòng lệnh bằng bộ luật riêng: nó xử lý các metacharacter <code>&amp;</code>, <code>|</code>, <code>&gt;</code>, <code>^</code> trước và không hiểu escape kiểu <code>&#92;&quot;</code>. Vì vậy giá trị <code>--workspace</code> do người dùng cung cấp vẫn thoát ra được khỏi câu lệnh dự kiến - lần này chỉ trên Windows.",
     "c4.impact": "Thực thi lệnh tùy ý với quyền của user đang chạy CLI trên máy Windows - rút dữ liệu, sửa hoặc xóa file, và tùy cách triển khai có thể dẫn tới leo thang đặc quyền. Vì đây vẫn là tool sinh SBOM chạy tự động trong pipeline, các Windows CI runner là mục tiêu trực tiếp. Đáng chú ý: đây là bản vá của một CVE trước đó, nên những ai đã nâng cấp lên 5.0.0 để tránh CVE-2026-55849 vẫn còn nằm trong vùng ảnh hưởng.",
@@ -1637,9 +1808,12 @@ const I18N = {
 
     "link.cve": "Xem bản ghi trên cve.org ↗",
     "link.ghsa": "Xem advisory GHSA ↗",
+    "link.patch": "Xem bản vá (PR #149) ↗",
 
     "journey.h2": "Hành <span class=\"grad-text\">trình</span>",
-    "journey.sub": "Các cột mốc theo thứ tự gần nhất trước, tính theo ngày advisory được công khai.",
+    "journey.sub": "Các cột mốc theo thứ tự gần nhất trước, tính theo ngày advisory được công khai hoặc ngày báo cáo được ghi nhận.",
+    "tlb.time": "Resolved 09/07/2026 · HackerOne #3850031 · HIGH",
+    "tlb.p": "<code>compile.js</code> sinh mã qua <code>new Function()</code> nhưng bỏ sót <code>field.tag</code> ở khâu kiểm định danh - một schema do attacker cung cấp chạy được JavaScript tùy ý. Báo cáo ngày 08/07, Mapbox vá và đóng report ngay hôm sau ở phiên bản 5.1.2.",
     "tl0.time": "Công khai 07/07/2026 · CVE-2026-71538 · HIGH",
     "tl1.time": "Công khai 18/06/2026 · CVE-2026-57207 · MODERATE",
     "tl2.time": "Công khai 16/06/2026 · CVE-2026-55849 · HIGH",
@@ -1699,6 +1873,17 @@ const I18N = {
     "wu4.s5h": "Báo cáo &amp; kết quả",
     "wu4.s5p": "Mình báo cáo lại cho maintainer kèm PoC chạy trên Windows. Lần này họ bỏ hẳn nhánh <code>cmd.exe</code> thay vì chỉ escape thêm: v6.0.0 luôn phân giải về npm CLI dạng <code>.js</code> rồi gọi qua <code>node</code> với <code>shell: false</code>. CVE được cấp với điểm CVSS 4.0 là 8.5 (High) - bằng đúng CVE trước đó.",
 
+    "wu5.s1h": "Đổi lớp lỗi, giữ nguyên cách nghĩ",
+    "wu5.s1p": "Sau mấy CVE về command injection, mình chuyển sang một lớp lỗi họ hàng: code injection. Cách chọn mục tiêu vẫn thế - tìm nơi chương trình tự sinh ra mã rồi chạy chính nó bằng <code>new Function()</code> hay <code>eval</code>. pbf là thư viện protobuf nằm dưới Mapbox GL JS và rất nhiều pipeline vector tile, và <code>compile.js</code> của nó đúng là một code generator.",
+    "wu5.s2h": "Đã có hàng rào nghĩa là mối nguy đã được thừa nhận",
+    "wu5.s2p": "Một phiên bản trước đó đã thêm <code>validateIdentifier()</code> để chặn injection qua tên field. Với mình, một hàng rào có sẵn là tin tốt chứ không phải dấu hiệu nên bỏ qua: nó xác nhận mô hình nguy cơ đã được chính tác giả thừa nhận, và việc còn lại chỉ là kiểm kê xem hàng rào có phủ hết mọi lối vào hay chưa.",
+    "wu5.s3h": "Đối chiếu hai danh sách",
+    "wu5.s3p": "Mình liệt kê mọi giá trị lấy từ schema được nội suy vào chuỗi mã sinh ra, rồi đặt cạnh danh sách những giá trị thực sự đi qua <code>validateIdentifier()</code>. Tên message, tên field, tên oneof, tên enum value đều có mặt ở cả hai. <code>field.tag</code> chỉ có ở danh sách đầu - và nó xuất hiện ở cả nhánh đọc lẫn nhánh ghi.",
+    "wu5.s4h": "Vì sao lỗ hổng sống sót: kiểu dữ liệu nói dối",
+    "wu5.s4p": "Tag về mặt khái niệm là số nguyên, nên không ai nghĩ nó cần lọc. Nhưng đây là JavaScript và schema chỉ là object thuần - không có gì bắt buộc <code>tag</code> phải là number. Thêm nữa, parser <code>.proto</code> luôn ép tag qua <code>Number()</code>, nên đúng luồng được tài liệu hóa thì lỗi không bao giờ lộ ra. Vector chỉ mở khi ứng dụng nhận schema dạng object từ bên ngoài.",
+    "wu5.s5h": "Báo cáo &amp; kết quả",
+    "wu5.s5p": "Mình gửi báo cáo qua chương trình bug bounty của Mapbox trên HackerOne ngày 08/07/2026. Mapbox phân loại High (8.1) và xử lý gọn trong một ngày: 09/07/2026 report được đóng ở trạng thái Resolved, cũng đúng ngày v5.1.2 lên kệ với <code>validateTag()</code> thêm vào đúng vòng lặp đã có <code>validateIdentifier()</code>. Báo cáo được thưởng <b>$1,000</b>. Vì báo cáo để ở chế độ riêng tư, ở đây mình chỉ mô tả lớp lỗi và cách tiếp cận - không đăng PoC.",
+
     "av.cap1": "Nơi mọi thứ diễn ra - đọc source lúc nửa đêm",
     "av.cap2": "Sài Gòn - Dinh Độc Lập",
     "av.cap3": "Một khoảng lặng giữa ngày dài",
@@ -1721,7 +1906,7 @@ const I18N = {
     "term.helpList": [
       ["help", "hiện danh sách lệnh này"],
       ["whoami", "thông tin nhanh về mình"],
-      ["cve", "liệt kê các CVE đã được ghi nhận"],
+      ["cve", "liệt kê các báo cáo đã được ghi nhận"],
       ["writeup", "mở nhật ký săn lỗ hổng"],
       ["contact", "email và các kênh liên lạc"],
       ["banner", "vẽ lại banner đầu trang"],
@@ -1736,7 +1921,7 @@ const I18N = {
       ["hướng đi", "vulnerability research, responsible disclosure"],
       ["nơi ở", "TP. Hồ Chí Minh, Việt Nam"]
     ],
-    "term.cveHead": "CVE đã được ghi nhận:",
+    "term.cveHead": "Các báo cáo đã được ghi nhận:",
     "term.cveTail": "Xem chi tiết ở bản tin trang chủ.",
     "term.contact": "Kênh liên lạc:",
     "term.goWriteup": "Đang mở nhật ký săn lỗ hổng..."
@@ -1769,9 +1954,10 @@ const I18N = {
     "stat1": "CVEs assigned",
     "stat2": "Open-source projects",
     "stat3": "Distinct CWE classes",
+    "stat4": "Paid bug bounty",
 
     "home.h2": "Vulnerability <span class=\"grad-text\">feed</span>",
-    "home.sub": "CVEs I've found - newest first. Each card covers the technical summary, the impact, and the original code behind the flaw.",
+    "home.sub": "Vulnerabilities I've found - CVEs and bug bounty reports, newest first. Each card covers the technical summary, the impact, and the original code behind the flaw.",
     "status.state": "Status",
     "status.updated": "Last updated",
     "feed.all": "See all writeups →",
@@ -1779,12 +1965,22 @@ const I18N = {
     "link.back": "← Back to all writeups",
     "detail.code": "The code behind the flaw",
     "detail.process": "How I found it",
+    "c5.teaser": "Mapbox's protobuf library builds its codec with <code>new Function()</code>; every schema identifier is validated except <code>field.tag</code> - enough to smuggle arbitrary JavaScript into the generated reader and writer.",
     "c4.teaser": "The patch for CVE-2026-55849 kept the shell out on Linux but left a Windows-only <code>cmd.exe /c</code> branch behind - <code>--workspace</code> still injects commands.",
     "c1.teaser": "OS command injection through the <code>--workspace</code> option of an SBOM generator that runs automatically inside CI/CD pipelines.",
     "c2.teaser": "A webhook endpoint left unauthenticated by default, plus a uid read straight from the payload - enough to wipe every user's vector index.",
     "c3.teaser": "An MCP endpoint wide open under <code>TRANSPORT=http</code>, exposing all NetBox infrastructure data without any credentials.",
     "label.summary": "Summary",
     "label.impact": "Impact",
+
+    "c5.summary": "pbf's <code>compile.js</code> builds JavaScript source as a string and then runs it through <code>new Function()</code>. Every identifier taken from the schema - message name, field name, oneof name, enum value name - is passed through <code>validateIdentifier()</code> first, except <code>field.tag</code>. The tag value is inserted straight into the generated code with no checks at all, so a schema whose <code>field.tag</code> is a string can carry arbitrary JavaScript into both the compiled reader and the compiled writer.",
+    "c5.impact": "Any application that calls <code>compile()</code> / <code>compileRaw()</code> on a protobuf schema coming from user-controlled input - a schema descriptor received as JSON or over an API, for instance - will execute attacker-supplied JavaScript inside its own process. The attacker only has to submit a schema where one field's tag is a crafted string; as soon as the victim compiles that schema, the code runs with the privileges of the victim process, while the message still decodes to a normal-looking value so the injection never shows up in the output. Scope: the documented <code>.proto</code> path (<code>schema.parse</code>) is not affected, since tags are always <code>Number()</code>-coerced there - the vector is the schema-object API only.",
+    "c5.path1": "compile.js - v5.1.1 and earlier",
+    "c5.note1": "<b>The flaw:</b> <span>That whole string eventually goes into <code>new Function()</code>. A tag is conceptually an integer, but the schema is just a plain JavaScript object - nothing forces <code>tag</code> to actually be a number, which turns it into an entrance nobody was watching.</span>",
+    "c5.note2": "<b>The fix:</b> <span>The patch adds <code>validateTag()</code> to the very loop that already ran <code>validateIdentifier()</code>: a tag must be an integer within <code>[1, 2^29 - 1]</code>, numeric strings are still accepted so the <code>.proto</code> path keeps working, and anything else throws.</span>",
+    "c5.ver1": "Affected: ≤ 5.1.1 (verified on 5.1.0)",
+    "c5.ver2": "Fixed in: 5.1.2",
+    "c5.ver3": "Not affected: the .proto path via schema.parse",
 
     "c4.summary": "The v5.0.0 patch for CVE-2026-55849 replaced <code>execSync</code> with <code>execFileSync</code>, but it also introduced a Windows-only branch. When npm resolves to a batch file (<code>npm.cmd</code>), the tool runs <code>execFileSync('cmd.exe', ['/c', execPath, ...args])</code>. Node escapes arguments following the <code>CommandLineToArgvW</code> convention, but <code>cmd.exe</code> parses the command line with a completely different set of rules: it handles the metacharacters <code>&amp;</code>, <code>|</code>, <code>&gt;</code> and <code>^</code> first, and it does not understand <code>&#92;&quot;</code> escaping. So the user-supplied <code>--workspace</code> value can still break out of the intended command - this time only on Windows.",
     "c4.impact": "Arbitrary command execution with the privileges of the user running the CLI on Windows machines - data exfiltration, modifying or deleting files, and depending on the deployment, possible privilege escalation. Since this is still an SBOM generator running automatically inside pipelines, Windows CI runners are a direct target. Worth noting: this is the patch for an earlier CVE, so anyone who upgraded to 5.0.0 to escape CVE-2026-55849 is still in scope.",
@@ -1819,9 +2015,12 @@ const I18N = {
 
     "link.cve": "View the record on cve.org ↗",
     "link.ghsa": "View the GHSA advisory ↗",
+    "link.patch": "View the patch (PR #149) ↗",
 
     "journey.h2": "My <span class=\"grad-text\">journey</span>",
-    "journey.sub": "Milestones, most recent first, dated by advisory publication.",
+    "journey.sub": "Milestones, most recent first, dated by advisory publication or by the day the report was accepted.",
+    "tlb.time": "Resolved Jul 9, 2026 · HackerOne #3850031 · HIGH",
+    "tlb.p": "<code>compile.js</code> generates code through <code>new Function()</code> but skipped <code>field.tag</code> during identifier validation - an attacker-supplied schema could run arbitrary JavaScript. Reported on Jul 8; Mapbox patched and closed the report the very next day in version 5.1.2.",
     "tl0.time": "Disclosed Jul 7, 2026 · CVE-2026-71538 · HIGH",
     "tl1.time": "Disclosed Jun 18, 2026 · CVE-2026-57207 · MODERATE",
     "tl2.time": "Disclosed Jun 16, 2026 · CVE-2026-55849 · HIGH",
@@ -1881,6 +2080,17 @@ const I18N = {
     "wu4.s5h": "Report &amp; outcome",
     "wu4.s5p": "I reported back to the maintainers with a PoC that runs on Windows. This time they dropped the <code>cmd.exe</code> branch altogether rather than adding more escaping: v6.0.0 always resolves to the npm CLI <code>.js</code> file and spawns it through <code>node</code> with <code>shell: false</code>. The CVE was assigned a CVSS 4.0 score of 8.5 (High) - the same as the previous one.",
 
+    "wu5.s1h": "A different bug class, the same way of thinking",
+    "wu5.s1p": "After a run of command injection CVEs I moved to a close relative: code injection. The way I pick targets did not change - look for places where a program writes its own source and then runs it through <code>new Function()</code> or <code>eval</code>. pbf is the protobuf library sitting underneath Mapbox GL JS and a great many vector tile pipelines, and its <code>compile.js</code> is exactly that: a code generator.",
+    "wu5.s2h": "An existing guard means the risk is already acknowledged",
+    "wu5.s2p": "An earlier release had added <code>validateIdentifier()</code> to block injection through field names. To me an existing guard is good news rather than a reason to move on: it confirms the threat model was accepted by the authors themselves, and all that remains is taking inventory of whether the guard covers every entrance.",
+    "wu5.s3h": "Comparing the two lists",
+    "wu5.s3p": "I listed every schema-derived value that gets interpolated into the generated source string, then placed it next to the list of values that actually pass through <code>validateIdentifier()</code>. Message names, field names, oneof names and enum value names appear on both. <code>field.tag</code> appears only on the first - and it shows up in the read path as well as the write path.",
+    "wu5.s4h": "Why it survived: the type lies",
+    "wu5.s4p": "A tag is conceptually an integer, so nobody thought it needed sanitising. But this is JavaScript and the schema is a plain object - nothing requires <code>tag</code> to be a number. On top of that, the <code>.proto</code> parser always coerces tags through <code>Number()</code>, so along the documented path the flaw never surfaces. The vector only opens when an application accepts a schema object from outside.",
+    "wu5.s5h": "Report &amp; outcome",
+    "wu5.s5p": "I submitted the report through Mapbox's bug bounty programme on HackerOne on Jul 8, 2026. Mapbox triaged it as High (8.1) and wrapped it up within a day: on Jul 9, 2026 the report was closed as Resolved, the same day v5.1.2 shipped with <code>validateTag()</code> added to the very loop that already ran <code>validateIdentifier()</code>. The report was awarded a <b>$1,000</b> bounty. Since the report is private, I only describe the bug class and the approach here - no PoC.",
+
     "av.cap1": "Where it all happens - reading source at midnight",
     "av.cap2": "Saigon - Independence Palace",
     "av.cap3": "A quiet moment in a long day",
@@ -1903,7 +2113,7 @@ const I18N = {
     "term.helpList": [
       ["help", "show this list of commands"],
       ["whoami", "a quick rundown of who I am"],
-      ["cve", "list the CVEs assigned to me"],
+      ["cve", "list the reports on record"],
       ["writeup", "open the bug hunting journal"],
       ["contact", "email and other channels"],
       ["banner", "redraw the header banner"],
@@ -1918,7 +2128,7 @@ const I18N = {
       ["focus", "vulnerability research, responsible disclosure"],
       ["based in", "Ho Chi Minh City, Vietnam"]
     ],
-    "term.cveHead": "CVEs assigned:",
+    "term.cveHead": "Reports on record:",
     "term.cveTail": "Full details are in the feed on the home page.",
     "term.contact": "Contact channels:",
     "term.goWriteup": "Opening the bug hunting journal..."
@@ -1941,7 +2151,9 @@ const toTop = document.getElementById("toTop");
 const typingEl = document.getElementById("typing");
 
 const statCounts = {
-  cve: document.querySelectorAll("#cve .cve").length,
+  // Card bug bounty không phải CVE nên đếm riêng, tránh thổi phồng số CVE.
+  cve: document.querySelectorAll('#cve .cve:not([data-kind="bounty"])').length,
+  bounty: document.querySelectorAll('#cve .cve[data-kind="bounty"]').length,
   pkg: new Set([...document.querySelectorAll("#cve .pkg")].map(el => el.textContent.trim())).size,
   cwe: new Set(
     [...document.querySelectorAll("#cve .cwe-row .tag")]
@@ -2271,7 +2483,8 @@ function termPair(k, v, pad){
 }
 function termBanner(){
   termPrint('<span class="t-red">$</span> <span class="t-txt">./recon --target fortress</span>');
-  termPrint("[*] " + statCounts.cve + " advisories · " + statCounts.pkg + " projects · " + statCounts.cwe + " CWE classes", "t-dim");
+  termPrint("[*] " + statCounts.cve + " CVEs · " + statCounts.bounty + " bounty · " +
+            statCounts.pkg + " projects · " + statCounts.cwe + " CWE classes", "t-dim");
   termPrint(t("term.welcome"), "t-dim");
 }
 function termRun(raw){
