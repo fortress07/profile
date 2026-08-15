@@ -1406,7 +1406,7 @@
             </p>
           </div>
 
-      <div class="notice" data-i18n="c6.nocve"><b>Vì sao không có CVE:</b> <span>Advisory đã publish công khai trên repo appium/appium-mcp và ghi nhận mình là người báo cáo, nhưng mình không request CVE ID. Vì vậy nó không nằm trong GitHub Global Advisory Database và không hiện khi chạy <code>npm audit</code>. Mình vẫn liệt kê ở đây, gắn nhãn đúng bản chất: một finding được publish và được ghi nhận, không phải một CVE.</span></div>
+      <div class="notice" data-i18n="c6.nocve"><b>Vì sao không có CVE:</b> <span>Advisory đã publish công khai trên repo appium/appium-mcp và ghi nhận mình là người báo cáo, nhưng không có CVE ID nào được cấp. Quyền request CVE thuộc về phía maintainer, và họ đã không request - mình có mong muốn được cấp CVE và đã nói rõ điều đó với họ, nhưng tới giờ vẫn chưa biết lý do. Hệ quả là finding này không nằm trong GitHub Global Advisory Database và không hiện khi chạy <code>npm audit</code>. Mình vẫn liệt kê ở đây, gắn nhãn đúng bản chất: một finding được publish và được ghi nhận, không phải một CVE.</span></div>
 
       <h3 class="detail-h3" data-i18n="detail.code">Đoạn code gây ra lỗ hổng</h3>
       <div class="code">
@@ -1447,7 +1447,7 @@ xcrun simctl install <span class="s">"x"</span> <span class="hl">&amp;&amp; id &
           </div></div>
           <div class="wu-step"><span class="n">5</span><div>
             <h4 data-i18n="wu6.s5h">Báo cáo &amp; kết quả</h4>
-            <p data-i18n="wu6.s5p">Mình báo cáo riêng qua GitHub Security Advisory kèm PoC, đề xuất chuyển sang <code>execFile</code> với mảng tham số và validate định dạng UDID. Bản vá ra ở 1.86.5, advisory được publish và ghi nhận mình là người báo cáo. Mình không request CVE cho finding này.</p>
+            <p data-i18n="wu6.s5p">Mình báo cáo riêng qua GitHub Security Advisory kèm PoC, đề xuất chuyển sang <code>execFile</code> với mảng tham số và validate định dạng UDID. Bản vá ra ở 1.86.5, advisory được publish và ghi nhận mình là người báo cáo. Mình có đề nghị cấp CVE và đã trao đổi điều đó với maintainer, nhưng họ không gửi request - và đó vẫn là phần mình chưa hiểu của câu chuyện này.</p>
           </div></div>
         </div>
 
@@ -1806,7 +1806,8 @@ middleware = [
         <p data-i18n="tla.p">
           Tham số <code>udid</code> của tool <code>prepare_ios_simulator</code> đi thẳng vào chuỗi lệnh shell,
           cho phép mọi MCP client chạy lệnh tùy ý trên máy host. Đã được sửa ở phiên bản 1.86.5.
-          Advisory được publish và ghi nhận, mình không request CVE.
+          Advisory được publish và ghi nhận, nhưng maintainer không request CVE
+          nên finding này không có CVE ID.
         </p>
       </div>
       <div class="tl-item reveal d3" style="--dot:var(--gold)">
@@ -1950,7 +1951,7 @@ const I18N = {
     "c6.teaser": "Tham số <code>udid</code> đi thẳng vào chuỗi lệnh shell của tool <code>prepare_ios_simulator</code> - mọi MCP client kết nối tới đều chạy được lệnh tùy ý trên máy host.",
     "c6.summary": "Tool <code>prepare_ios_simulator</code> nhận tham số <code>udid</code> từ MCP client rồi nội suy thẳng vào chuỗi lệnh shell qua <code>execAsync</code>, ở bốn call site khác nhau. Lớp bảo vệ duy nhất là cặp dấu nháy kép bao quanh giá trị - nhưng nháy kép nằm ngay trong chuỗi do attacker kiểm soát, nên chỉ cần đóng nháy sớm là thoát được ra ngoài câu lệnh dự kiến.",
     "c6.impact": "Bất kỳ MCP client nào kết nối tới server đều thực thi được lệnh hệ điều hành tùy ý trên máy host, với quyền của tiến trình MCP server - đọc toàn bộ filesystem, lấy credential, và từ đó mở rộng sang các hệ thống khác. Đáng lo hơn ở bối cảnh MCP, vì tham số của tool call thường do một mô hình sinh ra: nội dung không đáng tin có thể đi thẳng vào <code>udid</code> mà không qua mắt người dùng.",
-    "c6.nocve": "<b>Vì sao không có CVE:</b> <span>Advisory đã publish công khai trên repo appium/appium-mcp và ghi nhận mình là người báo cáo, nhưng mình không request CVE ID. Vì vậy nó không nằm trong GitHub Global Advisory Database và không hiện khi chạy <code>npm audit</code>. Mình vẫn liệt kê ở đây, gắn nhãn đúng bản chất: một finding được publish và được ghi nhận, không phải một CVE.</span>",
+    "c6.nocve": "<b>Vì sao không có CVE:</b> <span>Advisory đã publish công khai trên repo appium/appium-mcp và ghi nhận mình là người báo cáo, nhưng không có CVE ID nào được cấp. Quyền request CVE thuộc về phía maintainer, và họ đã không request - mình có mong muốn được cấp CVE và đã nói rõ điều đó với họ, nhưng tới giờ vẫn chưa biết lý do. Hệ quả là finding này không nằm trong GitHub Global Advisory Database và không hiện khi chạy <code>npm audit</code>. Mình vẫn liệt kê ở đây, gắn nhãn đúng bản chất: một finding được publish và được ghi nhận, không phải một CVE.</span>",
     "c6.path1": "src/tools/ios/prepare-ios-simulator.ts - trước v1.86.5",
     "c6.note1": "<b>Vấn đề:</b> <span><code>execAsync</code> là <code>exec()</code> của Node - luôn đi qua shell. Giá trị <code>udid</code> đến thẳng từ tham số của tool call, không hề được kiểm định dạng, trong khi một UDID hợp lệ chỉ gồm hex và dấu gạch ngang.</span>",
     "c6.note2": "<b>Vì sao nháy kép không cứu được:</b> <span>Dấu nháy do template literal thêm vào bị chính payload đóng lại sớm. Phần <code>echo \"x</code> ở cuối chỉ để mở lại nháy cho vế sau, giúp câu lệnh vẫn hợp lệ và không văng lỗi cú pháp - lệnh chèn vào chạy trọn vẹn.</span>",
@@ -2000,7 +2001,7 @@ const I18N = {
     "tlb.p": "<code>compile.js</code> sinh mã qua <code>new Function()</code> nhưng bỏ sót <code>field.tag</code> ở khâu kiểm định danh - một schema do attacker cung cấp chạy được JavaScript tùy ý. Mapbox vá chỉ một ngày sau khi mình báo cáo, ở phiên bản 5.1.2.",
     "tl0.time": "Công khai 07/07/2026 · CVE-2026-71538 · HIGH",
     "tla.time": "Công khai 28/06/2026 · GHSA (không CVE) · HIGH",
-    "tla.p": "Tham số <code>udid</code> của tool <code>prepare_ios_simulator</code> đi thẳng vào chuỗi lệnh shell, cho phép mọi MCP client chạy lệnh tùy ý trên máy host. Đã được sửa ở phiên bản 1.86.5. Advisory được publish và ghi nhận, mình không request CVE.",
+    "tla.p": "Tham số <code>udid</code> của tool <code>prepare_ios_simulator</code> đi thẳng vào chuỗi lệnh shell, cho phép mọi MCP client chạy lệnh tùy ý trên máy host. Đã được sửa ở phiên bản 1.86.5. Advisory được publish và ghi nhận, nhưng maintainer không request CVE nên finding này không có CVE ID.",
     "tl1.time": "Công khai 18/06/2026 · CVE-2026-57207 · MODERATE",
     "tl2.time": "Công khai 16/06/2026 · CVE-2026-55849 · HIGH",
     "tl3.time": "Công khai 14/06/2026 · CVE-2026-55640 · CRITICAL",
@@ -2078,7 +2079,7 @@ const I18N = {
     "wu6.s4h": "Phá lớp nháy kép",
     "wu6.s4p": "Giá trị được bọc trong nháy kép nên payload phải tự đóng nháy rồi mở lại để câu lệnh còn hợp lệ. Mình dựng payload đóng - chèn - mở và xác nhận bằng một lệnh vô hại ghi file ra <code>/tmp</code>, đủ chứng minh mà không đụng gì tới hệ thống.",
     "wu6.s5h": "Báo cáo &amp; kết quả",
-    "wu6.s5p": "Mình báo cáo riêng qua GitHub Security Advisory kèm PoC, đề xuất chuyển sang <code>execFile</code> với mảng tham số và validate định dạng UDID. Bản vá ra ở 1.86.5, advisory được publish và ghi nhận mình là người báo cáo. Mình không request CVE cho finding này.",
+    "wu6.s5p": "Mình báo cáo riêng qua GitHub Security Advisory kèm PoC, đề xuất chuyển sang <code>execFile</code> với mảng tham số và validate định dạng UDID. Bản vá ra ở 1.86.5, advisory được publish và ghi nhận mình là người báo cáo. Mình có đề nghị cấp CVE và đã trao đổi điều đó với maintainer, nhưng họ không gửi request - và đó vẫn là phần mình chưa hiểu của câu chuyện này.",
 
     "av.cap1": "Nơi mọi thứ diễn ra - đọc source lúc nửa đêm",
     "av.cap2": "Sài Gòn - Dinh Độc Lập",
@@ -2187,7 +2188,7 @@ const I18N = {
     "c6.teaser": "The <code>udid</code> parameter flows straight into a shell command in the <code>prepare_ios_simulator</code> tool - any connected MCP client can run arbitrary commands on the host.",
     "c6.summary": "The <code>prepare_ios_simulator</code> tool takes the <code>udid</code> parameter from the MCP client and interpolates it straight into shell commands through <code>execAsync</code>, at four separate call sites. The only protection is the pair of double quotes wrapped around the value - but those quotes sit inside a string the attacker controls, so closing the quote early is enough to break out of the intended command.",
     "c6.impact": "Any MCP client connected to the server can execute arbitrary OS commands on the host with the privileges of the MCP server process - full filesystem access, credential theft, and lateral movement from there. It is especially uncomfortable in the MCP context, because tool-call parameters are usually generated by a model: untrusted content can reach <code>udid</code> without a human ever seeing it.",
-    "c6.nocve": "<b>Why there is no CVE:</b> <span>The advisory is published publicly on the appium/appium-mcp repository and credits me as the reporter, but I never requested a CVE ID. That means it is not in the GitHub Global Advisory Database and does not surface in <code>npm audit</code>. I still list it here, labelled for exactly what it is: a published, credited finding - not a CVE.</span>",
+    "c6.nocve": "<b>Why there is no CVE:</b> <span>The advisory is published publicly on the appium/appium-mcp repository and credits me as the reporter, but no CVE ID was ever assigned. Requesting a CVE is the maintainer's call, and they did not request one - I did want a CVE for this finding and said so, and I still do not know the reason. The consequence is that it never entered the GitHub Global Advisory Database and does not surface in <code>npm audit</code>. I still list it here, labelled for exactly what it is: a published, credited finding - not a CVE.</span>",
     "c6.path1": "src/tools/ios/prepare-ios-simulator.ts - before v1.86.5",
     "c6.note1": "<b>The flaw:</b> <span><code>execAsync</code> is Node's <code>exec()</code> - it always goes through a shell. The <code>udid</code> value arrives straight from the tool-call parameters with no format validation at all, even though a legitimate UDID is nothing but hex digits and dashes.</span>",
     "c6.note2": "<b>Why the quotes don't save it:</b> <span>The quotes added by the template literal are closed early by the payload itself. The trailing <code>echo \"x</code> exists only to reopen a quote for the rest of the command, keeping it syntactically valid so nothing errors out - and the injected command runs in full.</span>",
@@ -2237,7 +2238,7 @@ const I18N = {
     "tlb.p": "<code>compile.js</code> generates code through <code>new Function()</code> but skipped <code>field.tag</code> during identifier validation - an attacker-supplied schema could run arbitrary JavaScript. Mapbox shipped the fix in version 5.1.2 just one day after I reported it.",
     "tl0.time": "Disclosed Jul 7, 2026 · CVE-2026-71538 · HIGH",
     "tla.time": "Disclosed Jun 28, 2026 · GHSA (no CVE) · HIGH",
-    "tla.p": "The <code>udid</code> parameter of the <code>prepare_ios_simulator</code> tool flows straight into a shell command, letting any MCP client run arbitrary commands on the host. Fixed in version 1.86.5. The advisory was published and credited; I did not request a CVE.",
+    "tla.p": "The <code>udid</code> parameter of the <code>prepare_ios_simulator</code> tool flows straight into a shell command, letting any MCP client run arbitrary commands on the host. Fixed in version 1.86.5. The advisory was published and credited, but the maintainers never requested a CVE, so this finding has no CVE ID.",
     "tl1.time": "Disclosed Jun 18, 2026 · CVE-2026-57207 · MODERATE",
     "tl2.time": "Disclosed Jun 16, 2026 · CVE-2026-55849 · HIGH",
     "tl3.time": "Disclosed Jun 14, 2026 · CVE-2026-55640 · CRITICAL",
@@ -2315,7 +2316,7 @@ const I18N = {
     "wu6.s4h": "Breaking out of the quotes",
     "wu6.s4p": "The value is wrapped in double quotes, so the payload has to close the quote and reopen it to keep the command valid. I built a close-inject-reopen payload and confirmed it with a harmless command writing a file into <code>/tmp</code> - enough to prove the issue without touching anything on the system.",
     "wu6.s5h": "Report &amp; outcome",
-    "wu6.s5p": "I reported it privately through a GitHub Security Advisory with a PoC, suggesting a switch to <code>execFile</code> with an argument array plus UDID format validation. The patch shipped in 1.86.5 and the advisory was published crediting me as the reporter. I did not request a CVE for this finding.",
+    "wu6.s5p": "I reported it privately through a GitHub Security Advisory with a PoC, suggesting a switch to <code>execFile</code> with an argument array plus UDID format validation. The patch shipped in 1.86.5 and the advisory was published crediting me as the reporter. I did ask for a CVE and raised it with the maintainers, but no request was filed - and that part I still do not understand.",
 
     "av.cap1": "Where it all happens - reading source at midnight",
     "av.cap2": "Saigon - Independence Palace",
