@@ -423,6 +423,19 @@
   .sb-v .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2.4s infinite;flex:none}
   .date-chip{margin-left:auto;font-family:var(--mono);font-size:.66rem;color:var(--muted);padding:3px 10px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
 
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;border:0;padding:0;min-width:0}
+  .filters button{
+    display:inline-flex;align-items:center;cursor:pointer;min-height:36px;
+    font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.03em;
+    color:var(--muted);background:var(--surface);border:1px solid var(--line);
+    padding:6px 14px;border-radius:8px;
+    transition:color .25s,border-color .25s,background .25s;
+  }
+  .filters button:hover{color:var(--text);border-color:rgba(255,59,92,.32)}
+  .filters button[aria-pressed="true"]{background:var(--grad);color:#180509;border-color:transparent}
+  .filters .n{margin-left:7px;opacity:.62}
+  .cve.hide{display:none}
+
   .cve-list{display:grid;gap:20px}
   .cve{
     position:relative;display:grid;grid-template-columns:148px 1fr;gap:24px;
@@ -467,7 +480,7 @@
 
   .cve-main{display:flex;flex-direction:column;gap:13px;min-width:0}
   .cve-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .cve-id{font-family:var(--mono);font-weight:700;font-size:clamp(.97rem,2.2vw,1.16rem);letter-spacing:.01em;line-height:1.4}
+  .cve-id{font-family:var(--mono);font-weight:700;font-size:clamp(.97rem,2.2vw,1.16rem);letter-spacing:.01em;line-height:1.4;overflow-wrap:anywhere}
   .cve.featured .cve-id{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .badge{
     font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.09em;
@@ -475,6 +488,20 @@
     background:rgba(245,181,68,.12);color:var(--gold);border:1px solid rgba(245,181,68,.34);
   }
   .badge.bounty{background:rgba(74,222,128,.1);color:var(--green);border-color:rgba(74,222,128,.32)}
+  /* Nhãn loại finding - chỉ gắn khi bản thân ID không nói rõ nó là gì. */
+  .kind{
+    font-family:var(--mono);font-size:.615rem;font-weight:700;letter-spacing:.08em;
+    padding:3px 9px;border-radius:5px;text-transform:uppercase;white-space:nowrap;line-height:1.7;
+    color:var(--gold);background:rgba(245,181,68,.11);border:1px solid rgba(245,181,68,.32);
+  }
+  /* Hộp nói về trạng thái công bố, không phải về bản thân lỗ hổng. */
+  .notice{
+    display:flex;flex-wrap:wrap;gap:7px;padding:13px 15px;border-radius:11px;
+    font-size:.85rem;line-height:1.75;color:var(--text-dim);
+    background:rgba(245,181,68,.055);border:1px solid rgba(245,181,68,.24);
+  }
+  .notice b{color:var(--gold);font-weight:600;flex:none}
+  .notice span{min-width:0}
   .pkg{
     display:inline-flex;align-items:center;gap:7px;align-self:flex-start;max-width:100%;
     font-family:var(--mono);font-size:.765rem;color:var(--red-soft);
@@ -926,9 +953,10 @@
     </div>
 
     <div class="stats">
-      <div class="stat card reveal"><div class="num" data-stat="cve" data-count="4">0</div><div class="lbl" data-i18n="stat1">CVE được ghi nhận</div></div>
-      <div class="stat card reveal d1"><div class="num" data-stat="bounty" data-count="1">0</div><div class="lbl" data-i18n="stat4">Bug bounty được thưởng</div></div>
-      <div class="stat card reveal d2"><div class="num" data-stat="pkg" data-count="4">0</div><div class="lbl" data-i18n="stat2">Dự án mã nguồn mở</div></div>
+      <div class="stat card reveal"><div class="num" data-stat="find" data-count="6">0</div><div class="lbl" data-i18n="stat0">Finding được ghi nhận</div></div>
+      <div class="stat card reveal d1"><div class="num" data-stat="cve" data-count="4">0</div><div class="lbl" data-i18n="stat1">CVE được ghi nhận</div></div>
+      <div class="stat card reveal d2"><div class="num" data-stat="bounty" data-count="1">0</div><div class="lbl" data-i18n="stat4">Bug bounty được thưởng</div></div>
+      <div class="stat card reveal d3"><div class="num" data-stat="pkg" data-count="5">0</div><div class="lbl" data-i18n="stat2">Dự án mã nguồn mở</div></div>
       <div class="stat card reveal d3"><div class="num" data-stat="cwe" data-count="4">0</div><div class="lbl" data-i18n="stat3">Lớp CWE khác nhau</div></div>
     </div>
   </section>
@@ -936,11 +964,12 @@
   <section id="cve">
     <div class="sec-tag reveal">tail -f ./disclosures.log</div>
     <h2 class="reveal" data-i18n="home.h2">Bản tin <span class="grad-text">lỗ hổng</span></h2>
-    <p class="sec-sub reveal d1" data-i18n="home.sub">Các CVE mình tìm được - mới nhất xếp trước. Mỗi card gồm tóm tắt kỹ thuật, ảnh hưởng và đoạn code gốc gây ra lỗ hổng.</p>
+    <p class="sec-sub reveal d1" data-i18n="home.sub">Toàn bộ finding mình đã báo cáo - CVE, advisory được publish nhưng không xin CVE, và bug bounty được ghi nhận. Mới nhất xếp trước.</p>
     <div class="status-board reveal d1">
       <div class="sb-item"><span class="sb-k" data-i18n="status.state">Trạng thái</span><span class="sb-v live"><span class="dot"></span>ONLINE</span></div>
       <div class="sb-item"><span class="sb-k" data-i18n="status.updated">Cập nhật gần đây</span><span class="sb-v" id="lastUpdate">—</span></div>
     </div>
+    <fieldset class="filters reveal d1" id="filters"></fieldset>
     <div class="cve-list">
 
       <article class="cve reveal" data-date="2026-07-09" data-slug="wu-h1-pbf" data-kind="bounty" style="--sev:var(--orange)">
@@ -965,7 +994,7 @@
         </div>
       </article>
 
-      <article class="cve reveal" data-date="2026-07-07" data-slug="wu-71538" style="--sev:var(--orange)">
+      <article class="cve reveal" data-date="2026-07-07" data-slug="wu-71538" data-kind="cve" style="--sev:var(--orange)">
         <div class="score">
           <div class="ring" data-p="85">
             <div class="inner"><span class="val">8.5</span><span class="of">CVSS 4.0</span></div>
@@ -986,7 +1015,29 @@
         </div>
       </article>
 
-      <article class="cve featured reveal" data-date="2026-06-16" data-slug="wu-55849" style="--sev:var(--orange)">
+      <article class="cve reveal" data-date="2026-06-28" data-slug="wu-appium" data-kind="advisory" style="--sev:var(--orange)">
+        <div class="score">
+          <div class="ring" data-p="75">
+            <div class="inner"><span class="val">7.5</span><span class="of">CVSS 3.1</span></div>
+          </div>
+          <span class="sev-label">High</span>
+        </div>
+        <div class="cve-main">
+          <div class="cve-head">
+            <span class="cve-id">GHSA-pchr-rp2x-w3vw</span>
+            <span class="kind" data-i18n="kind.advisory">Advisory · không CVE</span>
+          </div>
+          <span class="pkg">appium-mcp</span>
+          <p class="cve-teaser" data-i18n="c6.teaser"></p>
+          <div class="cwe-row">
+            <span class="tag">CWE-78 · OS Command Injection</span>
+            <span class="tag">MCP tool parameter</span>
+          </div>
+          <a class="cve-link" href="#/wu-appium" data-i18n="link.more">Xem chi tiết →</a>
+        </div>
+      </article>
+
+      <article class="cve featured reveal" data-date="2026-06-16" data-slug="wu-55849" data-kind="cve" style="--sev:var(--orange)">
         <div class="score">
           <div class="ring" data-p="85">
             <div class="inner"><span class="val">8.5</span><span class="of">CVSS 4.0</span></div>
@@ -1007,7 +1058,7 @@
         </div>
       </article>
 
-      <article class="cve reveal" data-date="2026-06-14" data-slug="wu-55640" style="--sev:var(--red)">
+      <article class="cve reveal" data-date="2026-06-14" data-slug="wu-55640" data-kind="cve" style="--sev:var(--red)">
         <div class="score">
           <div class="ring" data-p="91">
             <div class="inner"><span class="val">9.1</span><span class="of">CVSS 3.1</span></div>
@@ -1028,7 +1079,7 @@
         </div>
       </article>
 
-      <article class="cve reveal" data-date="2026-06-18" data-slug="wu-57207" style="--sev:var(--gold)">
+      <article class="cve reveal" data-date="2026-06-18" data-slug="wu-57207" data-kind="cve" style="--sev:var(--gold)">
         <div class="score">
           <div class="ring" data-p="59">
             <div class="inner"><span class="val">5.9</span><span class="of">CVSS 3.1</span></div>
@@ -1296,6 +1347,111 @@
         </div>
 
       <a class="cve-link" href="https://github.com/CycloneDX/cyclonedx-node-npm/security/advisories/GHSA-q69g-4hcv-6jg4" target="_blank" rel="noopener noreferrer" data-i18n="link.ghsa">
+            Xem advisory GHSA ↗
+          </a>
+    </div>
+  </section>
+
+  </div>
+
+  <div class="page" id="page-wu-appium">
+
+  <section class="detail" style="--sev:var(--orange)">
+    <a class="back-link" href="#/writeup" data-i18n="link.back">← Quay lại danh sách writeup</a>
+    <div class="sec-tag reveal">cat ./writeups/appium-mcp-udid.md</div>
+    <h2 class="reveal"><span class="grad-text">GHSA-pchr-rp2x-w3vw</span></h2>
+    <p class="sec-sub reveal d1" data-i18n="c6.teaser"></p>
+
+    <div class="card detail-top reveal">
+      <div class="score">
+          <div class="ring" data-p="75">
+            <div class="inner"><span class="val">7.5</span><span class="of">CVSS 3.1</span></div>
+          </div>
+          <span class="sev-label">High</span>
+        </div>
+      <div class="detail-facts">
+        <div class="cve-head">
+          <span class="pkg">appium-mcp</span>
+          <span class="kind" data-i18n="kind.advisory">Advisory · không CVE</span>
+        </div>
+        <div class="vector"><b>CVSS 3.1</b>&nbsp; AV:L/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:H</div>
+        <div class="ver-row">
+                    <span class="ver bad" data-i18n="c6.ver1">Bị ảnh hưởng: ≥ 1.49.0, ≤ 1.86.4</span>
+                    <span class="ver ok" data-i18n="c6.ver2">Đã sửa: 1.86.5</span>
+                  </div>
+        <div class="cwe-row">
+                    <span class="tag">CWE-78 · OS Command Injection</span>
+                  </div>
+      </div>
+    </div>
+
+    <div class="detail-body">
+      <div class="block">
+            <h4 data-i18n="label.summary">Tóm tắt</h4>
+            <p data-i18n="c6.summary">
+              Tool <code>prepare_ios_simulator</code> nhận tham số <code>udid</code> từ MCP client rồi nội suy
+              thẳng vào chuỗi lệnh shell qua <code>execAsync</code>, ở bốn call site khác nhau.
+              Lớp bảo vệ duy nhất là cặp dấu nháy kép bao quanh giá trị - nhưng nháy kép nằm ngay trong
+              chuỗi do attacker kiểm soát, nên chỉ cần đóng nháy sớm là thoát được ra ngoài câu lệnh dự kiến.
+            </p>
+          </div>
+
+      <div class="block">
+            <h4 data-i18n="label.impact">Ảnh hưởng</h4>
+            <p data-i18n="c6.impact">
+              Bất kỳ MCP client nào kết nối tới server đều thực thi được lệnh hệ điều hành tùy ý trên máy host,
+              với quyền của tiến trình MCP server - đọc toàn bộ filesystem, lấy credential, và từ đó mở rộng
+              sang các hệ thống khác. Đáng lo hơn ở bối cảnh MCP, vì tham số của tool call thường do một mô hình
+              sinh ra: nội dung không đáng tin có thể đi thẳng vào <code>udid</code> mà không qua mắt người dùng.
+            </p>
+          </div>
+
+      <div class="notice" data-i18n="c6.nocve"><b>Vì sao không có CVE:</b> <span>Advisory đã publish công khai trên repo appium/appium-mcp và ghi nhận mình là người báo cáo, nhưng không có CVE ID nào được cấp. Quyền request CVE thuộc về phía maintainer, và họ đã không request - mình có mong muốn được cấp CVE và đã nói rõ điều đó với họ, nhưng tới giờ vẫn chưa biết lý do. Hệ quả là finding này không nằm trong GitHub Global Advisory Database và không hiện khi chạy <code>npm audit</code>. Mình vẫn liệt kê ở đây, gắn nhãn đúng bản chất: một finding được publish và được ghi nhận, không phải một CVE.</span></div>
+
+      <h3 class="detail-h3" data-i18n="detail.code">Đoạn code gây ra lỗ hổng</h3>
+      <div class="code">
+              <div class="code-bar"><span class="lang">TypeScript</span><span class="path" data-i18n="c6.path1">src/tools/ios/prepare-ios-simulator.ts - trước v1.86.5</span><button type="button" class="copy">Copy</button></div>
+<pre><span class="hl"><span class="k">await</span> <span class="f">execAsync</span>(<span class="s">`xcrun simctl install "${simulatorUdid}" "${appPath}"`</span>)</span>
+<span class="hl"><span class="k">await</span> <span class="f">execAsync</span>(<span class="s">`xcrun simctl launch "${simulatorUdid}" "${bundleId}"`</span>)</span>
+<span class="hl"><span class="k">await</span> <span class="f">execAsync</span>(<span class="s">`xcrun simctl listapps "${simulatorUdid}" --json`</span>)</span>
+<span class="hl"><span class="k">await</span> <span class="f">execAsync</span>(<span class="s">`xcrun simctl spawn "${simulatorUdid}" launchctl list`</span>)</span></pre>
+              <div class="code-note" data-i18n="c6.note1"><b>Vấn đề:</b> <span><code>execAsync</code> là <code>exec()</code> của Node - luôn đi qua shell. Giá trị <code>udid</code> đến thẳng từ tham số của tool call, không hề được kiểm định dạng, trong khi một UDID hợp lệ chỉ gồm hex và dấu gạch ngang.</span></div>
+            </div>
+            <div class="code">
+              <div class="code-bar"><span class="lang">PoC</span><span class="path">prepare_ios_simulator - tool call</span><button type="button" class="copy">Copy</button></div>
+<pre><span class="c">// tham số gửi cho tool</span>
+<span class="s">"udid"</span>: <span class="s">"x\" &amp;&amp; id &gt; /tmp/poc_test1.txt &amp;&amp; echo \"x"</span>
+
+<span class="c">// chuỗi lệnh thực tế shell nhận được</span>
+xcrun simctl install <span class="s">"x"</span> <span class="hl">&amp;&amp; id &gt; /tmp/poc_test1.txt &amp;&amp;</span> echo <span class="s">"x"</span> <span class="s">"/path/to/app.app"</span></pre>
+              <div class="code-note" data-i18n="c6.note2"><b>Vì sao nháy kép không cứu được:</b> <span>Dấu nháy do template literal thêm vào bị chính payload đóng lại sớm. Phần <code>echo "x</code> ở cuối chỉ để mở lại nháy cho vế sau, giúp câu lệnh vẫn hợp lệ và không văng lỗi cú pháp - lệnh chèn vào chạy trọn vẹn.</span></div>
+            </div>
+
+      <h3 class="detail-h3" data-i18n="detail.process">Quá trình phát hiện</h3>
+      <div class="wu-steps">
+          <div class="wu-step"><span class="n">1</span><div>
+            <h4 data-i18n="wu6.s1h">Đổi câu hỏi khi soi MCP server</h4>
+            <p data-i18n="wu6.s1p">Hai finding MCP trước của mình đều xoay quanh câu hỏi "ai gọi được tool". Lần này mình đổi sang "tham số của tool đi tới đâu". MCP đưa tham số do mô hình sinh ra vào thẳng hàm xử lý, nên mọi sink thực thi lệnh trong một MCP server đều đáng đọc kỹ.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">2</span><div>
+            <h4 data-i18n="wu6.s2h">Tìm sink trước, nguồn sau</h4>
+            <p data-i18n="wu6.s2p">Mình grep các hàm sinh process trong repo và dừng ở <code>prepare-ios-simulator.ts</code>: bốn lời gọi <code>execAsync</code> đều dựng bằng template literal. Template literal đi kèm <code>exec</code> gần như luôn là dấu hiệu của chuỗi lệnh được ghép tay.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">3</span><div>
+            <h4 data-i18n="wu6.s3h">Truy ngược tham số udid</h4>
+            <p data-i18n="wu6.s3p">Lần ngược lên schema của tool, <code>udid</code> là một string tự do: không regex, không whitelist ký tự. Trong khi UDID thật của simulator chỉ là UUID hex - việc kiểm định dạng lẽ ra rất rẻ mà lại không hề có.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">4</span><div>
+            <h4 data-i18n="wu6.s4h">Phá lớp nháy kép</h4>
+            <p data-i18n="wu6.s4p">Giá trị được bọc trong nháy kép nên payload phải tự đóng nháy rồi mở lại để câu lệnh còn hợp lệ. Mình dựng payload đóng - chèn - mở và xác nhận bằng một lệnh vô hại ghi file ra <code>/tmp</code>, đủ chứng minh mà không đụng gì tới hệ thống.</p>
+          </div></div>
+          <div class="wu-step"><span class="n">5</span><div>
+            <h4 data-i18n="wu6.s5h">Báo cáo &amp; kết quả</h4>
+            <p data-i18n="wu6.s5p">Mình báo cáo riêng qua GitHub Security Advisory kèm PoC, đề xuất chuyển sang <code>execFile</code> với mảng tham số và validate định dạng UDID. Bản vá ra ở 1.86.5, advisory được publish và ghi nhận mình là người báo cáo. Mình có đề nghị cấp CVE và đã trao đổi điều đó với maintainer, nhưng họ không gửi request - và đó vẫn là phần mình chưa hiểu của câu chuyện này.</p>
+          </div></div>
+        </div>
+
+      <a class="cve-link" href="https://github.com/appium/appium-mcp/security/advisories/GHSA-pchr-rp2x-w3vw" target="_blank" rel="noopener noreferrer" data-i18n="link.ghsa">
             Xem advisory GHSA ↗
           </a>
     </div>
@@ -1643,7 +1799,18 @@ middleware = [
           <code>--workspace</code> vẫn chèn được lệnh. Đã được sửa ở phiên bản 6.0.0.
         </p>
       </div>
-      <div class="tl-item reveal d2" style="--dot:var(--gold)">
+      <div class="tl-item reveal d2" style="--dot:var(--orange)">
+        <span class="tl-time" data-i18n="tla.time">Công khai 28/06/2026 · GHSA (không CVE) · HIGH</span>
+        <h3>appium-mcp</h3>
+        <div class="sub">CWE-78 · OS Command Injection</div>
+        <p data-i18n="tla.p">
+          Tham số <code>udid</code> của tool <code>prepare_ios_simulator</code> đi thẳng vào chuỗi lệnh shell,
+          cho phép mọi MCP client chạy lệnh tùy ý trên máy host. Đã được sửa ở phiên bản 1.86.5.
+          Advisory được publish và ghi nhận, nhưng maintainer không request CVE
+          nên finding này không có CVE ID.
+        </p>
+      </div>
+      <div class="tl-item reveal d3" style="--dot:var(--gold)">
         <span class="tl-time" data-i18n="tl1.time">Công khai 18/06/2026 · CVE-2026-57207 · MODERATE</span>
         <h3>netbox-mcp-server</h3>
         <div class="sub">CWE-306 + CWE-1059 · Missing Authentication</div>
@@ -1744,13 +1911,20 @@ const I18N = {
     "fact2.k": "Hướng nghiên cứu",
     "fact2.v": "Vulnerability research &amp; responsible disclosure",
     "fact3.k": "Email",
+    "stat0": "Finding được ghi nhận",
     "stat1": "CVE được ghi nhận",
     "stat2": "Dự án mã nguồn mở",
     "stat3": "Lớp CWE khác nhau",
     "stat4": "Bug bounty được thưởng",
 
     "home.h2": "Bản tin <span class=\"grad-text\">lỗ hổng</span>",
-    "home.sub": "Các lỗ hổng mình tìm được - CVE và báo cáo bug bounty, mới nhất xếp trước. Mỗi card gồm tóm tắt kỹ thuật, ảnh hưởng và đoạn code gốc gây ra lỗ hổng.",
+    "home.sub": "Toàn bộ finding mình đã báo cáo - CVE, advisory được publish nhưng không xin CVE, và bug bounty được ghi nhận. Mới nhất xếp trước, mỗi card gồm tóm tắt kỹ thuật, ảnh hưởng và đoạn code gốc gây ra lỗ hổng.",
+    "filter.aria": "Lọc theo loại finding",
+    "filter.all": "Tất cả",
+    "filter.cve": "CVE",
+    "filter.advisory": "Advisory (không CVE)",
+    "filter.bounty": "Bug bounty",
+    "kind.advisory": "Advisory · không CVE",
     "status.state": "Trạng thái",
     "status.updated": "Cập nhật gần đây",
     "feed.all": "Xem tất cả writeup →",
@@ -1774,6 +1948,15 @@ const I18N = {
     "c5.ver1": "Bị ảnh hưởng: ≤ 5.1.1 (kiểm chứng trên 5.1.0)",
     "c5.ver2": "Đã sửa: 5.1.2",
     "c5.ver3": "Không bị ảnh hưởng: luồng .proto qua schema.parse",
+    "c6.teaser": "Tham số <code>udid</code> đi thẳng vào chuỗi lệnh shell của tool <code>prepare_ios_simulator</code> - mọi MCP client kết nối tới đều chạy được lệnh tùy ý trên máy host.",
+    "c6.summary": "Tool <code>prepare_ios_simulator</code> nhận tham số <code>udid</code> từ MCP client rồi nội suy thẳng vào chuỗi lệnh shell qua <code>execAsync</code>, ở bốn call site khác nhau. Lớp bảo vệ duy nhất là cặp dấu nháy kép bao quanh giá trị - nhưng nháy kép nằm ngay trong chuỗi do attacker kiểm soát, nên chỉ cần đóng nháy sớm là thoát được ra ngoài câu lệnh dự kiến.",
+    "c6.impact": "Bất kỳ MCP client nào kết nối tới server đều thực thi được lệnh hệ điều hành tùy ý trên máy host, với quyền của tiến trình MCP server - đọc toàn bộ filesystem, lấy credential, và từ đó mở rộng sang các hệ thống khác. Đáng lo hơn ở bối cảnh MCP, vì tham số của tool call thường do một mô hình sinh ra: nội dung không đáng tin có thể đi thẳng vào <code>udid</code> mà không qua mắt người dùng.",
+    "c6.nocve": "<b>Vì sao không có CVE:</b> <span>Advisory đã publish công khai trên repo appium/appium-mcp và ghi nhận mình là người báo cáo, nhưng không có CVE ID nào được cấp. Quyền request CVE thuộc về phía maintainer, và họ đã không request - mình có mong muốn được cấp CVE và đã nói rõ điều đó với họ, nhưng tới giờ vẫn chưa biết lý do. Hệ quả là finding này không nằm trong GitHub Global Advisory Database và không hiện khi chạy <code>npm audit</code>. Mình vẫn liệt kê ở đây, gắn nhãn đúng bản chất: một finding được publish và được ghi nhận, không phải một CVE.</span>",
+    "c6.path1": "src/tools/ios/prepare-ios-simulator.ts - trước v1.86.5",
+    "c6.note1": "<b>Vấn đề:</b> <span><code>execAsync</code> là <code>exec()</code> của Node - luôn đi qua shell. Giá trị <code>udid</code> đến thẳng từ tham số của tool call, không hề được kiểm định dạng, trong khi một UDID hợp lệ chỉ gồm hex và dấu gạch ngang.</span>",
+    "c6.note2": "<b>Vì sao nháy kép không cứu được:</b> <span>Dấu nháy do template literal thêm vào bị chính payload đóng lại sớm. Phần <code>echo \"x</code> ở cuối chỉ để mở lại nháy cho vế sau, giúp câu lệnh vẫn hợp lệ và không văng lỗi cú pháp - lệnh chèn vào chạy trọn vẹn.</span>",
+    "c6.ver1": "Bị ảnh hưởng: ≥ 1.49.0, ≤ 1.86.4",
+    "c6.ver2": "Đã sửa: 1.86.5",
     "c5.vector": "<b>CVSS 3.1 · tự chấm</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
     "badge.rewarded": "Đã được thưởng",
 
@@ -1817,6 +2000,8 @@ const I18N = {
     "tlb.time": "Đã vá 09/07/2026 · Mapbox Bug Bounty · HIGH",
     "tlb.p": "<code>compile.js</code> sinh mã qua <code>new Function()</code> nhưng bỏ sót <code>field.tag</code> ở khâu kiểm định danh - một schema do attacker cung cấp chạy được JavaScript tùy ý. Mapbox vá chỉ một ngày sau khi mình báo cáo, ở phiên bản 5.1.2.",
     "tl0.time": "Công khai 07/07/2026 · CVE-2026-71538 · HIGH",
+    "tla.time": "Công khai 28/06/2026 · GHSA (không CVE) · HIGH",
+    "tla.p": "Tham số <code>udid</code> của tool <code>prepare_ios_simulator</code> đi thẳng vào chuỗi lệnh shell, cho phép mọi MCP client chạy lệnh tùy ý trên máy host. Đã được sửa ở phiên bản 1.86.5. Advisory được publish và ghi nhận, nhưng maintainer không request CVE nên finding này không có CVE ID.",
     "tl1.time": "Công khai 18/06/2026 · CVE-2026-57207 · MODERATE",
     "tl2.time": "Công khai 16/06/2026 · CVE-2026-55849 · HIGH",
     "tl3.time": "Công khai 14/06/2026 · CVE-2026-55640 · CRITICAL",
@@ -1885,6 +2070,16 @@ const I18N = {
     "wu5.s4p": "Tag về mặt khái niệm là số nguyên, nên không ai nghĩ nó cần lọc. Nhưng đây là JavaScript và schema chỉ là object thuần - không có gì bắt buộc <code>tag</code> phải là number. Thêm nữa, parser <code>.proto</code> luôn ép tag qua <code>Number()</code>, nên đúng luồng được tài liệu hóa thì lỗi không bao giờ lộ ra. Vector chỉ mở khi ứng dụng nhận schema dạng object từ bên ngoài.",
     "wu5.s5h": "Báo cáo &amp; kết quả",
     "wu5.s5p": "Mình gửi báo cáo riêng qua chương trình bug bounty của Mapbox trên HackerOne. Họ xử lý rất nhanh: chỉ một ngày sau, v5.1.2 lên kệ với <code>validateTag()</code> thêm vào đúng vòng lặp đã có <code>validateIdentifier()</code>, kèm release note ghi rõ đây là bản vá cho một lỗ hổng của compiler. Báo cáo được ghi nhận hợp lệ và có thưởng. Điểm CVSS ở trên là mình tự chấm từ vector, không phải con số Mapbox công bố - và vì báo cáo gốc vẫn ở chế độ riêng tư, ở đây mình chỉ mô tả lớp lỗi, cách tiếp cận cùng bản vá công khai, không đăng PoC và không nêu chi tiết nội bộ của report.",
+    "wu6.s1h": "Đổi câu hỏi khi soi MCP server",
+    "wu6.s1p": "Hai finding MCP trước của mình đều xoay quanh câu hỏi “ai gọi được tool”. Lần này mình đổi sang “tham số của tool đi tới đâu”. MCP đưa tham số do mô hình sinh ra vào thẳng hàm xử lý, nên mọi sink thực thi lệnh trong một MCP server đều đáng đọc kỹ.",
+    "wu6.s2h": "Tìm sink trước, nguồn sau",
+    "wu6.s2p": "Mình grep các hàm sinh process trong repo và dừng ở <code>prepare-ios-simulator.ts</code>: bốn lời gọi <code>execAsync</code> đều dựng bằng template literal. Template literal đi kèm <code>exec</code> gần như luôn là dấu hiệu của chuỗi lệnh được ghép tay.",
+    "wu6.s3h": "Truy ngược tham số udid",
+    "wu6.s3p": "Lần ngược lên schema của tool, <code>udid</code> là một string tự do: không regex, không whitelist ký tự. Trong khi UDID thật của simulator chỉ là UUID hex - việc kiểm định dạng lẽ ra rất rẻ mà lại không hề có.",
+    "wu6.s4h": "Phá lớp nháy kép",
+    "wu6.s4p": "Giá trị được bọc trong nháy kép nên payload phải tự đóng nháy rồi mở lại để câu lệnh còn hợp lệ. Mình dựng payload đóng - chèn - mở và xác nhận bằng một lệnh vô hại ghi file ra <code>/tmp</code>, đủ chứng minh mà không đụng gì tới hệ thống.",
+    "wu6.s5h": "Báo cáo &amp; kết quả",
+    "wu6.s5p": "Mình báo cáo riêng qua GitHub Security Advisory kèm PoC, đề xuất chuyển sang <code>execFile</code> với mảng tham số và validate định dạng UDID. Bản vá ra ở 1.86.5, advisory được publish và ghi nhận mình là người báo cáo. Mình có đề nghị cấp CVE và đã trao đổi điều đó với maintainer, nhưng họ không gửi request - và đó vẫn là phần mình chưa hiểu của câu chuyện này.",
 
     "av.cap1": "Nơi mọi thứ diễn ra - đọc source lúc nửa đêm",
     "av.cap2": "Sài Gòn - Dinh Độc Lập",
@@ -1908,7 +2103,7 @@ const I18N = {
     "term.helpList": [
       ["help", "hiện danh sách lệnh này"],
       ["whoami", "thông tin nhanh về mình"],
-      ["cve", "liệt kê các báo cáo đã được ghi nhận"],
+      ["findings", "liệt kê toàn bộ finding (alias: cve, ls)"],
       ["writeup", "mở nhật ký săn lỗ hổng"],
       ["contact", "email và các kênh liên lạc"],
       ["banner", "vẽ lại banner đầu trang"],
@@ -1923,7 +2118,7 @@ const I18N = {
       ["hướng đi", "vulnerability research, responsible disclosure"],
       ["nơi ở", "TP. Hồ Chí Minh, Việt Nam"]
     ],
-    "term.cveHead": "Các báo cáo đã được ghi nhận:",
+    "term.cveHead": "Finding đã được ghi nhận:",
     "term.cveTail": "Xem chi tiết ở bản tin trang chủ.",
     "term.contact": "Kênh liên lạc:",
     "term.goWriteup": "Đang mở nhật ký săn lỗ hổng..."
@@ -1953,13 +2148,20 @@ const I18N = {
     "fact2.k": "Focus area",
     "fact2.v": "Vulnerability research &amp; responsible disclosure",
     "fact3.k": "Email",
+    "stat0": "Findings credited",
     "stat1": "CVEs assigned",
     "stat2": "Open-source projects",
     "stat3": "Distinct CWE classes",
     "stat4": "Paid bug bounty",
 
     "home.h2": "Vulnerability <span class=\"grad-text\">feed</span>",
-    "home.sub": "Vulnerabilities I've found - CVEs and bug bounty reports, newest first. Each card covers the technical summary, the impact, and the original code behind the flaw.",
+    "home.sub": "Every finding I've reported - CVEs, advisories published without a CVE request, and credited bug bounty reports. Newest first; each card covers the technical summary, the impact, and the original code behind the flaw.",
+    "filter.aria": "Filter by finding type",
+    "filter.all": "All",
+    "filter.cve": "CVE",
+    "filter.advisory": "Advisory (no CVE)",
+    "filter.bounty": "Bug bounty",
+    "kind.advisory": "Advisory · no CVE",
     "status.state": "Status",
     "status.updated": "Last updated",
     "feed.all": "See all writeups →",
@@ -1983,6 +2185,15 @@ const I18N = {
     "c5.ver1": "Affected: ≤ 5.1.1 (verified on 5.1.0)",
     "c5.ver2": "Fixed in: 5.1.2",
     "c5.ver3": "Not affected: the .proto path via schema.parse",
+    "c6.teaser": "The <code>udid</code> parameter flows straight into a shell command in the <code>prepare_ios_simulator</code> tool - any connected MCP client can run arbitrary commands on the host.",
+    "c6.summary": "The <code>prepare_ios_simulator</code> tool takes the <code>udid</code> parameter from the MCP client and interpolates it straight into shell commands through <code>execAsync</code>, at four separate call sites. The only protection is the pair of double quotes wrapped around the value - but those quotes sit inside a string the attacker controls, so closing the quote early is enough to break out of the intended command.",
+    "c6.impact": "Any MCP client connected to the server can execute arbitrary OS commands on the host with the privileges of the MCP server process - full filesystem access, credential theft, and lateral movement from there. It is especially uncomfortable in the MCP context, because tool-call parameters are usually generated by a model: untrusted content can reach <code>udid</code> without a human ever seeing it.",
+    "c6.nocve": "<b>Why there is no CVE:</b> <span>The advisory is published publicly on the appium/appium-mcp repository and credits me as the reporter, but no CVE ID was ever assigned. Requesting a CVE is the maintainer's call, and they did not request one - I did want a CVE for this finding and said so, and I still do not know the reason. The consequence is that it never entered the GitHub Global Advisory Database and does not surface in <code>npm audit</code>. I still list it here, labelled for exactly what it is: a published, credited finding - not a CVE.</span>",
+    "c6.path1": "src/tools/ios/prepare-ios-simulator.ts - before v1.86.5",
+    "c6.note1": "<b>The flaw:</b> <span><code>execAsync</code> is Node's <code>exec()</code> - it always goes through a shell. The <code>udid</code> value arrives straight from the tool-call parameters with no format validation at all, even though a legitimate UDID is nothing but hex digits and dashes.</span>",
+    "c6.note2": "<b>Why the quotes don't save it:</b> <span>The quotes added by the template literal are closed early by the payload itself. The trailing <code>echo \"x</code> exists only to reopen a quote for the rest of the command, keeping it syntactically valid so nothing errors out - and the injected command runs in full.</span>",
+    "c6.ver1": "Affected: ≥ 1.49.0, ≤ 1.86.4",
+    "c6.ver2": "Fixed in: 1.86.5",
     "c5.vector": "<b>CVSS 3.1 · self-scored</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
     "badge.rewarded": "Rewarded",
 
@@ -2026,6 +2237,8 @@ const I18N = {
     "tlb.time": "Patched Jul 9, 2026 · Mapbox bug bounty · HIGH",
     "tlb.p": "<code>compile.js</code> generates code through <code>new Function()</code> but skipped <code>field.tag</code> during identifier validation - an attacker-supplied schema could run arbitrary JavaScript. Mapbox shipped the fix in version 5.1.2 just one day after I reported it.",
     "tl0.time": "Disclosed Jul 7, 2026 · CVE-2026-71538 · HIGH",
+    "tla.time": "Disclosed Jun 28, 2026 · GHSA (no CVE) · HIGH",
+    "tla.p": "The <code>udid</code> parameter of the <code>prepare_ios_simulator</code> tool flows straight into a shell command, letting any MCP client run arbitrary commands on the host. Fixed in version 1.86.5. The advisory was published and credited, but the maintainers never requested a CVE, so this finding has no CVE ID.",
     "tl1.time": "Disclosed Jun 18, 2026 · CVE-2026-57207 · MODERATE",
     "tl2.time": "Disclosed Jun 16, 2026 · CVE-2026-55849 · HIGH",
     "tl3.time": "Disclosed Jun 14, 2026 · CVE-2026-55640 · CRITICAL",
@@ -2094,6 +2307,16 @@ const I18N = {
     "wu5.s4p": "A tag is conceptually an integer, so nobody thought it needed sanitising. But this is JavaScript and the schema is a plain object - nothing requires <code>tag</code> to be a number. On top of that, the <code>.proto</code> parser always coerces tags through <code>Number()</code>, so along the documented path the flaw never surfaces. The vector only opens when an application accepts a schema object from outside.",
     "wu5.s5h": "Report &amp; outcome",
     "wu5.s5p": "I submitted the report privately through Mapbox's bug bounty programme on HackerOne. They moved fast: just one day later v5.1.2 shipped with <code>validateTag()</code> added to the very loop that already ran <code>validateIdentifier()</code>, and the release notes state plainly that it fixes a vulnerability in the compiler. The report was accepted as valid and rewarded. The CVSS score above is my own, derived from the vector rather than published by Mapbox - and since the original report is still private, I only cover the bug class, the approach and the public patch here: no PoC and no internal report details.",
+    "wu6.s1h": "Changing the question I ask of an MCP server",
+    "wu6.s1p": "My two previous MCP findings both revolved around “who can call the tool”. This time I switched to “where do the tool's parameters end up”. MCP feeds model-generated parameters straight into the handler, which makes every command-execution sink in an MCP server worth reading closely.",
+    "wu6.s2h": "Sink first, source second",
+    "wu6.s2p": "I grepped the repository for process-spawning calls and stopped at <code>prepare-ios-simulator.ts</code>: four <code>execAsync</code> calls, all built from template literals. A template literal next to <code>exec</code> is almost always a hand-assembled command string.",
+    "wu6.s3h": "Tracing the udid parameter",
+    "wu6.s3p": "Walking back up to the tool schema, <code>udid</code> is a free-form string: no regex, no character allow-list. A real simulator UDID is just a hex UUID, so validating the format would have been cheap - and it simply was not there.",
+    "wu6.s4h": "Breaking out of the quotes",
+    "wu6.s4p": "The value is wrapped in double quotes, so the payload has to close the quote and reopen it to keep the command valid. I built a close-inject-reopen payload and confirmed it with a harmless command writing a file into <code>/tmp</code> - enough to prove the issue without touching anything on the system.",
+    "wu6.s5h": "Report &amp; outcome",
+    "wu6.s5p": "I reported it privately through a GitHub Security Advisory with a PoC, suggesting a switch to <code>execFile</code> with an argument array plus UDID format validation. The patch shipped in 1.86.5 and the advisory was published crediting me as the reporter. I did ask for a CVE and raised it with the maintainers, but no request was filed - and that part I still do not understand.",
 
     "av.cap1": "Where it all happens - reading source at midnight",
     "av.cap2": "Saigon - Independence Palace",
@@ -2117,7 +2340,7 @@ const I18N = {
     "term.helpList": [
       ["help", "show this list of commands"],
       ["whoami", "a quick rundown of who I am"],
-      ["cve", "list the reports on record"],
+      ["findings", "list every finding (alias: cve, ls)"],
       ["writeup", "open the bug hunting journal"],
       ["contact", "email and other channels"],
       ["banner", "redraw the header banner"],
@@ -2132,7 +2355,7 @@ const I18N = {
       ["focus", "vulnerability research, responsible disclosure"],
       ["based in", "Ho Chi Minh City, Vietnam"]
     ],
-    "term.cveHead": "Reports on record:",
+    "term.cveHead": "Findings credited:",
     "term.cveTail": "Full details are in the feed on the home page.",
     "term.contact": "Contact channels:",
     "term.goWriteup": "Opening the bug hunting journal..."
@@ -2154,10 +2377,16 @@ const navLinks = document.getElementById("navLinks");
 const toTop = document.getElementById("toTop");
 const typingEl = document.getElementById("typing");
 
+// Mỗi card là một finding; data-kind cho biết nó được ghi nhận dưới dạng nào:
+// cve (có CVE ID), advisory (publish nhưng không xin CVE), bounty (bug bounty).
+// Đếm tách bạch để một finding không có CVE không bao giờ bị cộng vào số CVE.
+const findingCards = [...document.querySelectorAll("#cve .cve")];
+const countKind = kind => findingCards.filter(c => c.dataset.kind === kind).length;
 const statCounts = {
-  // Card bug bounty không phải CVE nên đếm riêng, tránh thổi phồng số CVE.
-  cve: document.querySelectorAll('#cve .cve:not([data-kind="bounty"])').length,
-  bounty: document.querySelectorAll('#cve .cve[data-kind="bounty"]').length,
+  find: findingCards.length,
+  cve: countKind("cve"),
+  advisory: countKind("advisory"),
+  bounty: countKind("bounty"),
   pkg: new Set([...document.querySelectorAll("#cve .pkg")].map(el => el.textContent.trim())).size,
   cwe: new Set(
     [...document.querySelectorAll("#cve .cwe-row .tag")]
@@ -2176,6 +2405,37 @@ const cveList = document.querySelector("#cve .cve-list");
 
 const wuIndex = document.getElementById("wuIndex");
 [...cveList.querySelectorAll(".cve")].forEach(card => wuIndex.appendChild(card.cloneNode(true)));
+
+// Bộ lọc theo loại finding. Loại nào chưa có card nào thì không hiện nút.
+const filterBar = document.getElementById("filters");
+const KINDS = ["all", "cve", "advisory", "bounty"];
+let activeKind = "all";
+function buildFilters(){
+  filterBar.innerHTML = "";
+  const legend = document.createElement("legend");
+  legend.className = "sr-only";
+  legend.textContent = t("filter.aria");
+  filterBar.appendChild(legend);
+  KINDS.forEach(kind => {
+    const n = kind === "all" ? findingCards.length : countKind(kind);
+    if(!n) return;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.dataset.kind = kind;
+    btn.setAttribute("aria-pressed", String(kind === activeKind));
+    btn.innerHTML = t("filter." + kind) + '<span class="n">' + n + "</span>";
+    btn.addEventListener("click", () => { activeKind = kind; applyFilter(); });
+    filterBar.appendChild(btn);
+  });
+}
+function applyFilter(){
+  findingCards.forEach(c => {
+    c.classList.toggle("hide", activeKind !== "all" && c.dataset.kind !== activeKind);
+  });
+  filterBar.querySelectorAll("button").forEach(b => {
+    b.setAttribute("aria-pressed", String(b.dataset.kind === activeKind));
+  });
+}
 
 document.querySelectorAll(".cve[data-date]").forEach(card => {
   const chip = document.createElement("span");
@@ -2222,6 +2482,7 @@ function applyLang(){
     if(!btn.classList.contains("done")) btn.textContent = t("btn.copy");
   });
   renderStatus();
+  buildFilters();
   if(typeof buildHints === "function"){
     buildHints();
     termOut.innerHTML = "";
@@ -2467,8 +2728,8 @@ const termBody = document.getElementById("termBody");
 const termEcho = document.getElementById("termEcho");
 const termInput = document.getElementById("termInput");
 const termHint = document.getElementById("termHint");
-const CMDS = ["help", "whoami", "cve", "writeup", "contact", "banner", "clear"];
-const HINTS = ["help", "whoami", "cve", "contact"];
+const CMDS = ["help", "whoami", "findings", "cve", "writeup", "contact", "banner", "clear"];
+const HINTS = ["help", "whoami", "findings", "contact"];
 let history = [], histI = -1;
 
 function esc(s){
@@ -2487,7 +2748,8 @@ function termPair(k, v, pad){
 }
 function termBanner(){
   termPrint('<span class="t-red">$</span> <span class="t-txt">./recon --target fortress</span>');
-  termPrint("[*] " + statCounts.cve + " CVEs · " + statCounts.bounty + " bounty · " +
+  termPrint("[*] " + statCounts.find + " findings · " + statCounts.cve + " CVEs · " +
+            statCounts.advisory + " advisory · " + statCounts.bounty + " bounty · " +
             statCounts.pkg + " projects · " + statCounts.cwe + " CWE classes", "t-dim");
   termPrint(t("term.welcome"), "t-dim");
 }
@@ -2511,14 +2773,17 @@ function termRun(raw){
     t("term.whoami").forEach(([k, v]) => termPrint(termPair(k, v, 9)));
     return;
   }
-  if(cmd === "cve" || cmd === "ls"){
+  if(cmd === "findings" || cmd === "cve" || cmd === "ls"){
     termPrint(t("term.cveHead"), "t-gold");
     document.querySelectorAll("#cve .cve").forEach(c => {
       const id = c.querySelector(".cve-id").textContent.trim();
       const pkg = c.querySelector(".pkg").textContent.trim();
       const sev = c.querySelector(".sev-label").textContent.trim();
       const val = c.querySelector(".ring .val").textContent.trim();
-      termPrint('<span class="t-green">[+]</span> <span class="t-txt">' + esc(id) + '</span> <span class="t-gold">' +
+      // ID của CVE và của bug bounty đã tự nói lên loại, chỉ advisory mới cần nhãn.
+      let tag = "";
+      if(c.dataset.kind === "advisory") tag = ' <span class="t-dim">[no cve]</span>';
+      termPrint('<span class="t-green">[+]</span> <span class="t-txt">' + esc(id) + '</span>' + tag + ' <span class="t-gold">' +
                 esc(val) + " " + esc(sev) + '</span> <span class="t-dim">' + esc(pkg) + "</span>");
     });
     termPrint(t("term.cveTail"), "t-dim");
