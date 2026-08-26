@@ -1,4 +1,0 @@
-Contact: mailto:vophuvinh15012007@gmail.com
-Expires: 2027-12-31T23:59:59.000Z
-Preferred-Languages: vi, en
-Canonical: https://fortress07.github.io/profile/security.txt

@@ -19,794 +19,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0a0709;
-    --surface:rgba(255,255,255,.032);
-    --surface-2:rgba(255,255,255,.055);
-    --line:rgba(255,255,255,.085);
-    --line-soft:rgba(255,255,255,.05);
-    --text:#ece7e9;
-    --text-dim:#c3bbc0;
-    --muted:#938a90;
-    --red:#ff3b5c;
-    --red-soft:#ff8095;
-    --orange:#ff7a45;
-    --gold:#f5b544;
-    --green:#4ade80;
-    --grad:linear-gradient(120deg,#ff3b5c 0%,#ff6b47 100%);
-    --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
-    --nav-h:64px;
-    --ease:cubic-bezier(.22,.9,.3,1);
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-  body{
-    font-family:'Be Vietnam Pro',system-ui,sans-serif;
-    background:var(--bg);color:var(--text);
-    font-size:16px;line-height:1.72;letter-spacing:.1px;
-    overflow-x:hidden;-webkit-font-smoothing:antialiased;
-    overscroll-behavior-y:none;
-  }
-  ::selection{background:rgba(255,59,92,.32);color:#fff}
-  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-  a{color:inherit}
-  svg{display:block;max-width:100%}
-  button{font-family:inherit}
-
-  ::-webkit-scrollbar{width:10px;height:10px}
-  ::-webkit-scrollbar-track{background:#0a0709}
-  ::-webkit-scrollbar-thumb{background:#2b1c22;border-radius:99px;border:2px solid #0a0709}
-  ::-webkit-scrollbar-thumb:hover{background:#4a2530}
-
-  .bg-fx{
-    position:fixed;inset:0;z-index:-3;
-    background:
-      radial-gradient(48rem 48rem at 88% -10%,rgba(255,59,92,.10),transparent 62%),
-      radial-gradient(40rem 40rem at -6% 48%,rgba(140,16,41,.10),transparent 62%),
-      radial-gradient(44rem 44rem at 62% 112%,rgba(255,122,69,.055),transparent 62%),
-      var(--bg);
-  }
-  .bg-fx::before{
-    content:"";position:absolute;inset:0;
-    background-image:
-      linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
-      linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
-    background-size:46px 46px;
-    -webkit-mask-image:radial-gradient(ellipse 92% 70% at 50% 22%,#000 30%,transparent 100%);
-    mask-image:radial-gradient(ellipse 92% 70% at 50% 22%,#000 30%,transparent 100%);
-  }
-  .bg-fx::after{
-    content:"";position:absolute;inset:0;pointer-events:none;
-    background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px);
-    opacity:.45;
-  }
-  #matrix{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.5}
-  .blob{
-    position:fixed;z-index:-2;border-radius:50%;filter:blur(110px);opacity:.2;
-    pointer-events:none;will-change:transform;
-  }
-  .blob.b1{width:400px;height:400px;background:#a01033;top:-140px;right:-90px}
-  .blob.b2{width:320px;height:320px;background:#5e0f22;bottom:-120px;left:-110px}
-
-  .spotlight{
-    position:fixed;z-index:-1;width:520px;height:520px;border-radius:50%;
-    pointer-events:none;opacity:0;transition:opacity .6s ease;
-    background:radial-gradient(circle,rgba(255,59,92,.055),transparent 68%);
-    transform:translate(-50%,-50%);
-  }
-
-  #progress{
-    position:fixed;top:0;left:0;height:2px;width:0;z-index:120;
-    background:var(--grad);box-shadow:0 0 10px rgba(255,59,92,.7);
-  }
-
-  nav{
-    position:fixed;top:0;left:0;right:0;z-index:110;height:var(--nav-h);
-    display:flex;align-items:center;justify-content:space-between;gap:12px;
-    padding:0 clamp(14px,5vw,60px);
-    background:rgba(10,7,9,.62);
-    -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
-    border-bottom:1px solid var(--line-soft);
-    transition:background .35s ease,border-color .35s ease;
-  }
-  nav.scrolled{background:rgba(10,7,9,.9);border-bottom-color:rgba(255,59,92,.16)}
-  .logo{
-    font-family:var(--mono);font-weight:700;font-size:.92rem;flex:none;
-    text-decoration:none;letter-spacing:.2px;color:var(--text-dim);
-    transition:color .25s;white-space:nowrap;
-  }
-  .logo:hover{color:var(--text)}
-  .logo b{color:var(--red);font-weight:700}
-  .nav-right{display:flex;align-items:center;gap:10px;flex:none}
-  .nav-links{display:flex;gap:2px;list-style:none}
-  .nav-links a{
-    position:relative;display:block;color:var(--muted);text-decoration:none;
-    font-size:.86rem;font-weight:500;padding:7px 13px;border-radius:8px;
-    transition:color .25s,background .25s;white-space:nowrap;
-  }
-  .nav-links a::after{
-    content:"";position:absolute;left:13px;right:13px;bottom:2px;height:1.5px;
-    background:var(--red);border-radius:2px;
-    transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);
-  }
-  .nav-links a:hover{color:var(--text-dim)}
-  .nav-links a.active{color:var(--text)}
-  .nav-links a.active::after{transform:scaleX(1)}
-
-  .lang-btn{
-    display:inline-flex;align-items:center;gap:2px;flex:none;cursor:pointer;
-    padding:3px;border-radius:9px;background:var(--surface);border:1px solid var(--line);
-    font-family:var(--mono);font-size:.685rem;font-weight:700;letter-spacing:.05em;
-    transition:border-color .25s;
-  }
-  .lang-btn:hover{border-color:rgba(255,59,92,.32)}
-  .lang-btn span{
-    padding:4px 9px;border-radius:6px;color:var(--muted);line-height:1.4;
-    transition:background .3s var(--ease),color .3s;
-  }
-  .lang-btn span.on{background:var(--grad);color:#180509}
-
-  .burger{display:none;background:none;border:0;cursor:pointer;width:42px;height:42px;border-radius:9px;transition:background .25s;flex:none}
-  .burger:hover{background:var(--surface-2)}
-  .burger span{display:block;width:19px;height:1.8px;background:var(--text);margin:5px auto;border-radius:2px;transition:transform .3s var(--ease),opacity .2s}
-  .burger.open span:nth-child(1){transform:translateY(6.8px) rotate(45deg)}
-  .burger.open span:nth-child(2){opacity:0}
-  .burger.open span:nth-child(3){transform:translateY(-6.8px) rotate(-45deg)}
-
-  main{max-width:1120px;margin:0 auto;padding:var(--nav-h) clamp(16px,5vw,40px) 0}
-  section{padding:clamp(58px,9vh,104px) 0;scroll-margin-top:var(--nav-h)}
-  .sec-tag{
-    display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);
-    font-size:.735rem;font-weight:500;letter-spacing:.06em;
-    color:var(--red-soft);margin-bottom:12px;
-  }
-  .sec-tag::before{content:"//";color:var(--muted);opacity:.7}
-  h2{
-    position:relative;font-size:clamp(1.55rem,3.6vw,2.15rem);font-weight:700;
-    line-height:1.26;letter-spacing:-.015em;margin-bottom:14px;padding-bottom:14px;
-  }
-  h2::after{
-    content:"";position:absolute;left:0;bottom:0;width:52px;height:2px;border-radius:2px;
-    background:var(--grad);transform:scaleX(0);transform-origin:left;
-    transition:transform .8s var(--ease) .15s;
-  }
-  h2.show::after{transform:scaleX(1)}
-  .sec-sub{color:var(--muted);font-size:.94rem;max-width:64ch;margin-bottom:34px}
-  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-
-  #hero{display:flex;align-items:center;padding-top:clamp(30px,6vh,60px);padding-bottom:48px}
-  .hero-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(30px,5vw,58px);align-items:center;width:100%}
-  .status-chip{
-    display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);
-    font-size:.71rem;letter-spacing:.04em;color:var(--muted);
-    padding:6px 14px;border-radius:99px;
-    background:var(--surface);border:1px solid var(--line);margin-bottom:20px;
-  }
-  .status-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2.4s infinite;flex:none}
-  @keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}
-    70%{box-shadow:0 0 0 8px rgba(74,222,128,0)}
-    100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}
-  }
-  .hero-name{
-    font-size:clamp(2.1rem,5.6vw,3.6rem);font-weight:800;
-    line-height:1.14;letter-spacing:-.03em;margin-bottom:8px;
-  }
-  .glitch{position:relative;display:inline-block}
-  .glitch::before,.glitch::after{
-    content:attr(data-text);position:absolute;inset:0;opacity:0;
-    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .glitch::before{animation:gl1 6s infinite}
-  .glitch::after{animation:gl2 6s infinite}
-  @keyframes gl1{
-    0%,95%,100%{opacity:0;transform:none}
-    96%{opacity:.7;transform:translate(-2px,1px)}
-    98%{opacity:.7;transform:translate(2px,-1px)}
-    99%{opacity:0}
-  }
-  @keyframes gl2{
-    0%,96%,100%{opacity:0;transform:none}
-    97%{opacity:.5;transform:translate(2px,1px)}
-    99%{opacity:0}
-  }
-  .handle{
-    font-family:var(--mono);font-size:clamp(.82rem,2vw,.96rem);
-    color:var(--red-soft);margin-bottom:18px;letter-spacing:.03em;
-  }
-  .typing-line{
-    font-family:var(--mono);font-size:clamp(.78rem,1.9vw,.93rem);
-    color:var(--muted);min-height:2.2em;margin-bottom:20px;letter-spacing:.01em;
-  }
-  .typing-line .prompt{color:var(--red)}
-  .typing{color:var(--text-dim)}
-  .caret{display:inline-block;width:8px;height:1.05em;background:var(--red);vertical-align:-2px;margin-left:3px;animation:blink 1.1s step-end infinite}
-  @keyframes blink{50%{opacity:0}}
-  .hero-desc{color:var(--muted);max-width:52ch;margin-bottom:28px}
-  .hero-desc strong{color:var(--text-dim);font-weight:600}
-  .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px}
-  .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:9px;
-    min-height:46px;padding:12px 24px;border-radius:11px;font-size:.9rem;font-weight:600;
-    text-decoration:none;cursor:pointer;border:1px solid transparent;text-align:center;
-    transition:transform .3s var(--ease),box-shadow .3s,background .3s,border-color .3s;
-  }
-  .btn-primary{background:var(--grad);color:#180509;box-shadow:0 6px 22px -8px rgba(255,59,92,.5)}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(255,59,92,.65)}
-  .btn-ghost{background:var(--surface);color:var(--text-dim);border-color:var(--line)}
-  .btn-ghost:hover{transform:translateY(-2px);background:var(--surface-2);border-color:rgba(255,59,92,.3);color:var(--text)}
-  .socials{display:flex;gap:10px}
-  .socials a{
-    width:46px;height:46px;border-radius:11px;display:grid;place-items:center;
-    background:var(--surface);border:1px solid var(--line);color:var(--muted);
-    transition:transform .3s var(--ease),color .3s,border-color .3s,background .3s;
-  }
-  .socials a:hover{color:var(--text);transform:translateY(-3px);border-color:rgba(255,59,92,.42);background:rgba(255,59,92,.1)}
-  .socials svg{width:19px;height:19px;fill:currentColor}
-
-  .hero-visual{display:flex;justify-content:center;width:100%;min-width:0}
-  .terminal{
-    width:min(470px,100%);border-radius:13px;overflow:hidden;text-align:left;
-    background:rgba(14,10,13,.93);border:1px solid var(--line);
-    box-shadow:0 24px 56px -22px rgba(0,0,0,.8),0 0 32px -22px rgba(255,59,92,.5);
-    font-family:var(--mono);font-size:.765rem;
-  }
-  .term-bar{display:flex;align-items:center;gap:7px;padding:10px 13px;background:rgba(255,255,255,.035);border-bottom:1px solid var(--line-soft)}
-  .term-bar i{width:10px;height:10px;border-radius:50%;flex:none}
-  .term-bar i:nth-child(1){background:#ff5f57}
-  .term-bar i:nth-child(2){background:#febc2e}
-  .term-bar i:nth-child(3){background:#28c840}
-  .term-bar span{margin-left:auto;color:var(--muted);font-size:.67rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .term-body{padding:15px 16px 18px;line-height:2;overflow-y:auto;overflow-x:hidden;max-height:340px;cursor:text}
-  .term-body .ln{display:block;white-space:pre-wrap;word-break:break-word}
-  .term-body .ln.nowrap{white-space:nowrap;overflow-x:auto}
-  .term-in{display:flex;align-items:baseline;gap:7px}
-  .term-in .echo{color:var(--text-dim);white-space:pre-wrap;word-break:break-all;min-width:0}
-  #termInput{
-    position:absolute;opacity:0;width:1px;height:1px;padding:0;border:0;
-    left:-9999px;font-size:16px;
-  }
-  .term-hint{
-    display:flex;flex-wrap:wrap;gap:6px;padding:9px 13px;
-    background:rgba(255,255,255,.025);border-top:1px solid var(--line-soft);
-  }
-  .term-hint button{
-    cursor:pointer;font-family:var(--mono);font-size:.63rem;letter-spacing:.02em;
-    color:var(--muted);background:var(--surface-2);border:1px solid var(--line);
-    padding:4px 9px;border-radius:6px;transition:color .22s,border-color .22s,background .22s;
-  }
-  .term-hint button:hover{color:var(--text);border-color:rgba(255,59,92,.4);background:rgba(255,59,92,.1)}
-  .t-red{color:var(--red)}
-  .t-green{color:var(--green)}
-  .t-gold{color:var(--gold)}
-  .t-dim{color:var(--muted)}
-  .t-txt{color:var(--text-dim)}
-
-  #boot{
-    position:fixed;inset:0;z-index:300;background:#070506;
-    display:flex;flex-direction:column;justify-content:center;
-    padding:clamp(18px,6vw,64px);font-family:var(--mono);font-size:clamp(.66rem,2.1vw,.82rem);
-    line-height:1.95;color:var(--text-dim);transition:opacity .5s ease,visibility .5s;
-    /* Tự ẩn sau 4s kể cả khi JS không chạy, để màn hình boot không khoá trang. */
-    animation:bootOut .4s ease 4s forwards;
-  }
-  #boot.done{opacity:0;visibility:hidden}
-  @keyframes bootOut{to{opacity:0;visibility:hidden}}
-  #boot .boot-lines{max-width:760px;width:100%;margin:0 auto}
-  #boot .bl{display:block;white-space:pre-wrap;word-break:break-word;opacity:0;animation:blIn .25s forwards}
-  @keyframes blIn{to{opacity:1}}
-  #boot .ok{color:var(--green)}
-  #boot .warn{color:var(--gold)}
-  #boot .hd{color:var(--red);font-weight:700}
-  #boot .bar{height:3px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin:14px 0 10px;max-width:760px;width:100%;margin-inline:auto}
-  #boot .bar i{display:block;height:100%;width:0;background:var(--grad);animation:bootBar 1.5s var(--ease) forwards}
-  @keyframes bootBar{to{width:100%}}
-  #bootSkip{
-    position:absolute;right:clamp(14px,4vw,28px);bottom:clamp(14px,4vw,28px);
-    font-family:var(--mono);font-size:.7rem;color:var(--muted);cursor:pointer;
-    background:var(--surface);border:1px solid var(--line);padding:9px 15px;border-radius:9px;
-    transition:color .25s,border-color .25s;min-height:40px;
-  }
-  #bootSkip:hover{color:var(--text);border-color:rgba(255,59,92,.4)}
-
-  .avatar-rig{display:flex;flex-direction:column;gap:12px;min-width:0}
-  .avatar-frame{
-    position:relative;aspect-ratio:4/5;border-radius:16px;overflow:hidden;
-    background:#0c0810;border:1px solid var(--line);
-    box-shadow:0 26px 60px -28px rgba(0,0,0,.9),0 0 40px -26px rgba(255,59,92,.6);
-  }
-  .av-img{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    object-position:var(--pos,50% 50%);
-    opacity:0;transform:scale(1.07);filter:saturate(.72) contrast(1.06);
-    transition:opacity .9s var(--ease),transform 6s linear;
-  }
-  .av-img.on{opacity:1;transform:scale(1)}
-  .avatar-frame::after{
-    content:"";position:absolute;inset:0;pointer-events:none;
-    background:
-      linear-gradient(180deg,rgba(255,59,92,.14),transparent 38%,rgba(10,7,9,.5) 88%),
-      repeating-linear-gradient(0deg,rgba(0,0,0,.26) 0 1px,transparent 1px 3px);
-  }
-  .av-sweep{
-    position:absolute;left:0;right:0;height:30%;pointer-events:none;z-index:2;
-    background:linear-gradient(180deg,transparent,rgba(255,59,92,.16),transparent);
-    animation:sweep 4.4s var(--ease) infinite;
-  }
-  @keyframes sweep{0%{top:-30%}100%{top:100%}}
-  .av-corner{position:absolute;width:26px;height:26px;border:2px solid var(--red);z-index:3;pointer-events:none;opacity:.85}
-  .av-corner.tl{top:12px;left:12px;border-right:0;border-bottom:0;border-radius:5px 0 0 0}
-  .av-corner.tr{top:12px;right:12px;border-left:0;border-bottom:0;border-radius:0 5px 0 0}
-  .av-corner.bl{bottom:12px;left:12px;border-right:0;border-top:0;border-radius:0 0 0 5px}
-  .av-corner.br{bottom:12px;right:12px;border-left:0;border-top:0;border-radius:0 0 5px 0}
-  .av-hud{
-    position:absolute;top:14px;left:0;right:0;z-index:4;pointer-events:none;
-    display:flex;align-items:center;justify-content:space-between;padding:0 46px;
-    font-family:var(--mono);font-size:.6rem;letter-spacing:.09em;color:var(--text-dim);
-  }
-  .av-hud span{background:rgba(10,7,9,.6);padding:3px 8px;border-radius:5px;border:1px solid var(--line-soft);white-space:nowrap}
-  .av-rec{display:inline-flex;align-items:center;gap:6px;color:var(--red-soft)}
-  .av-rec i{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.4s step-end infinite}
-  .av-cap{
-    position:absolute;left:14px;right:14px;bottom:14px;z-index:4;pointer-events:none;
-    font-family:var(--mono);font-size:.65rem;line-height:1.7;color:var(--text-dim);
-    background:rgba(10,7,9,.68);border:1px solid var(--line-soft);border-radius:9px;
-    padding:8px 11px;-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
-  }
-  .av-cap b{color:var(--red-soft);font-weight:600}
-  .avatar-frame.glitching .av-img.on{animation:avGl .42s steps(2) 1}
-  @keyframes avGl{
-    0%{filter:saturate(.72) contrast(1.06) hue-rotate(0deg);transform:translateX(0) scale(1)}
-    30%{filter:saturate(2) contrast(1.5) hue-rotate(-18deg);transform:translateX(-5px) scale(1.02)}
-    60%{filter:saturate(.4) contrast(1.2) hue-rotate(12deg);transform:translateX(4px) scale(1.01)}
-    100%{filter:saturate(.72) contrast(1.06);transform:none}
-  }
-  .av-dots{display:flex;gap:7px;justify-content:center}
-  .av-dots button{
-    flex:1;max-width:64px;height:24px;padding:0;background:none;border:0;cursor:pointer;
-    display:grid;place-items:center;
-  }
-  .av-dots button::before{
-    content:"";display:block;width:100%;height:3px;border-radius:99px;
-    background:rgba(255,255,255,.12);transition:background .35s;
-  }
-  .av-dots button[aria-current="true"]::before{background:var(--grad)}
-
-  .card{
-    position:relative;background:var(--surface);border:1px solid var(--line);
-    border-radius:15px;padding:24px;
-    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-    transition:transform .4s var(--ease),border-color .4s,box-shadow .4s;
-  }
-  .card::before,.cve::before{
-    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    opacity:0;transition:opacity .5s;
-    background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(255,59,92,.085),transparent 65%);
-  }
-  .card:hover{transform:translateY(-4px);border-color:rgba(255,59,92,.3);box-shadow:0 18px 40px -20px rgba(0,0,0,.6)}
-  .card:hover::before,.cve:hover::before{opacity:1}
-  .card.focus,.cve.focus{border-color:rgba(255,59,92,.26)}
-  .card.focus::before,.cve.focus::before{
-    opacity:1;background:radial-gradient(300px circle at 50% 26%,rgba(255,59,92,.07),transparent 66%);
-  }
-
-  .about-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:22px;align-items:start}
-  .about-col{display:grid;gap:14px;min-width:0}
-  .about-text p{color:var(--muted);margin-bottom:13px;max-width:60ch}
-  .about-text p:last-child{margin-bottom:0}
-  .about-text strong{color:var(--text-dim);font-weight:600}
-  .facts{display:grid;gap:11px}
-  .fact{display:flex;align-items:center;gap:13px;padding:15px 16px}
-  .fact .ico{
-    width:40px;height:40px;flex:none;border-radius:11px;display:grid;place-items:center;
-    background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.16);font-size:1rem;
-  }
-  .fact .txt{min-width:0}
-  .fact b{display:block;font-size:.89rem;font-weight:600;line-height:1.5}
-  .fact small{display:block;color:var(--muted);font-size:.79rem;line-height:1.55;word-break:break-word}
-
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:13px;margin-top:22px}
-  .stat{text-align:center;padding:22px 14px}
-  .stat .num{font-family:var(--mono);font-size:1.65rem;font-weight:700;line-height:1.3;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .stat .lbl{font-size:.785rem;color:var(--muted);margin-top:2px;line-height:1.5}
-
-  .page{display:none}
-  .page.active{display:block;animation:pageIn .5s var(--ease)}
-  @keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-
-  .status-board{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px;margin-bottom:30px}
-  .sb-item{display:flex;flex-direction:column;gap:5px;padding:14px 16px;border-radius:13px;background:var(--surface);border:1px solid var(--line)}
-  .sb-k{font-family:var(--mono);font-size:.63rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
-  .sb-v{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.95rem;font-weight:700;color:var(--text-dim)}
-  .sb-v.live{color:var(--green)}
-  .sb-v .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2.4s infinite;flex:none}
-  .date-chip{margin-left:auto;font-family:var(--mono);font-size:.66rem;color:var(--muted);padding:3px 10px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
-
-  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;border:0;padding:0;min-width:0}
-  .filters button{
-    display:inline-flex;align-items:center;cursor:pointer;min-height:36px;
-    font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.03em;
-    color:var(--muted);background:var(--surface);border:1px solid var(--line);
-    padding:6px 14px;border-radius:8px;
-    transition:color .25s,border-color .25s,background .25s;
-  }
-  .filters button:hover{color:var(--text);border-color:rgba(255,59,92,.32)}
-  .filters button[aria-pressed="true"]{background:var(--grad);color:#180509;border-color:transparent}
-  .filters .n{margin-left:7px;opacity:.62}
-  .cve.hide{display:none}
-
-  .cve-list{display:grid;gap:20px}
-  .cve{
-    position:relative;display:grid;grid-template-columns:148px 1fr;gap:24px;
-    padding:24px;border-radius:17px;
-    background:var(--surface);border:1px solid var(--line);
-    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-    transition:transform .4s var(--ease),border-color .4s,box-shadow .4s;
-  }
-  .cve:hover{transform:translateY(-4px);border-color:rgba(255,59,92,.32);box-shadow:0 20px 46px -22px rgba(0,0,0,.7)}
-  .cve.featured{
-    border-color:rgba(255,59,92,.34);
-    background:linear-gradient(160deg,rgba(255,59,92,.055),transparent 46%),var(--surface);
-  }
-  .cve.featured::after{
-    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    border:1px solid transparent;
-    background:conic-gradient(from var(--ang),transparent 0 66%,rgba(255,59,92,.75) 82%,rgba(255,122,69,.5) 90%,transparent 100%) border-box;
-    -webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);
-    mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor;mask-composite:exclude;
-    animation:spin 7s linear infinite;
-  }
-  @property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
-  @keyframes spin{to{--ang:360deg}}
-
-  .score{display:flex;flex-direction:column;align-items:center;gap:11px}
-  .ring{
-    position:relative;width:116px;height:116px;border-radius:50%;display:grid;place-items:center;flex:none;
-    background:conic-gradient(var(--sev) calc(var(--p,0) * 1%),rgba(255,255,255,.055) 0);
-    transition:background 1.5s var(--ease);
-  }
-  .ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#100b0e}
-  .ring .inner{position:relative;text-align:center;line-height:1.25}
-  .ring .val{display:block;font-family:var(--mono);font-size:1.42rem;font-weight:700;color:var(--sev)}
-  .ring .of{display:block;font-family:var(--mono);font-size:.59rem;color:var(--muted);letter-spacing:.04em;margin-top:1px}
-  .sev-label{
-    font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
-    padding:4px 12px;border-radius:6px;color:var(--sev);white-space:nowrap;
-    background:color-mix(in srgb,var(--sev) 12%,transparent);
-    border:1px solid color-mix(in srgb,var(--sev) 34%,transparent);
-  }
-
-  .cve-main{display:flex;flex-direction:column;gap:13px;min-width:0}
-  .cve-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .cve-id{font-family:var(--mono);font-weight:700;font-size:clamp(.97rem,2.2vw,1.16rem);letter-spacing:.01em;line-height:1.4;overflow-wrap:anywhere}
-  .cve.featured .cve-id{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .badge{
-    font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.09em;
-    padding:3px 9px;border-radius:5px;text-transform:uppercase;white-space:nowrap;
-    background:rgba(245,181,68,.12);color:var(--gold);border:1px solid rgba(245,181,68,.34);
-  }
-  .badge.bounty{background:rgba(74,222,128,.1);color:var(--green);border-color:rgba(74,222,128,.32)}
-  /* Nhãn loại finding - chỉ gắn khi bản thân ID không nói rõ nó là gì. */
-  .kind{
-    font-family:var(--mono);font-size:.615rem;font-weight:700;letter-spacing:.08em;
-    padding:3px 9px;border-radius:5px;text-transform:uppercase;white-space:nowrap;line-height:1.7;
-    color:var(--gold);background:rgba(245,181,68,.11);border:1px solid rgba(245,181,68,.32);
-  }
-  /* Hộp nói về trạng thái công bố, không phải về bản thân lỗ hổng. */
-  .notice{
-    display:flex;flex-wrap:wrap;gap:7px;padding:13px 15px;border-radius:11px;
-    font-size:.85rem;line-height:1.75;color:var(--text-dim);
-    background:rgba(245,181,68,.055);border:1px solid rgba(245,181,68,.24);
-  }
-  .notice b{color:var(--gold);font-weight:600;flex:none}
-  .notice span{min-width:0}
-  .pkg{
-    display:inline-flex;align-items:center;gap:7px;align-self:flex-start;max-width:100%;
-    font-family:var(--mono);font-size:.765rem;color:var(--red-soft);
-    padding:5px 12px;border-radius:7px;
-    background:rgba(255,59,92,.07);border:1px solid rgba(255,59,92,.18);
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  }
-  .block h4{
-    font-size:.695rem;font-family:var(--mono);letter-spacing:.11em;text-transform:uppercase;
-    color:var(--red-soft);margin-bottom:6px;font-weight:600;
-  }
-  .block p{color:var(--muted);font-size:.89rem;line-height:1.78;max-width:74ch}
-  code{
-    font-family:var(--mono);font-size:.87em;color:var(--text-dim);
-    background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px;
-    word-break:break-word;
-  }
-  .cwe-row{display:flex;flex-wrap:wrap;gap:7px}
-  .tag{
-    font-family:var(--mono);font-size:.68rem;font-weight:500;letter-spacing:.01em;
-    padding:4px 10px;border-radius:6px;color:var(--text-dim);line-height:1.7;
-    background:var(--surface-2);border:1px solid var(--line);
-  }
-  .vector{
-    font-family:var(--mono);font-size:.705rem;color:var(--muted);line-height:1.7;
-    background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-radius:8px;
-    padding:10px 12px;overflow-x:auto;white-space:nowrap;
-  }
-  .vector b{color:var(--text-dim);font-weight:600}
-  .ver-row{display:flex;flex-wrap:wrap;gap:8px;font-family:var(--mono);font-size:.705rem}
-  .ver{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:6px;border:1px solid;line-height:1.7}
-  .ver.bad{color:var(--red-soft);background:rgba(255,59,92,.06);border-color:rgba(255,59,92,.24)}
-  .ver.ok{color:var(--green);background:rgba(74,222,128,.055);border-color:rgba(74,222,128,.24)}
-
-  .code-toggle{
-    display:inline-flex;align-items:center;gap:9px;align-self:flex-start;cursor:pointer;
-    min-height:42px;font-family:var(--mono);font-size:.75rem;font-weight:600;letter-spacing:.02em;
-    color:var(--text-dim);background:var(--surface-2);border:1px solid var(--line);
-    padding:8px 15px;border-radius:9px;transition:background .28s,border-color .28s,color .28s;
-  }
-  .code-toggle:hover{background:rgba(255,59,92,.1);border-color:rgba(255,59,92,.32);color:var(--text)}
-  .code-toggle .arrow{display:inline-block;transition:transform .35s var(--ease);color:var(--red);flex:none}
-  .code-toggle[aria-expanded="true"] .arrow{transform:rotate(90deg)}
-  .code-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease)}
-  .code-wrap.open{grid-template-rows:1fr}
-  .code-inner{overflow:hidden;min-height:0}
-  .code{
-    margin-top:12px;border-radius:11px;overflow:hidden;
-    background:#0c0810;border:1px solid var(--line);
-  }
-  .code + .code{margin-top:10px}
-  .code-bar{
-    display:flex;align-items:center;gap:9px;padding:9px 12px;
-    background:rgba(255,255,255,.035);border-bottom:1px solid var(--line-soft);
-  }
-  .code-bar .path{font-family:var(--mono);font-size:.7rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .code-bar .lang{
-    font-family:var(--mono);font-size:.61rem;letter-spacing:.08em;text-transform:uppercase;
-    color:var(--red-soft);background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.2);
-    padding:2px 8px;border-radius:4px;flex:none;
-  }
-  .copy{
-    margin-left:auto;flex:none;cursor:pointer;font-family:var(--mono);font-size:.655rem;
-    color:var(--muted);background:transparent;border:1px solid var(--line);
-    padding:5px 10px;border-radius:6px;transition:color .25s,border-color .25s,background .25s;
-  }
-  .copy:hover{color:var(--text);border-color:rgba(255,59,92,.35);background:rgba(255,59,92,.08)}
-  .copy.done{color:var(--green);border-color:rgba(74,222,128,.4)}
-  pre{
-    margin:0;padding:14px 16px;overflow-x:auto;
-    font-family:var(--mono);font-size:.745rem;line-height:1.85;
-    color:var(--text-dim);tab-size:2;-webkit-overflow-scrolling:touch;
-  }
-  pre .c{color:#6f6470;font-style:italic}
-  pre .k{color:#ff6b8a}
-  pre .s{color:#8fd694}
-  pre .f{color:#ffc46b}
-  pre .n{color:#c99bff}
-  pre .hl{
-    display:inline-block;min-width:100%;
-    background:rgba(255,59,92,.13);
-    box-shadow:inset 3px 0 0 var(--red);
-    padding-left:7px;margin-left:-10px;
-  }
-  .code-note{
-    display:flex;flex-wrap:wrap;gap:6px;padding:11px 13px;font-size:.805rem;line-height:1.7;
-    color:var(--muted);background:rgba(255,59,92,.05);
-    border-top:1px solid var(--line-soft);
-  }
-  .code-note b{color:var(--red-soft);font-weight:600;flex:none}
-
-  .cve-link{
-    display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
-    min-height:44px;font-family:var(--mono);font-size:.78rem;font-weight:600;text-decoration:none;
-    color:var(--red-soft);padding:10px 17px;border-radius:10px;
-    border:1px solid rgba(255,59,92,.3);background:rgba(255,59,92,.06);text-align:center;
-    transition:transform .3s var(--ease),background .3s,box-shadow .3s,color .3s;
-  }
-  .cve-link:hover{background:rgba(255,59,92,.15);color:var(--text);transform:translateY(-2px)}
-  .cve.featured .cve-link{background:var(--grad);color:#180509;border-color:transparent;box-shadow:0 6px 20px -8px rgba(255,59,92,.55)}
-  .cve.featured .cve-link:hover{transform:translateY(-2px);box-shadow:0 12px 26px -8px rgba(255,59,92,.7)}
-
-  .timeline{position:relative;padding-left:30px}
-  .timeline::before{content:"";position:absolute;left:8px;top:8px;bottom:8px;width:1.5px;background:linear-gradient(180deg,var(--red),rgba(140,16,41,.5),transparent)}
-  .tl-item{position:relative;padding:0 0 30px 24px}
-  .tl-item:last-child{padding-bottom:0}
-  .tl-item::before{
-    content:"";position:absolute;left:-28px;top:7px;width:14px;height:14px;border-radius:50%;
-    background:var(--bg);border:2.5px solid var(--dot,var(--red));
-    box-shadow:0 0 0 4px rgba(255,59,92,.09);
-    transition:box-shadow .4s,transform .4s var(--ease);
-  }
-  .tl-item:hover::before,.tl-item.focus::before{transform:scale(1.18);box-shadow:0 0 0 6px rgba(255,59,92,.14)}
-  .tl-time{
-    display:inline-flex;align-items:center;font-family:var(--mono);font-size:.675rem;
-    font-weight:600;letter-spacing:.06em;color:var(--dot,var(--red));
-    padding:3px 11px;border-radius:6px;line-height:1.8;
-    background:color-mix(in srgb,var(--dot,var(--red)) 9%,transparent);
-    border:1px solid color-mix(in srgb,var(--dot,var(--red)) 26%,transparent);
-    margin-bottom:9px;
-  }
-  .tl-item h3{font-family:var(--mono);font-size:.96rem;font-weight:700;line-height:1.5;margin-bottom:3px;word-break:break-word}
-  .tl-item .sub{font-family:var(--mono);font-size:.735rem;color:var(--dot,var(--red));opacity:.85;margin-bottom:6px;line-height:1.6}
-  .tl-item p{color:var(--muted);font-size:.875rem;line-height:1.75;max-width:66ch}
-
-  .cve-teaser{color:var(--muted);font-size:.885rem;line-height:1.75;max-width:70ch}
-  .feed-more{display:flex;justify-content:center;margin-top:26px}
-  .feed-more .btn{min-width:min(300px,100%)}
-
-  .back-link{
-    display:inline-flex;align-items:center;gap:7px;margin-bottom:18px;
-    font-family:var(--mono);font-size:.74rem;font-weight:600;text-decoration:none;
-    color:var(--muted);padding:8px 14px;border-radius:9px;min-height:40px;
-    background:var(--surface);border:1px solid var(--line);
-    transition:color .25s,border-color .25s,background .25s;
-  }
-  .back-link:hover{color:var(--text);border-color:rgba(255,59,92,.35);background:rgba(255,59,92,.08)}
-  .detail-top{
-    display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;margin-bottom:26px;
-    background:linear-gradient(160deg,color-mix(in srgb,var(--sev) 9%,transparent),transparent 52%),var(--surface);
-    border-color:color-mix(in srgb,var(--sev) 26%,var(--line));
-  }
-  .detail-facts{display:flex;flex-direction:column;gap:11px;min-width:0}
-  .detail-facts .cve-head{gap:9px}
-  .detail-body{display:flex;flex-direction:column;gap:20px}
-  .detail-body .block p{max-width:78ch}
-  .detail-h3{
-    position:relative;font-family:var(--mono);font-size:.8rem;font-weight:700;
-    letter-spacing:.09em;text-transform:uppercase;color:var(--red-soft);
-    padding-top:16px;margin-top:4px;border-top:1px solid var(--line-soft);
-  }
-  .detail-body .code{margin-top:0}
-  .detail-body .cve-link{margin-top:4px}
-
-  .wu-step{display:grid;grid-template-columns:26px 1fr;gap:13px;align-items:start}
-  .wu-step .n{
-    width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:none;
-    font-family:var(--mono);font-size:.68rem;font-weight:700;color:var(--red-soft);
-    background:rgba(255,59,92,.09);border:1px solid rgba(255,59,92,.22);
-  }
-  .wu-step h4{font-size:.85rem;font-weight:600;line-height:1.6;margin-bottom:3px}
-  .wu-step p{color:var(--muted);font-size:.865rem;line-height:1.78;max-width:72ch}
-  .wu-steps{display:grid;gap:15px}
-
-  .contact-card{
-    text-align:center;padding:clamp(30px,6vw,56px);
-    background:radial-gradient(400px 190px at 50% 0%,rgba(255,59,92,.12),transparent),var(--surface);
-  }
-  .contact-card .sec-tag{justify-content:center}
-  .contact-card h2{padding-bottom:0;margin-bottom:12px}
-  .contact-card h2::after{left:50%;transform:translateX(-50%) scaleX(0);bottom:-10px}
-  .contact-card h2.show::after{transform:translateX(-50%) scaleX(1)}
-  .contact-card>p{color:var(--muted);max-width:56ch;margin:0 auto 24px}
-  .contact-mail{font-family:var(--mono);font-size:clamp(.76rem,2.4vw,1rem);font-weight:700;word-break:break-all}
-  .contact-socials{display:flex;gap:10px;justify-content:center;margin-top:20px}
-
-  footer{
-    text-align:center;padding:28px 20px;color:var(--muted);font-size:.765rem;
-    border-top:1px solid var(--line-soft);margin-top:30px;font-family:var(--mono);line-height:1.9;
-  }
-
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
-  .reveal.show{opacity:1;transform:none}
-  .reveal.from-l{transform:translateX(-26px)}
-  .reveal.from-r{transform:translateX(26px)}
-  .reveal.d1{transition-delay:.07s}
-  .reveal.d2{transition-delay:.14s}
-  .reveal.d3{transition-delay:.21s}
-
-  #toTop{
-    position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:11px;
-    background:var(--grad);color:#180509;border:0;cursor:pointer;font-size:1.15rem;
-    display:grid;place-items:center;z-index:95;
-    opacity:0;pointer-events:none;transform:translateY(10px);
-    transition:opacity .35s,transform .35s var(--ease),box-shadow .3s;
-    box-shadow:0 8px 22px -8px rgba(255,59,92,.55);
-  }
-  #toTop.show{opacity:1;pointer-events:auto;transform:none}
-  #toTop:hover{box-shadow:0 12px 28px -8px rgba(255,59,92,.75)}
-
-  @media (hover:none){
-    .card:hover,.cve:hover,.btn:hover,.socials a:hover,.cve-link:hover{transform:none}
-    .card:active,.cve:active{border-color:rgba(255,59,92,.4)}
-    .btn:active,.cve-link:active,.code-toggle:active{transform:scale(.985)}
-  }
-
-  @media (max-width:980px){
-    .hero-grid{grid-template-columns:1fr;text-align:center;gap:32px}
-    .hero-visual{order:-1}
-    .hero-desc{margin-inline:auto}
-    .btn-row,.socials{justify-content:center}
-    #hero .status-chip{margin-inline:auto}
-    .about-grid{grid-template-columns:1fr}
-    .about-text p{max-width:none}
-    .avatar-frame{aspect-ratio:16/10}
-    .av-cap{font-size:.62rem}
-    .detail-top{grid-template-columns:1fr;gap:18px}
-    .detail-top .score{flex-direction:row;justify-content:flex-start;gap:15px}
-    .cve{grid-template-columns:1fr;gap:18px}
-    .score{flex-direction:row;justify-content:flex-start;gap:15px}
-    .ring{width:94px;height:94px}
-    .ring::before{inset:8px}
-    .ring .val{font-size:1.18rem}
-    .ring .of{font-size:.55rem}
-    .reveal.from-l,.reveal.from-r{transform:translateY(24px)}
-  }
-  @media (max-width:860px){
-    .nav-links{
-      position:fixed;top:var(--nav-h);left:0;right:0;flex-direction:column;gap:2px;
-      padding:12px 16px 18px;background:rgba(10,7,9,.98);
-      -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
-      border-bottom:1px solid var(--line);
-      max-height:calc(100svh - var(--nav-h));overflow-y:auto;
-      transform:translateY(-10px);opacity:0;pointer-events:none;transition:.3s var(--ease);
-    }
-    .nav-links.open{transform:none;opacity:1;pointer-events:auto}
-    .nav-links a{padding:12px 14px;font-size:.92rem}
-    .nav-links a::after{display:none}
-    .nav-links a.active{background:rgba(255,59,92,.1)}
-    .burger{display:block}
-  }
-  @media (max-width:640px){
-    body{font-size:15.5px}
-    section{padding:54px 0}
-    .stats{grid-template-columns:1fr;gap:10px}
-    .stat{display:flex;align-items:center;justify-content:space-between;text-align:left;padding:15px 18px;gap:14px}
-    .stat .num{font-size:1.5rem}
-    .stat .lbl{margin-top:0}
-    .btn{width:100%}
-    .btn-row{flex-direction:column;gap:10px}
-    .terminal{font-size:.685rem}
-    .term-body{padding:13px 14px 15px;line-height:1.95;max-height:270px}
-    .avatar-frame{aspect-ratio:1/1}
-    .av-corner{width:20px;height:20px}
-    .av-corner.tl,.av-corner.tr{top:10px}
-    .av-corner.bl,.av-corner.br{bottom:10px}
-    .av-corner.tl,.av-corner.bl{left:10px}
-    .av-corner.tr,.av-corner.br{right:10px}
-    .av-hud{padding:0 38px;font-size:.55rem;top:12px}
-    .av-cap{font-size:.6rem;padding:7px 9px;left:10px;right:10px;bottom:10px}
-    .wu-step{grid-template-columns:24px 1fr;gap:11px}
-    .detail-top{grid-template-columns:1fr;gap:16px}
-    .detail-top .score{flex-direction:row;align-items:center;gap:14px}
-    .cve{padding:20px 16px}
-    .status-board{grid-template-columns:1fr 1fr;gap:10px}
-    .sb-item{padding:12px 13px}
-    .sb-v{font-size:.85rem}
-    .cve-head .date-chip{margin-left:0}
-    .score{flex-direction:row;align-items:center;gap:14px}
-    .ring{width:82px;height:82px}
-    .ring::before{inset:7px}
-    .ring .val{font-size:1.05rem}
-    .cve-link,.code-toggle{width:100%;justify-content:center}
-    .code-bar{flex-wrap:wrap;gap:7px}
-    .code-bar .path{order:3;width:100%;font-size:.66rem}
-    pre{font-size:.7rem;padding:12px 13px}
-    .code-note{font-size:.775rem;padding:10px 12px}
-    .timeline{padding-left:24px}
-    .tl-item{padding-left:18px;padding-bottom:26px}
-    .tl-item::before{left:-25px;width:12px;height:12px}
-    .contact-socials{margin-top:18px}
-    #toTop{right:14px;bottom:14px;width:44px;height:44px}
-  }
-  @media (max-width:400px){
-    .logo{font-size:.78rem}
-    .lang-btn{font-size:.64rem}
-    .lang-btn span{padding:4px 7px}
-    .hero-name{font-size:1.95rem}
-    .cve{padding:18px 14px}
-    .card{padding:20px 17px}
-    .score{flex-direction:column;align-items:flex-start}
-    .sev-label{font-size:.6rem}
-    pre{font-size:.655rem}
-    .fact{padding:13px 14px;gap:11px}
-    .fact .ico{width:36px;height:36px}
-  }
-  @media (prefers-reduced-motion:reduce){
-    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
-    html{scroll-behavior:auto}
-    .reveal{opacity:1;transform:none}
-    #matrix,.av-sweep{display:none}
-  }
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+<!-- Đầu mũi tên dùng chung cho mọi sơ đồ lỗ hổng. -->
+<svg aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute"><defs>
+<marker id="vdaN" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="rgba(255,255,255,.34)"/></marker>
+<marker id="vdaB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#ff3b5c"/></marker>
+<marker id="vdaG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#4ade80"/></marker>
+</defs></svg>
 
 <div id="boot">
   <div class="boot-lines" id="bootLines"></div>
@@ -896,12 +118,13 @@
           <img class="av-img on" src="avatar-2.jpg" alt="" style="--pos:56% 52%" fetchpriority="high">
           <img class="av-img" src="avatar-3.jpg" alt="" style="--pos:57% 68%" loading="lazy">
           <img class="av-img" src="avatar-1.jpg" alt="" style="--pos:52% 44%" loading="lazy">
+          <img class="av-img" src="avatar-4.jpg" alt="" style="--pos:58% 62%" loading="lazy">
           <div class="av-sweep"></div>
           <span class="av-corner tl"></span><span class="av-corner tr"></span>
           <span class="av-corner bl"></span><span class="av-corner br"></span>
           <div class="av-hud">
             <span class="av-rec"><i></i>REC</span>
-            <span>IMG_<span id="avIdx">01</span>/03</span>
+            <span>IMG_<span id="avIdx">01</span>/<span id="avTotal">04</span></span>
           </div>
           <div class="av-cap"><b>›</b> <span id="avCap"></span></div>
         </div>
@@ -982,7 +205,7 @@
         <div class="cve-main">
           <div class="cve-head">
             <span class="cve-id">Mapbox Bug Bounty</span>
-            <span class="badge bounty" data-i18n="badge.rewarded">Đã được thưởng</span>
+            <span class="badge bounty" data-i18n="badge.rewarded">Đã được thưởng $1,000</span>
           </div>
           <span class="pkg">mapbox/pbf</span>
           <p class="cve-teaser" data-i18n="c5.teaser"></p>
@@ -1058,7 +281,7 @@
         </div>
       </article>
 
-      <article class="cve reveal" data-date="2026-06-14" data-slug="wu-55640" data-kind="cve" style="--sev:var(--red)">
+      <article class="cve featured reveal" data-date="2026-06-14" data-slug="wu-55640" data-kind="cve" style="--sev:var(--red)">
         <div class="score">
           <div class="ring" data-p="91">
             <div class="inner"><span class="val">9.1</span><span class="of">CVSS 3.1</span></div>
@@ -1068,6 +291,7 @@
         <div class="cve-main">
           <div class="cve-head">
             <span class="cve-id">CVE-2026-55640</span>
+            <span class="badge">★ Featured</span>
           </div>
           <span class="pkg">nextcloud-mcp-server</span>
           <p class="cve-teaser" data-i18n="c2.teaser"></p>
@@ -1114,6 +338,7 @@
     <div class="sec-tag reveal">ls -la ./writeups</div>
     <h2 class="reveal" data-i18n="wu.h2">Nhật ký <span class="grad-text">săn lỗ hổng</span></h2>
     <p class="sec-sub reveal d1" data-i18n="wu.sub"></p>
+    <div class="card board reveal d1" id="statBoard"></div>
     <div class="cve-list" id="wuIndex"></div>
   </section>
 
@@ -1137,9 +362,9 @@
       <div class="detail-facts">
         <div class="cve-head">
           <span class="pkg">mapbox/pbf</span>
-          <span class="badge bounty" data-i18n="badge.rewarded">Đã được thưởng</span>
+          <span class="badge bounty" data-i18n="badge.rewarded">Đã được thưởng $1,000</span>
         </div>
-        <div class="vector" data-i18n="c5.vector"><b>CVSS 3.1 · tự chấm</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H</div>
+        <div class="vector" data-i18n="c5.vector"><b>CVSS 3.1</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H</div>
         <div class="ver-row">
                     <span class="ver bad" data-i18n="c5.ver1">Bị ảnh hưởng: ≤ 5.1.1 (kiểm chứng trên 5.1.0)</span>
                     <span class="ver ok" data-i18n="c5.ver2">Đã sửa: 5.1.2</span>
@@ -1178,6 +403,24 @@
               luôn được ép qua <code>Number()</code> - vector nằm ở API nhận schema dạng object.
             </p>
           </div>
+
+      <h3 class="detail-h3" data-i18n="detail.arch">Cơ chế dự án</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 204" role="img" aria-labelledby="arpbf"><title id="arpbf">the documented .proto path stays safe: schema.parse() coerces every tag through Number()</title><desc>the documented .proto path stays safe: schema.parse() coerces every tag through Number()</desc><rect class="bx src" x="16.0" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="31.0" y="111">schema object</text><text class="t-sm" x="31.0" y="133">JSON or API</text><path class="ar " d="M167.4 116 L 189.4 116"/><rect class="bx bad" x="196.4" y="78" width="146.4" height="76" rx="10"/><text class="t-k t-red" x="211.4" y="111">compile.js</text><text class="t-sm" x="211.4" y="133">code generator</text><path class="ar " d="M347.8 116 L 369.8 116"/><rect class="bx " x="376.8" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="391.8" y="111">new Function()</text><text class="t-sm" x="391.8" y="133">reader + writer</text><path class="ar " d="M528.2 116 L 550.2 116"/><rect class="bx " x="557.2" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="572.2" y="111">pbf codec</text><text class="t-sm" x="572.2" y="133">encode / decode</text><path class="ar " d="M708.6 116 L 730.6 116"/><rect class="bx " x="737.6" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="752.6" y="111">vector tiles</text><text class="t-sm" x="752.6" y="133">Mapbox GL JS</text><rect class="pin" x="196.4" y="16" width="143.3" height="30" rx="9"/><text class="t-sm t-red" x="209.4" y="36">tag never checked</text><path class="pin-tip" d="M216.4 46 L236.4 46 L226.4 64 z"/><text class="t-sm t-gld" x="16" y="186">the documented .proto path stays safe: schema.parse() coerces every tag through Number()</text></svg></div>
+        <figcaption data-i18n="ar6">pbf nhận schema rồi tự sinh mã reader/writer bằng <code>new Function()</code>. Đây là một code generator thật sự, nên mọi giá trị trong schema đều là mã nguồn tiềm năng chứ không chỉ là dữ liệu.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.diagram">Đường đi của lỗ hổng</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 432" role="img" aria-labelledby="dgpbf"><title id="dgpbf">Moi dinh danh trong schema deu duoc validate, rieng field.tag thi khong</title><desc>Moi dinh danh trong schema deu duoc validate, rieng field.tag thi khong</desc><text class="t-mut" x="34" y="42">EVERY VALUE THE COMPILER INTERPOLATES INTO THE GENERATED SOURCE</text><text class="t-mut" x="46" y="78">SCHEMA VALUE</text><text class="t-mut" x="392" y="78">REACHES new Function()</text><text class="t-mut" x="672" y="78">validateIdentifier()</text><path class="rule" d="M30 90 L884 90"/><text class="t-k" x="46" y="117">proto.name</text><path class="ico-ok" d="M402 116 l3.5 4 L413 109.5"/><path class="ico-ok" d="M682 116 l3.5 4 L693 109.5"/><path class="rule soft" d="M30 130 L884 130"/><text class="t-k" x="46" y="157">field.name</text><path class="ico-ok" d="M402 156 l3.5 4 L413 149.5"/><path class="ico-ok" d="M682 156 l3.5 4 L693 149.5"/><path class="rule soft" d="M30 170 L884 170"/><text class="t-k" x="46" y="197">field.oneof</text><path class="ico-ok" d="M402 196 l3.5 4 L413 189.5"/><path class="ico-ok" d="M682 196 l3.5 4 L693 189.5"/><path class="rule soft" d="M30 210 L884 210"/><text class="t-k" x="46" y="237">enum value name</text><path class="ico-ok" d="M402 236 l3.5 4 L413 229.5"/><path class="ico-ok" d="M682 236 l3.5 4 L693 229.5"/><path class="rule soft" d="M30 250 L884 250"/><rect class="rowhl" x="30" y="253" width="854" height="35" rx="8"/><text class="t-k t-red" x="46" y="277">field.tag</text><path class="ico-ok" d="M402 276 l3.5 4 L413 269.5"/><path class="ico-bad" d="M682 270.5 l11 11 M693 270.5 l-11 11"/><text class="t-sm t-red" x="712" y="277">the one gap</text><path class="rule soft" d="M30 290 L884 290"/><rect class="lane bad" x="16" y="312" width="868" height="78" rx="13"/><rect class="bx bad" x="36" y="328" width="276" height="46" rx="10"/><text class="t-k t-red" x="52" y="356">field.tag = "1); attacker(); //"</text><path class="ar bad" d="M316 351 L 350 351"/><rect class="bx bad" x="358" y="328" width="214" height="46" rx="10"/><text class="t-k t-red" x="374" y="356">new Function(code)</text><path class="ar bad" d="M576 351 L 610 351"/><rect class="bx bad" x="618" y="328" width="252" height="46" rx="10"/><text class="t-k t-red" x="632" y="356">attacker JS in the process</text><text class="t-sm t-grn" x="34" y="416">the documented .proto path stays safe: schema.parse() coerces every tag through Number()</text></svg></div>
+        <figcaption data-i18n="dg6"><b>Hàng rào dựng sẵn, nhưng thiếu một cọc.</b> Mọi định danh lấy từ schema đều đi qua <code>validateIdentifier()</code> trước khi được nội suy vào mã sinh ra - riêng <code>field.tag</code> thì không, dù nó nằm trong chính chuỗi mã đó.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.map">Vị trí chính xác trong code</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 398" role="img" aria-labelledby="cmpbf"><title id="cmpbf">the loop that validates what comes from the schema</title><desc>the loop that validates what comes from the schema</desc><rect class="frame" x="16" y="20" width="868" height="330" rx="14"/><text class="t-mut" x="34" y="41">REPO</text><text class="t-sm" x="84" y="41">mapbox/pbf</text><rect class="frame f2" x="40" y="52" width="820" height="282" rx="12"/><text class="t-mut" x="58" y="73">FILE</text><text class="t-sm t-gld" x="102" y="73">compile.js</text><rect class="frame f3" x="64" y="84" width="772" height="234" rx="11"/><text class="t-mut" x="82" y="105">SCOPE</text><text class="t-sm" x="136" y="105">the loop that validates what comes from the schema</text><rect class="ln" x="82" y="116" width="736" height="32" rx="8"/><text class="fx " x="122" y="137" textLength="332.1" lengthAdjust="spacing" xml:space="preserve">for (const field of proto.fields ?? []) {</text><rect class="ln ok" x="82" y="155" width="736" height="32" rx="8"/><path class="ico-ok" d="M97 176 l3.5 4 L108 169.5"/><text class="fx t-grn" x="122" y="176" textLength="267.3" lengthAdjust="spacing" xml:space="preserve">  validateIdentifier(field.name);</text><rect class="ln ok" x="82" y="194" width="736" height="32" rx="8"/><path class="ico-ok" d="M97 215 l3.5 4 L108 208.5"/><text class="fx t-grn" x="122" y="215" textLength="413.1" lengthAdjust="spacing" xml:space="preserve">  if (field.oneof) validateIdentifier(field.oneof);</text><rect class="ln ghost" x="82" y="233" width="736" height="32" rx="8"/><path class="ico-bad" d="M97 248.5 l11 11 M108 248.5 l-11 11"/><text class="fx ghost-tx" x="122" y="254" textLength="453.6" lengthAdjust="spacing" xml:space="preserve">  validateTag(field.tag);   // only exists from 5.1.2 on</text><rect class="ln hit" x="82" y="272" width="736" height="32" rx="8"/><rect class="ln-bar" x="92" y="280" width="4" height="16" rx="2"/><text class="fx t-k t-red" x="122" y="293" textLength="372.6" lengthAdjust="spacing" xml:space="preserve">code += `if (field === ${fields[i].tag}) ...`;</text><rect class="chip bad" x="16.0" y="362" width="308.9" height="28" rx="9"/><text class="t-sm t-red" x="29.0" y="382">the tag is interpolated into generated JS</text><rect class="chip bad" x="334.9" y="362" width="246.8" height="28" rx="9"/><text class="t-sm t-red" x="347.9" y="382">nothing forces it to be a number</text></svg></div>
+        <figcaption data-i18n="cm6">Vòng lặp kiểm định danh nằm ngay cạnh dòng nội suy tag - thiếu đúng một lời gọi <code>validateTag()</code>, và đó chính là thứ 5.1.2 bổ sung.</figcaption>
+      </figure>
 
       <h3 class="detail-h3" data-i18n="detail.code">Đoạn code gây ra lỗ hổng</h3>
       <div class="code">
@@ -1233,7 +476,7 @@
           </div></div>
           <div class="wu-step"><span class="n">5</span><div>
             <h4 data-i18n="wu5.s5h">Báo cáo &amp; kết quả</h4>
-            <p data-i18n="wu5.s5p">Mình gửi báo cáo riêng qua chương trình bug bounty của Mapbox trên HackerOne. Họ xử lý rất nhanh: chỉ một ngày sau, v5.1.2 lên kệ với <code>validateTag()</code> thêm vào đúng vòng lặp đã có <code>validateIdentifier()</code>, kèm release note ghi rõ đây là bản vá cho một lỗ hổng của compiler. Báo cáo được ghi nhận hợp lệ và có thưởng. Điểm CVSS ở trên là mình tự chấm từ vector, không phải con số Mapbox công bố - và vì báo cáo gốc vẫn ở chế độ riêng tư, ở đây mình chỉ mô tả lớp lỗi, cách tiếp cận cùng bản vá công khai, không đăng PoC và không nêu chi tiết nội bộ của report.</p>
+            <p data-i18n="wu5.s5p">Mình gửi báo cáo riêng qua chương trình bug bounty của Mapbox trên HackerOne. Họ xử lý rất nhanh: chỉ một ngày sau, v5.1.2 lên kệ với <code>validateTag()</code> thêm vào đúng vòng lặp đã có <code>validateIdentifier()</code>, kèm release note ghi rõ đây là bản vá cho một lỗ hổng của compiler. Báo cáo được ghi nhận hợp lệ và được thưởng $1,000. Vì báo cáo gốc vẫn ở chế độ riêng tư, ở đây mình chỉ mô tả lớp lỗi, cách tiếp cận cùng bản vá công khai, không đăng PoC và không nêu chi tiết nội bộ của report.</p>
           </div></div>
         </div>
 
@@ -1302,6 +545,24 @@
               tránh CVE-2026-55849 vẫn còn nằm trong vùng ảnh hưởng.
             </p>
           </div>
+
+      <h3 class="detail-h3" data-i18n="detail.arch">Cơ chế dự án</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 204" role="img" aria-labelledby="ar71538"><title id="ar71538">on Windows, where npm almost always answers npm.cmd - so this is the ordinary path</title><desc>on Windows, where npm almost always answers npm.cmd - so this is the ordinary path</desc><rect class="bx src" x="16.0" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="31.0" y="111">cyclonedx-npm</text><text class="t-sm" x="31.0" y="133">on Windows</text><path class="ar " d="M167.4 116 L 189.4 116"/><rect class="bx " x="196.4" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="211.4" y="111">where npm</text><text class="t-sm" x="211.4" y="133">resolve the CLI</text><path class="ar " d="M347.8 116 L 369.8 116"/><rect class="bx " x="376.8" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="391.8" y="111">npm.cmd</text><text class="t-sm" x="391.8" y="133">a batch file</text><path class="ar " d="M528.2 116 L 550.2 116"/><rect class="bx bad" x="557.2" y="78" width="146.4" height="76" rx="10"/><text class="t-k t-red" x="572.2" y="111">cmd.exe /c</text><text class="t-sm" x="572.2" y="133">re-parses args</text><path class="ar " d="M708.6 116 L 730.6 116"/><rect class="bx " x="737.6" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="752.6" y="111">npm ls --json</text><text class="t-sm" x="752.6" y="133">SBOM</text><rect class="pin" x="557.2" y="16" width="129.5" height="30" rx="9"/><text class="t-sm t-red" x="570.2" y="36">the cmd.exe hop</text><path class="pin-tip" d="M577.2 46 L597.2 46 L587.2 64 z"/><text class="t-sm t-gld" x="16" y="186">on Windows, where npm almost always answers npm.cmd - so this is the ordinary path</text></svg></div>
+        <figcaption data-i18n="ar2">Trên Windows, npm được phân giải thành <code>npm.cmd</code> - một batch file - nên tool buộc phải đi qua <code>cmd.exe</code>. Đây là đường đi mặc định của người dùng Windows, không phải trường hợp hiếm.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.diagram">Đường đi của lỗ hổng</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 322" role="img" aria-labelledby="dg71538"><title id="dg71538">Cung mot chuoi lenh, Node va cmd.exe doc theo hai bo luat khac nhau</title><desc>Cung mot chuoi lenh, Node va cmd.exe doc theo hai bo luat khac nhau</desc><rect class="bx " x="16" y="22" width="300" height="80" rx="10"/><text class="t-mut" x="34" y="48">NODE SPAWNS THE PROCESS</text><text class="t-k" x="34" y="72">execFileSync('cmd.exe',</text><text class="t-k" x="34" y="92">['/c', execPath, ...args])</text><path class="ar " d="M316 62 L 356 62"/><rect class="bx warn" x="364" y="22" width="520" height="80" rx="10"/><text class="t-mut" x="382" y="48">ONE COMMAND-LINE STRING</text><text class="fx t-k" x="382" y="76" textLength="307.8" lengthAdjust="spacing" xml:space="preserve">npm.cmd --workspace "a\" &amp; calc &amp; \"b"</text><text class="t-sm" x="382" y="95">quoting done with CommandLineToArgvW rules</text><path class="ar ok" d="M624 102 C 624 122, 300 118, 300 140"/><path class="ar bad" d="M624 102 C 624 122, 640 118, 640 140"/><rect class="lane ok" x="16" y="144" width="412" height="168" rx="13"/><text class="t-mut t-grn" x="36" y="170">WHAT NODE MEANT</text><rect class="bx ok" x="36" y="182" width="372" height="46" rx="10"/><text class="t-k" x="52" y="210">one argv entry: --workspace</text><text class="t-sm" x="36" y="250">\"  →  a literal quote inside the value</text><text class="t-sm" x="36" y="272">&amp;   →  an ordinary character</text><text class="t-sm t-grn" x="36" y="296">no shell in the Node layer</text><rect class="lane bad" x="444" y="144" width="440" height="168" rx="13"/><text class="t-mut t-red" x="464" y="170">WHAT cmd.exe ACTUALLY DOES</text><rect class="bx bad" x="464" y="182" width="400" height="46" rx="10"/><text class="t-k" x="480" y="210">&amp; | &gt; ^  parsed FIRST, before quotes</text><text class="t-sm t-red" x="464" y="250">\"  →  not an escape, the quote closes</text><text class="t-sm t-red" x="464" y="272">&amp;   →  command separator</text><text class="t-sm t-red" x="464" y="296">→ calc runs as its own command</text></svg></div>
+        <figcaption data-i18n="dg2"><b>Một chuỗi, hai bộ luật.</b> Node ghép mảng tham số theo quy ước <code>CommandLineToArgvW</code> rồi tin rằng dấu nháy đã bọc kín giá trị. <code>cmd.exe</code> lại xử lý <code>&amp; | &gt; ^</code> trước cả dấu nháy và không hiểu <code>\"</code> - nên đúng dòng lệnh đó bị tách thành hai lệnh.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.map">Vị trí chính xác trong code</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 320" role="img" aria-labelledby="cm71538"><title id="cm71538">the Windows-only branch for .cmd / .bat files</title><desc>the Windows-only branch for .cmd / .bat files</desc><rect class="frame" x="16" y="20" width="868" height="252" rx="14"/><text class="t-mut" x="34" y="41">REPO</text><text class="t-sm" x="84" y="41">CycloneDX/cyclonedx-node-npm</text><rect class="frame f2" x="40" y="52" width="820" height="204" rx="12"/><text class="t-mut" x="58" y="73">FILE</text><text class="t-sm t-gld" x="102" y="73">src/npmRunner.ts  ·  v5.0.0</text><rect class="frame f3" x="64" y="84" width="772" height="156" rx="11"/><text class="t-mut" x="82" y="105">SCOPE</text><text class="t-sm" x="136" y="105">the Windows-only branch for .cmd / .bat files</text><rect class="ln" x="82" y="116" width="736" height="32" rx="8"/><text class="fx " x="122" y="137" textLength="648.0" lengthAdjust="spacing" xml:space="preserve">if (NpmRunner.#isWindows(process_) &amp;&amp; NpmRunner.#winCmdMatcher.test(execPath)) {</text><rect class="ln hit" x="82" y="155" width="736" height="32" rx="8"/><rect class="ln-bar" x="92" y="163" width="4" height="16" rx="2"/><text class="fx t-k t-red" x="122" y="176" textLength="631.8" lengthAdjust="spacing" xml:space="preserve">  return (args, options) =&gt; execFileSync('cmd.exe', ['/c', execPath, ...args])</text><rect class="ln ok" x="82" y="194" width="736" height="32" rx="8"/><path class="ico-ok" d="M97 215 l3.5 4 L108 208.5"/><text class="fx t-grn" x="122" y="215" textLength="656.1" lengthAdjust="spacing" xml:space="preserve">execFileSync(nodeExecPath, ['--', npmJsPath, ...args], {shell: false})  // v6.0.0</text><rect class="chip bad" x="16.0" y="284" width="260.6" height="28" rx="9"/><text class="t-sm t-red" x="29.0" y="304">Node quotes for CommandLineToArgvW</text><rect class="chip bad" x="286.6" y="284" width="239.9" height="28" rx="9"/><text class="t-sm t-red" x="299.6" y="304">cmd.exe parses by its own rules</text></svg></div>
+        <figcaption data-i18n="cm2">Vẫn file đó, nhưng lần này là nhánh chỉ chạy trên Windows: Node bọc nháy tham số rồi giao cho <code>cmd.exe</code> diễn giải lại. Dòng xanh là cách 6.0.0 bỏ hẳn shell khỏi luồng.</figcaption>
+      </figure>
 
       <h3 class="detail-h3" data-i18n="detail.code">Đoạn code gây ra lỗ hổng</h3>
       <div class="code">
@@ -1408,6 +669,24 @@
 
       <div class="notice" data-i18n="c6.nocve"><b>Vì sao không có CVE:</b> <span>Advisory đã publish công khai trên repo appium/appium-mcp và ghi nhận mình là người báo cáo, nhưng không có CVE ID nào được cấp. Quyền request CVE thuộc về phía maintainer, và họ đã không request - mình có mong muốn được cấp CVE và đã nói rõ điều đó với họ, nhưng tới giờ vẫn chưa biết lý do. Hệ quả là finding này không nằm trong GitHub Global Advisory Database và không hiện khi chạy <code>npm audit</code>. Mình vẫn liệt kê ở đây, gắn nhãn đúng bản chất: một finding được publish và được ghi nhận, không phải một CVE.</span></div>
 
+      <h3 class="detail-h3" data-i18n="detail.arch">Cơ chế dự án</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 204" role="img" aria-labelledby="arappium"><title id="arappium">tool arguments are produced by a model, not typed by a human</title><desc>tool arguments are produced by a model, not typed by a human</desc><rect class="bx src" x="16.0" y="78" width="191.5" height="76" rx="10"/><text class="t-k" x="31.0" y="111">LLM / MCP client</text><text class="t-sm" x="31.0" y="133">writes the arguments</text><path class="ar " d="M212.5 116 L 234.5 116"/><rect class="bx bad" x="241.5" y="78" width="191.5" height="76" rx="10"/><text class="t-k t-red" x="256.5" y="111">appium-mcp</text><text class="t-sm" x="256.5" y="133">prepare_ios_simulator</text><path class="ar " d="M438.0 116 L 460.0 116"/><rect class="bx " x="467.0" y="78" width="191.5" height="76" rx="10"/><text class="t-k" x="482.0" y="111">xcrun simctl</text><text class="t-sm" x="482.0" y="133">shell command</text><path class="ar " d="M663.5 116 L 685.5 116"/><rect class="bx " x="692.5" y="78" width="191.5" height="76" rx="10"/><text class="t-k" x="707.5" y="111">iOS Simulator</text><text class="t-sm" x="707.5" y="133">install &amp; launch</text><rect class="pin" x="241.5" y="16" width="136.4" height="30" rx="9"/><text class="t-sm t-red" x="254.5" y="36">udid goes in raw</text><path class="pin-tip" d="M261.5 46 L281.5 46 L271.5 64 z"/><text class="t-sm t-gld" x="16" y="186">tool arguments are produced by a model, not typed by a human</text></svg></div>
+        <figcaption data-i18n="ar5">Client gọi tool <code>prepare_ios_simulator</code>, server dịch tham số thành lệnh <code>xcrun simctl</code> chạy trên máy host. Điểm đáng chú ý: tham số của tool do mô hình sinh ra chứ không do người gõ.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.diagram">Đường đi của lỗ hổng</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 330" role="img" aria-labelledby="dgappium"><title id="dgappium">Payload dong nhay kep som de chen lenh roi mo lai nhay cho ve sau</title><desc>Payload dong nhay kep som de chen lenh roi mo lai nhay cho ve sau</desc><text class="t-mut" x="34" y="44">1 · TEMPLATE LITERAL IN THE TOOL HANDLER</text><rect class="hlrect" x="209.2" y="52" width="135.6" height="26" rx="5"/><text class="fx t-k" x="34" y="71" textLength="421.2" lengthAdjust="spacing" xml:space="preserve">xcrun simctl install "${simulatorUdid}" "${appPath}"</text><text class="t-mut" x="34" y="116">2 · udid RECEIVED FROM THE MCP TOOL CALL</text><rect class="hlrect bad" x="31.0" y="124" width="330.0" height="26" rx="5"/><text class="fx t-red" x="34" y="143" textLength="324.0" lengthAdjust="spacing" xml:space="preserve">x" &amp;&amp; id &gt; /tmp/poc_test1.txt &amp;&amp; echo "x</text><text class="t-sm" x="380.0" y="143">no format check · a real UDID is hex only</text><text class="t-mut" x="34" y="188">3 · WHAT THE SHELL RECEIVES</text><text class="fx t-grn" x="34.0" y="216" textLength="194.4" lengthAdjust="spacing" xml:space="preserve">xcrun simctl install "x"</text><text class="fx t-red" x="228.39999999999998" y="216" textLength="251.1" lengthAdjust="spacing" xml:space="preserve"> &amp;&amp; id &gt; /tmp/poc_test1.txt &amp;&amp; </text><text class="fx t-gld" x="479.5" y="216" textLength="218.7" lengthAdjust="spacing" xml:space="preserve">echo "x" "/path/to/app.app"</text><path class="uline u-grn" d="M36.0 228 L226.4 228"/><path class="uline u-red" d="M230.4 228 L477.5 228"/><path class="uline u-gld" d="M481.5 228 L696.2 228"/><text class="t-sm t-grn" x="34.0" y="250">intended command</text><text class="t-sm t-red" x="228.39999999999998" y="250">injected command</text><text class="t-sm t-gld" x="479.5" y="250">re-opens the quote so nothing errors</text><rect class="lane bad" x="16" y="268" width="868" height="54" rx="13"/><text class="t-sm t-red" x="36" y="300">same pattern at 4 call sites:</text><text class="t-k" x="258" y="300">install · launch · listapps · spawn</text></svg></div>
+        <figcaption data-i18n="dg5"><b>Dấu nháy nằm trong tay attacker.</b> <code>udid</code> được nội suy vào giữa hai dấu nháy kép, nên chỉ cần đóng nháy sớm là phần phía sau trở thành lệnh riêng; đoạn <code>echo "x</code> ở cuối mở lại nháy để câu lệnh không văng lỗi cú pháp.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.map">Vị trí chính xác trong code</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 359" role="img" aria-labelledby="cmappium"><title id="cmappium">the prepare_ios_simulator handler - 4 call sites</title><desc>the prepare_ios_simulator handler - 4 call sites</desc><rect class="frame" x="16" y="20" width="868" height="291" rx="14"/><text class="t-mut" x="34" y="41">REPO</text><text class="t-sm" x="84" y="41">appium/appium-mcp</text><rect class="frame f2" x="40" y="52" width="820" height="243" rx="12"/><text class="t-mut" x="58" y="73">FILE</text><text class="t-sm t-gld" x="102" y="73">src/tools/ios/prepare-ios-simulator.ts</text><rect class="frame f3" x="64" y="84" width="772" height="195" rx="11"/><text class="t-mut" x="82" y="105">SCOPE</text><text class="t-sm" x="136" y="105">the prepare_ios_simulator handler - 4 call sites</text><rect class="ln hit" x="82" y="116" width="736" height="32" rx="8"/><rect class="ln-bar" x="92" y="124" width="4" height="16" rx="2"/><text class="fx t-k t-red" x="122" y="137" textLength="575.1" lengthAdjust="spacing" xml:space="preserve">await execAsync(`xcrun simctl install "${simulatorUdid}" "${appPath}"`)</text><rect class="ln hit" x="82" y="155" width="736" height="32" rx="8"/><rect class="ln-bar" x="92" y="163" width="4" height="16" rx="2"/><text class="fx t-k t-red" x="122" y="176" textLength="575.1" lengthAdjust="spacing" xml:space="preserve">await execAsync(`xcrun simctl launch "${simulatorUdid}" "${bundleId}"`)</text><rect class="ln" x="82" y="194" width="736" height="32" rx="8"/><text class="fx " x="122" y="215" textLength="542.7" lengthAdjust="spacing" xml:space="preserve">// listapps and spawn build their command line exactly the same way</text><rect class="ln ghost" x="82" y="233" width="736" height="32" rx="8"/><path class="ico-bad" d="M97 248.5 l11 11 M108 248.5 l-11 11"/><text class="fx ghost-tx" x="122" y="254" textLength="461.7" lengthAdjust="spacing" xml:space="preserve">check udid against /^[0-9A-Fa-f-]+$/ before interpolating</text><rect class="chip bad" x="16.0" y="323" width="274.4" height="28" rx="9"/><text class="t-sm t-red" x="29.0" y="343">execAsync is exec() - always a shell</text><rect class="chip bad" x="300.4" y="323" width="198.5" height="28" rx="9"/><text class="t-sm t-red" x="313.4" y="343">quotes are the only guard</text></svg></div>
+        <figcaption data-i18n="cm5">Hai trong bốn call site nội suy <code>udid</code> thẳng vào chuỗi lệnh; dòng nét đứt là bước kiểm định dạng UDID mà mãi tới bản vá 1.86.5 mới có.</figcaption>
+      </figure>
+
       <h3 class="detail-h3" data-i18n="detail.code">Đoạn code gây ra lỗ hổng</h3>
       <div class="code">
               <div class="code-bar"><span class="lang">TypeScript</span><span class="path" data-i18n="c6.path1">src/tools/ios/prepare-ios-simulator.ts - trước v1.86.5</span><button type="button" class="copy">Copy</button></div>
@@ -1513,6 +792,24 @@ xcrun simctl install <span class="s">"x"</span> <span class="hl">&amp;&amp; id &
             </p>
           </div>
 
+      <h3 class="detail-h3" data-i18n="detail.arch">Cơ chế dự án</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 204" role="img" aria-labelledby="ar55849"><title id="ar55849">an SBOM generator: it runs unattended inside CI/CD pipelines</title><desc>an SBOM generator: it runs unattended inside CI/CD pipelines</desc><rect class="bx src" x="16.0" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="31.0" y="111">package.json</text><text class="t-sm" x="31.0" y="133">+ lockfile</text><path class="ar " d="M167.4 116 L 189.4 116"/><rect class="bx " x="196.4" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="211.4" y="111">cyclonedx-npm</text><text class="t-sm" x="211.4" y="133">CLI + flags</text><path class="ar " d="M347.8 116 L 369.8 116"/><rect class="bx bad" x="376.8" y="78" width="146.4" height="76" rx="10"/><text class="t-k t-red" x="391.8" y="111">npm ls --json</text><text class="t-sm" x="391.8" y="133">child process</text><path class="ar " d="M528.2 116 L 550.2 116"/><rect class="bx " x="557.2" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="572.2" y="111">dependency tree</text><text class="t-sm" x="572.2" y="133">resolved</text><path class="ar " d="M708.6 116 L 730.6 116"/><rect class="bx " x="737.6" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="752.6" y="111">SBOM file</text><text class="t-sm" x="752.6" y="133">CycloneDX JSON</text><rect class="pin" x="376.8" y="16" width="122.6" height="30" rx="9"/><text class="t-sm t-red" x="389.8" y="36">the spawn step</text><path class="pin-tip" d="M396.8 46 L416.8 46 L406.8 64 z"/><text class="t-sm t-gld" x="16" y="186">an SBOM generator: it runs unattended inside CI/CD pipelines</text></svg></div>
+        <figcaption data-i18n="ar1">Bình thường tool đọc <code>package.json</code>, gọi npm bằng một tiến trình con để lấy cây phụ thuộc rồi xuất SBOM. Toàn bộ lỗ hổng nằm gọn ở đúng bước sinh tiến trình con đó.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.diagram">Đường đi của lỗ hổng</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 322" role="img" aria-labelledby="dg55849"><title id="dg55849">Luong du lieu tu --workspace toi execSync va shell</title><desc>Luong du lieu tu --workspace toi execSync va shell</desc><rect class="bx src" x="16" y="24" width="268" height="84" rx="10"/><text class="t-mut" x="34" y="50">USER-CONTROLLED CLI ARG</text><text class="t-k" x="34" y="74">--workspace</text><text class="t-red" x="34" y="94">"; id &gt; /tmp/x"</text><path class="ar " d="M150 108 L150 130"/><rect class="bx " x="16" y="132" width="268" height="54" rx="10"/><text class="t-k" x="34" y="156">args: string[]</text><text class="t-sm" x="34" y="175">value never escaped</text><path class="ar " d="M150 186 L150 208"/><rect class="bx warn" x="16" y="210" width="268" height="66" rx="10"/><text class="t-mut" x="34" y="236">RUNTIME BRANCH</text><text class="" x="34" y="259"><tspan class="t-k">npm_execpath</tspan> <tspan class="t-gld">set?</tspan></text><path class="ar ok" d="M284 243 C 308 243, 306 96, 330 96"/><rect class="lane ok" x="340" y="24" width="544" height="122" rx="13"/><text class="t-mut t-grn" x="360" y="50">SET  →  SAFE PATH</text><rect class="bx ok" x="360" y="62" width="292" height="66" rx="10"/><text class="t-k" x="376" y="88">execFileSync(execPath, args)</text><text class="t-sm t-grn" x="376" y="108">argv array · no shell</text><path class="ar ok" d="M652 95 L 690 95"/><rect class="bx ok" x="698" y="70" width="168" height="50" rx="10"/><text class="t-grn" x="714" y="100">arg stays data</text><path class="ar bad" d="M284 243 C 310 243, 312 243, 330 243"/><rect class="lane bad" x="340" y="166" width="544" height="148" rx="13"/><text class="t-mut t-red" x="360" y="192">UNSET  →  FALLBACK</text><rect class="bx bad" x="360" y="204" width="300" height="66" rx="10"/><text class="t-k" x="374" y="230">execSync('npm ' + args.join(' '))</text><text class="t-sm" x="374" y="250">one concatenated string</text><path class="ar bad" d="M660 237 L 692 237"/><rect class="bx bad" x="700" y="210" width="166" height="54" rx="10"/><text class="t-red" x="714" y="234">/bin/sh -c</text><text class="t-sm t-red" x="714" y="253">; &amp;&amp; | $( )</text><text class="t-red t-sm" x="360" y="292">→ arbitrary command runs as the CI/CD user</text></svg></div>
+        <figcaption data-i18n="dg1"><b>Hai nhánh, một lối thoát.</b> Khi <code>npm_execpath</code> có giá trị, tool gọi <code>execFileSync</code> và tham số đi qua dạng mảng - shell không tham gia. Chỉ khi biến này rỗng, nhánh fallback mới nối tất cả thành một chuỗi rồi giao cho shell, và mọi metacharacter trong <code>--workspace</code> được diễn giải như lệnh.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.map">Vị trí chính xác trong code</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 320" role="img" aria-labelledby="cm55849"><title id="cm55849">the executor returned when npm_execpath is empty</title><desc>the executor returned when npm_execpath is empty</desc><rect class="frame" x="16" y="20" width="868" height="252" rx="14"/><text class="t-mut" x="34" y="41">REPO</text><text class="t-sm" x="84" y="41">CycloneDX/cyclonedx-node-npm</text><rect class="frame f2" x="40" y="52" width="820" height="204" rx="12"/><text class="t-mut" x="58" y="73">FILE</text><text class="t-sm t-gld" x="102" y="73">src/npmRunner.ts</text><rect class="frame f3" x="64" y="84" width="772" height="156" rx="11"/><text class="t-mut" x="82" y="105">SCOPE</text><text class="t-sm" x="136" y="105">the executor returned when npm_execpath is empty</text><rect class="ln" x="82" y="116" width="736" height="32" rx="8"/><text class="fx " x="122" y="137" textLength="380.7" lengthAdjust="spacing" xml:space="preserve">// - since we have complete control over `args`</text><rect class="ln hit" x="82" y="155" width="736" height="32" rx="8"/><rect class="ln-bar" x="92" y="163" width="4" height="16" rx="2"/><text class="fx t-k t-red" x="122" y="176" textLength="550.8" lengthAdjust="spacing" xml:space="preserve">return (args, options) =&gt; execSync('npm ' + args.join(' '), options)</text><rect class="ln ok" x="82" y="194" width="736" height="32" rx="8"/><path class="ico-ok" d="M97 215 l3.5 4 L108 208.5"/><text class="fx t-grn" x="122" y="215" textLength="607.5" lengthAdjust="spacing" xml:space="preserve">return (args, options) =&gt; execFileSync(execPath, args, options)   // v5.0.0</text><rect class="chip bad" x="16.0" y="284" width="198.5" height="28" rx="9"/><text class="t-sm t-red" x="29.0" y="304">args holds the user value</text><rect class="chip bad" x="224.5" y="284" width="177.8" height="28" rx="9"/><text class="t-sm t-red" x="237.5" y="304">joined into one string</text><rect class="chip bad" x="412.3" y="284" width="143.3" height="28" rx="9"/><text class="t-sm t-red" x="425.3" y="304">handed to /bin/sh</text></svg></div>
+        <figcaption data-i18n="cm1">Thu hẹp dần: repo → <code>src/npmRunner.ts</code> → nhánh executor khi <code>npm_execpath</code> rỗng → đúng một dòng gọi <code>execSync</code>. Dòng xanh là bản vá 5.0.0 thay thế nó.</figcaption>
+      </figure>
+
       <h3 class="detail-h3" data-i18n="detail.code">Đoạn code gây ra lỗ hổng</h3>
       <div class="code">
               <div class="code-bar"><span class="lang">TypeScript</span><span class="path" data-i18n="c1.path1">src/npmRunner.ts - trước v5.0.0</span><button type="button" class="copy">Copy</button></div>
@@ -1577,6 +874,7 @@ xcrun simctl install <span class="s">"x"</span> <span class="hl">&amp;&amp; id &
       <div class="detail-facts">
         <div class="cve-head">
           <span class="pkg">nextcloud-mcp-server</span>
+            <span class="badge">★ Featured</span>
         </div>
         <div class="vector"><b>CVSS 3.1</b>&nbsp; AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H</div>
         <div class="ver-row">
@@ -1611,6 +909,24 @@ xcrun simctl install <span class="s">"x"</span> <span class="hl">&amp;&amp; id &
               search index của toàn bộ user - muốn khôi phục phải re-scan lại từ đầu.
             </p>
           </div>
+
+      <h3 class="detail-h3" data-i18n="detail.arch">Cơ chế dự án</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 204" role="img" aria-labelledby="ar55640"><title id="ar55640">the webhook is what keeps the vector index in sync with the user's Nextcloud files</title><desc>the webhook is what keeps the vector index in sync with the user's Nextcloud files</desc><rect class="bx src" x="16.0" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="31.0" y="111">Nextcloud</text><text class="t-sm" x="31.0" y="133">file events</text><path class="ar " d="M167.4 116 L 189.4 116"/><rect class="bx bad" x="196.4" y="78" width="146.4" height="76" rx="10"/><text class="t-k t-red" x="211.4" y="111">POST /webhooks</text><text class="t-sm" x="211.4" y="133">nextcloud</text><path class="ar " d="M347.8 116 L 369.8 116"/><rect class="bx " x="376.8" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="391.8" y="111">MCP server</text><text class="t-sm" x="391.8" y="133">vector sync</text><path class="ar " d="M528.2 116 L 550.2 116"/><rect class="bx " x="557.2" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="572.2" y="111">Qdrant</text><text class="t-sm" x="572.2" y="133">embeddings</text><path class="ar " d="M708.6 116 L 730.6 116"/><rect class="bx " x="737.6" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="752.6" y="111">LLM client</text><text class="t-sm" x="752.6" y="133">semantic search</text><rect class="pin" x="196.4" y="16" width="115.7" height="30" rx="9"/><text class="t-sm t-red" x="209.4" y="36">the only gate</text><path class="pin-tip" d="M216.4 46 L236.4 46 L226.4 64 z"/><text class="t-sm t-gld" x="16" y="186">the webhook is what keeps the vector index in sync with the user's Nextcloud files</text></svg></div>
+        <figcaption data-i18n="ar3">Nextcloud bắn sự kiện file qua webhook để MCP server cập nhật vector index trong Qdrant, phục vụ semantic search cho LLM client. Endpoint webhook là cửa duy nhất - và cửa đó không khoá.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.diagram">Đường đi của lỗ hổng</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 318" role="img" aria-labelledby="dg55640"><title id="dg55640">Webhook fail-open va uid lay tu payload dan toi xoa vector cua moi user</title><desc>Webhook fail-open va uid lay tu payload dan toi xoa vector cua moi user</desc><rect class="bx src" x="16" y="24" width="288" height="84" rx="10"/><text class="t-mut" x="34" y="50">NO CREDENTIAL NEEDED</text><text class="t-k" x="34" y="74">POST /webhooks/</text><text class="t-k" x="34" y="94">nextcloud</text><path class="ar " d="M304 66 L 344 66"/><rect class="bx warn" x="352" y="24" width="244" height="84" rx="10"/><text class="t-mut" x="370" y="50">THE ONLY GATE</text><text class="t-k" x="370" y="74">if secret:</text><text class="t-sm t-gld" x="370" y="94">webhook_secret = None</text><path class="ar ok" d="M596 52 C 620 52, 620 42, 644 42"/><path class="ar bad" d="M596 84 C 620 84, 620 104, 644 104"/><rect class="bx ok" x="652" y="16" width="232" height="52" rx="10"/><text class="t-sm t-grn" x="668" y="38">hmac.compare_digest → 401</text><text class="t-sm" x="668" y="57">branch never taken by default</text><rect class="bx bad" x="652" y="78" width="232" height="56" rx="10"/><text class="t-sm t-red" x="668" y="102">_warn_missing_secret_once()</text><text class="t-sm t-red" x="668" y="121">request keeps processing</text><path class="ar bad" d="M768 134 L 768 148 Q 768 158 758 158 L 190 158 Q 180 158 180 168 L 180 174"/><rect class="lane bad" x="16" y="180" width="868" height="128" rx="13"/><text class="t-mut t-red" x="36" y="206">SECOND DEFECT · IDENTITY COMES FROM THE BODY</text><rect class="bx bad" x="36" y="218" width="330" height="68" rx="10"/><text class="t-k" x="52" y="244">payload["user"]["uid"]</text><text class="t-sm t-red" x="52" y="264">attacker names the victim</text><path class="ar bad" d="M366 252 L 404 252"/><rect class="bx bad" x="412" y="218" width="452" height="68" rx="10"/><text class="t-k" x="430" y="244">Qdrant · delete or re-index any user's vectors</text><text class="t-sm" x="430" y="264">recovery means a full re-scan from scratch</text></svg></div>
+        <figcaption data-i18n="dg3"><b>Hai khiếm khuyết chồng lên nhau.</b> Cổng kiểm tra chữ ký nằm trong <code>if secret:</code> nên ở cấu hình mặc định nó không chạy - request đi tiếp sau đúng một dòng warning. Ngay sau đó, danh tính người dùng lại đọc từ chính body của request, nên attacker tự chọn được mình là ai.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.map">Vị trí chính xác trong code</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 359" role="img" aria-labelledby="cm55640"><title id="cm55640">the signature check on POST /webhooks/nextcloud</title><desc>the signature check on POST /webhooks/nextcloud</desc><rect class="frame" x="16" y="20" width="868" height="291" rx="14"/><text class="t-mut" x="34" y="41">REPO</text><text class="t-sm" x="84" y="41">cbcoutinho/nextcloud-mcp-server</text><rect class="frame f2" x="40" y="52" width="820" height="243" rx="12"/><text class="t-mut" x="58" y="73">FILE</text><text class="t-sm t-gld" x="102" y="73">vector/webhook_receiver.py</text><rect class="frame f3" x="64" y="84" width="772" height="195" rx="11"/><text class="t-mut" x="82" y="105">SCOPE</text><text class="t-sm" x="136" y="105">the signature check on POST /webhooks/nextcloud</text><rect class="ln" x="82" y="116" width="736" height="32" rx="8"/><text class="fx " x="122" y="137" textLength="307.8" lengthAdjust="spacing" xml:space="preserve">secret = get_settings().webhook_secret</text><rect class="ln ok" x="82" y="155" width="736" height="32" rx="8"/><path class="ico-ok" d="M97 176 l3.5 4 L108 169.5"/><text class="fx t-grn" x="122" y="176" textLength="510.3" lengthAdjust="spacing" xml:space="preserve">if secret:  ...  hmac.compare_digest(provided, expected) -&gt; 401</text><rect class="ln hit" x="82" y="194" width="736" height="32" rx="8"/><rect class="ln-bar" x="92" y="202" width="4" height="16" rx="2"/><text class="fx t-k t-red" x="122" y="215" textLength="494.1" lengthAdjust="spacing" xml:space="preserve">else: _warn_missing_secret_once()   # and the request goes on</text><rect class="ln ghost" x="82" y="233" width="736" height="32" rx="8"/><path class="ico-bad" d="M97 248.5 l11 11 M108 248.5 l-11 11"/><text class="fx ghost-tx" x="122" y="254" textLength="494.1" lengthAdjust="spacing" xml:space="preserve">if not secret: return 401   # the branch that was never there</text><rect class="chip bad" x="16.0" y="323" width="239.9" height="28" rx="9"/><text class="t-sm t-red" x="29.0" y="343">webhook_secret defaults to None</text><rect class="chip bad" x="265.9" y="323" width="205.4" height="28" rx="9"/><text class="t-sm t-red" x="278.9" y="343">fail-open, not fail-closed</text><rect class="chip bad" x="481.3" y="323" width="239.9" height="28" rx="9"/><text class="t-sm t-red" x="494.3" y="343">uid parsed in webhook_parser.py</text></svg></div>
+        <figcaption data-i18n="cm3">Dòng nét đứt là hàng rào lẽ ra phải có: chặn request khi secret rỗng. Vì nó không tồn tại, nhánh <code>else</code> chỉ ghi log rồi cho request đi tiếp.</figcaption>
+      </figure>
 
       <h3 class="detail-h3" data-i18n="detail.code">Đoạn code gây ra lỗ hổng</h3>
       <div class="code">
@@ -1661,8 +977,8 @@ xcrun simctl install <span class="s">"x"</span> <span class="hl">&amp;&amp; id &
           </div></div>
         </div>
 
-      <a class="cve-link" href="https://github.com/cbcoutinho/nextcloud-mcp-server/security/advisories/GHSA-8vh3-g2qg-2h2c" target="_blank" rel="noopener noreferrer" data-i18n="link.ghsa">
-            Xem advisory GHSA ↗
+      <a class="cve-link" href="https://www.cve.org/CVERecord?id=CVE-2026-55640" target="_blank" rel="noopener noreferrer" data-i18n="link.cve">
+            Xem bản ghi trên cve.org ↗
           </a>
     </div>
   </section>
@@ -1721,6 +1037,24 @@ xcrun simctl install <span class="s">"x"</span> <span class="hl">&amp;&amp; id &
               hay tính sẵn sàng.
             </p>
           </div>
+
+      <h3 class="detail-h3" data-i18n="detail.arch">Cơ chế dự án</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 204" role="img" aria-labelledby="ar57207"><title id="ar57207">the server carries the NetBox token - reaching the port means borrowing it</title><desc>the server carries the NetBox token - reaching the port means borrowing it</desc><rect class="bx src" x="16.0" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="31.0" y="111">MCP client</text><text class="t-sm" x="31.0" y="133">IDE or agent</text><path class="ar " d="M167.4 116 L 189.4 116"/><rect class="bx bad" x="196.4" y="78" width="146.4" height="76" rx="10"/><text class="t-k t-red" x="211.4" y="111">:8000 http</text><text class="t-sm" x="211.4" y="133">transport</text><path class="ar " d="M347.8 116 L 369.8 116"/><rect class="bx " x="376.8" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="391.8" y="111">FastMCP server</text><text class="t-sm" x="391.8" y="133">4 NetBox tools</text><path class="ar " d="M528.2 116 L 550.2 116"/><rect class="bx " x="557.2" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="572.2" y="111">NetBox API</text><text class="t-sm" x="572.2" y="133">server's token</text><path class="ar " d="M708.6 116 L 730.6 116"/><rect class="bx " x="737.6" y="78" width="146.4" height="76" rx="10"/><text class="t-k" x="752.6" y="111">NetBox data</text><text class="t-sm" x="752.6" y="133">devices · IPs</text><rect class="pin" x="196.4" y="16" width="115.7" height="30" rx="9"/><text class="t-sm t-red" x="209.4" y="36">no auth layer</text><path class="pin-tip" d="M216.4 46 L236.4 46 L226.4 64 z"/><text class="t-sm t-gld" x="16" y="186">the server carries the NetBox token - reaching the port means borrowing it</text></svg></div>
+        <figcaption data-i18n="ar4">MCP server đứng giữa client và NetBox, và chính nó giữ token NetBox. Vì vậy chạm được tới port 8000 đồng nghĩa với mượn được quyền của token đó, không cần credential nào của riêng mình.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.diagram">Đường đi của lỗ hổng</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 296" role="img" aria-labelledby="dg57207"><title id="dg57207">CORS duoc lap nhung lop auth thi khong, moi client deu goi duoc 4 tool NetBox</title><desc>CORS duoc lap nhung lop auth thi khong, moi client deu goi duoc 4 tool NetBox</desc><rect class="bx src" x="16" y="118" width="186" height="84" rx="10"/><text class="t-mut" x="32" y="144">ANY CLIENT</text><text class="t-k" x="32" y="168">→ :8000</text><text class="t-sm t-red" x="32" y="188">HOST=0.0.0.0</text><path class="ar " d="M202 160 L 240 160"/><text class="t-mut" x="268" y="40">MIDDLEWARE STACK · FastMCP</text><rect class="bx ok" x="248" y="52" width="356" height="56" rx="10"/><path class="ico-ok" d="M268 86 l3.5 4 L279 79.5"/><text class="t-k" x="292" y="86">CORSMiddleware</text><text class="t-sm" x="292" y="100"></text><rect class="bx gap" x="248" y="118" width="356" height="66" rx="10"/><path class="ico-bad" d="M268 144.5 l11 11 M279 144.5 l-11 11"/><text class="t-k t-red" x="292" y="148">auth middleware — NEVER INSTALLED</text><text class="t-sm t-red" x="292" y="168">mcp.auth is None, so FastMCP skips it</text><rect class="bx " x="248" y="194" width="356" height="56" rx="10"/><text class="t-k" x="268" y="220">MCP session opens for anyone</text><text class="t-sm" x="268" y="238">initialize → tools/list → tools/call</text><path class="ar bad" d="M604 222 C 632 222, 630 186, 652 186"/><rect class="lane bad" x="660" y="96" width="224" height="180" rx="13"/><text class="t-mut t-red" x="678" y="122">4 NETBOX TOOLS</text><text class="t-sm" x="678" y="148">devices · IPs · VLANs</text><text class="t-sm" x="678" y="170">racks · circuits · VMs</text><text class="t-sm" x="678" y="192">changelog (usernames)</text><text class="t-red" x="678" y="226">full read access</text><text class="t-sm t-red" x="678" y="248">no credential at all</text><text class="t-sm t-gld" x="248" y="274">README documents -p 8000:8000 in three places, never mentions auth</text></svg></div>
+        <figcaption data-i18n="dg4"><b>Viên gạch không bao giờ được đặt.</b> Stack middleware chỉ có CORS; FastMCP chỉ gắn lớp xác thực khi <code>mcp.auth</code> có giá trị, mà giá trị đó không bao giờ được set. Ai chạm tới port đều mở được session hợp lệ và gọi cả bốn tool.</figcaption>
+      </figure>
+
+      <h3 class="detail-h3" data-i18n="detail.map">Vị trí chính xác trong code</h3>
+      <figure class="vd reveal">
+        <div class="vd-scroll"><svg viewBox="0 0 900 359" role="img" aria-labelledby="cm57207"><title id="cm57207">server startup, where the middleware stack is built</title><desc>server startup, where the middleware stack is built</desc><rect class="frame" x="16" y="20" width="868" height="291" rx="14"/><text class="t-mut" x="34" y="41">REPO</text><text class="t-sm" x="84" y="41">netboxlabs/netbox-mcp-server</text><rect class="frame f2" x="40" y="52" width="820" height="243" rx="12"/><text class="t-mut" x="58" y="73">FILE</text><text class="t-sm t-gld" x="102" y="73">src/netbox_mcp_server/server.py</text><rect class="frame f3" x="64" y="84" width="772" height="195" rx="11"/><text class="t-mut" x="82" y="105">SCOPE</text><text class="t-sm" x="136" y="105">server startup, where the middleware stack is built</text><rect class="ln" x="82" y="116" width="736" height="32" rx="8"/><text class="fx " x="122" y="137" textLength="186.3" lengthAdjust="spacing" xml:space="preserve">mcp = FastMCP("NetBox")</text><rect class="ln" x="82" y="155" width="736" height="32" rx="8"/><text class="fx " x="122" y="176" textLength="486.0" lengthAdjust="spacing" xml:space="preserve">middleware = [Middleware(CORSMiddleware, allow_origins=...)]</text><rect class="ln ghost" x="82" y="194" width="736" height="32" rx="8"/><path class="ico-bad" d="M97 209.5 l11 11 M108 209.5 l-11 11"/><text class="fx ghost-tx" x="122" y="215" textLength="542.7" lengthAdjust="spacing" xml:space="preserve">mcp.auth = &lt;a provider&gt;   # never assigned, so FastMCP adds no auth</text><rect class="ln hit" x="82" y="233" width="736" height="32" rx="8"/><rect class="ln-bar" x="92" y="241" width="4" height="16" rx="2"/><text class="fx t-k t-red" x="122" y="254" textLength="550.8" lengthAdjust="spacing" xml:space="preserve">mcp.run(transport="http", host=settings.host, middleware=middleware)</text><rect class="chip bad" x="16.0" y="323" width="184.7" height="28" rx="9"/><text class="t-sm t-red" x="29.0" y="343">CORS is the whole stack</text><rect class="chip bad" x="210.7" y="323" width="198.5" height="28" rx="9"/><text class="t-sm t-red" x="223.7" y="343">README ships -p 8000:8000</text></svg></div>
+        <figcaption data-i18n="cm4">Không có dòng nào gán <code>mcp.auth</code>, nên FastMCP không gắn middleware xác thực - stack chỉ còn CORS, và <code>mcp.run()</code> mở cổng cho tất cả.</figcaption>
+      </figure>
 
       <h3 class="detail-h3" data-i18n="detail.code">Đoạn code gây ra lỗ hổng</h3>
       <div class="code">
@@ -1885,1010 +1219,6 @@ middleware = [
 
 <button type="button" id="toTop" aria-label="Lên đầu trang">↑</button>
 
-<script>
-const I18N = {
-  vi: {
-    "meta.title": "Fortress - Võ Phú Vinh | Security Researcher",
-    "meta.desc": "Võ Phú Vinh (Fortress) - sinh viên An toàn thông tin HCMUTE, security researcher với nhiều CVE được ghi nhận.",
-
-    "nav.home": "Trang chủ",
-    "nav.writeup": "Writeup",
-    "nav.journey": "Hành trình",
-    "nav.contact": "Liên hệ",
-
-    "hero.desc": "Sinh viên ngành <strong>An toàn thông tin</strong> tại HCMUTE. Mình tìm và báo cáo có trách nhiệm các lỗ hổng trong dự án mã nguồn mở - đến nay đã có <strong>nhiều CVE được ghi nhận</strong>.",
-    "hero.btn1": "Xem bản tin CVE",
-    "hero.btn2": "Liên hệ",
-
-    "about.h2": "Về <span class=\"grad-text\">tôi</span>",
-    "about.sub": "Một chút về người đứng sau những báo cáo lỗ hổng.",
-    "about.p1": "Mình là <strong>Võ Phú Vinh</strong> <strong>(Fortress)</strong>. Hiện là sinh viên chuyên ngành <strong>An toàn thông tin</strong> tại <strong>Trường Đại học Công nghệ Kỹ thuật TP.HCM</strong> (tên cũ: Trường Đại học Sư phạm Kỹ thuật TP.HCM).",
-    "about.p2": "Hướng đi hiện tại mình đang theo đuổi là đọc source code của các dự án mã nguồn mở để tìm lỗ hổng, rồi <strong>báo cáo có trách nhiệm</strong> cho maintainer trước khi công bố.",
-    "fact1.k": "Học vấn",
-    "fact1.v": "Sinh viên năm 2 - An toàn thông tin, HCMUTE",
-    "fact4.k": "Điểm trung bình",
-    "fact4.v": "GPA 3.07 / 4.0",
-    "fact2.k": "Hướng nghiên cứu",
-    "fact2.v": "Vulnerability research &amp; responsible disclosure",
-    "fact3.k": "Email",
-    "stat0": "Finding được ghi nhận",
-    "stat1": "CVE được ghi nhận",
-    "stat2": "Dự án mã nguồn mở",
-    "stat3": "Lớp CWE khác nhau",
-    "stat4": "Bug bounty được thưởng",
-
-    "home.h2": "Bản tin <span class=\"grad-text\">lỗ hổng</span>",
-    "home.sub": "Toàn bộ finding mình đã báo cáo - CVE, advisory được publish nhưng không xin CVE, và bug bounty được ghi nhận. Mới nhất xếp trước, mỗi card gồm tóm tắt kỹ thuật, ảnh hưởng và đoạn code gốc gây ra lỗ hổng.",
-    "filter.aria": "Lọc theo loại finding",
-    "filter.all": "Tất cả",
-    "filter.cve": "CVE",
-    "filter.advisory": "Advisory (không CVE)",
-    "filter.bounty": "Bug bounty",
-    "kind.advisory": "Advisory · không CVE",
-    "status.state": "Trạng thái",
-    "status.updated": "Cập nhật gần đây",
-    "feed.all": "Xem tất cả writeup →",
-    "link.more": "Xem chi tiết →",
-    "link.back": "← Quay lại danh sách writeup",
-    "detail.code": "Đoạn code gây ra lỗ hổng",
-    "detail.process": "Quá trình phát hiện",
-    "c5.teaser": "Thư viện protobuf của Mapbox dựng mã bằng <code>new Function()</code>; mọi định danh trong schema đều được kiểm, riêng <code>field.tag</code> thì không - đủ để mang JavaScript tùy ý vào reader và writer.",
-    "c4.teaser": "Bản vá cho CVE-2026-55849 chặn được shell trên Linux nhưng để lại một nhánh <code>cmd.exe /c</code> chỉ có trên Windows - lệnh vẫn chèn được qua <code>--workspace</code>.",
-    "c1.teaser": "Chèn lệnh hệ điều hành qua option <code>--workspace</code> của một tool sinh SBOM chạy tự động trong pipeline CI/CD.",
-    "c2.teaser": "Webhook endpoint không xác thực theo mặc định, cộng thêm uid lấy thẳng từ payload - đủ để xoá sạch vector index của mọi user.",
-    "c3.teaser": "Endpoint MCP mở toang khi chạy <code>TRANSPORT=http</code>, đọc được toàn bộ dữ liệu hạ tầng NetBox mà không cần credential.",
-    "label.summary": "Tóm tắt",
-    "label.impact": "Ảnh hưởng",
-
-    "c5.summary": "<code>compile.js</code> của pbf dựng mã JavaScript dưới dạng chuỗi rồi chạy nó qua <code>new Function()</code>. Mọi định danh lấy từ schema - tên message, tên field, tên oneof, tên enum value - đều đi qua <code>validateIdentifier()</code> trước, riêng <code>field.tag</code> thì không. Giá trị tag được chèn thẳng vào mã sinh ra mà không qua bất kỳ bước kiểm nào, nên một schema có <code>field.tag</code> là chuỗi có thể mang JavaScript tùy ý vào cả reader lẫn writer được biên dịch.",
-    "c5.impact": "Bất kỳ ứng dụng nào gọi <code>compile()</code> / <code>compileRaw()</code> trên một schema protobuf đến từ nguồn do người dùng kiểm soát - ví dụ schema descriptor nhận qua JSON hoặc qua API - sẽ thực thi JavaScript của attacker ngay trong tiến trình của mình. Attacker chỉ cần gửi một schema trong đó tag của một field là chuỗi được dựng sẵn; ngay khi nạn nhân compile schema đó, code chạy với đúng quyền của tiến trình nạn nhân, mà message vẫn decode ra giá trị bình thường nên injection không lộ ra ở output. Phạm vi: luồng <code>.proto</code> được tài liệu hóa (<code>schema.parse</code>) không bị ảnh hưởng vì tag luôn được ép qua <code>Number()</code> - vector nằm ở API nhận schema dạng object.",
-    "c5.path1": "compile.js - v5.1.1 trở về trước",
-    "c5.note1": "<b>Vấn đề:</b> <span>Toàn bộ chuỗi trên cuối cùng được đưa vào <code>new Function()</code>. Tag về mặt khái niệm là số nguyên, nhưng schema chỉ là một object JavaScript thuần - không có gì bắt <code>tag</code> phải là number, nên nó trở thành một lối vào không ai canh.</span>",
-    "c5.note2": "<b>Cách sửa:</b> <span>Bản vá thêm <code>validateTag()</code> vào đúng vòng lặp đã có sẵn <code>validateIdentifier()</code>: tag phải là số nguyên trong khoảng <code>[1, 2^29 - 1]</code>, chuỗi số vẫn được chấp nhận để không phá luồng <code>.proto</code>, còn lại thì throw.</span>",
-    "c5.ver1": "Bị ảnh hưởng: ≤ 5.1.1 (kiểm chứng trên 5.1.0)",
-    "c5.ver2": "Đã sửa: 5.1.2",
-    "c5.ver3": "Không bị ảnh hưởng: luồng .proto qua schema.parse",
-    "c6.teaser": "Tham số <code>udid</code> đi thẳng vào chuỗi lệnh shell của tool <code>prepare_ios_simulator</code> - mọi MCP client kết nối tới đều chạy được lệnh tùy ý trên máy host.",
-    "c6.summary": "Tool <code>prepare_ios_simulator</code> nhận tham số <code>udid</code> từ MCP client rồi nội suy thẳng vào chuỗi lệnh shell qua <code>execAsync</code>, ở bốn call site khác nhau. Lớp bảo vệ duy nhất là cặp dấu nháy kép bao quanh giá trị - nhưng nháy kép nằm ngay trong chuỗi do attacker kiểm soát, nên chỉ cần đóng nháy sớm là thoát được ra ngoài câu lệnh dự kiến.",
-    "c6.impact": "Bất kỳ MCP client nào kết nối tới server đều thực thi được lệnh hệ điều hành tùy ý trên máy host, với quyền của tiến trình MCP server - đọc toàn bộ filesystem, lấy credential, và từ đó mở rộng sang các hệ thống khác. Đáng lo hơn ở bối cảnh MCP, vì tham số của tool call thường do một mô hình sinh ra: nội dung không đáng tin có thể đi thẳng vào <code>udid</code> mà không qua mắt người dùng.",
-    "c6.nocve": "<b>Vì sao không có CVE:</b> <span>Advisory đã publish công khai trên repo appium/appium-mcp và ghi nhận mình là người báo cáo, nhưng không có CVE ID nào được cấp. Quyền request CVE thuộc về phía maintainer, và họ đã không request - mình có mong muốn được cấp CVE và đã nói rõ điều đó với họ, nhưng tới giờ vẫn chưa biết lý do. Hệ quả là finding này không nằm trong GitHub Global Advisory Database và không hiện khi chạy <code>npm audit</code>. Mình vẫn liệt kê ở đây, gắn nhãn đúng bản chất: một finding được publish và được ghi nhận, không phải một CVE.</span>",
-    "c6.path1": "src/tools/ios/prepare-ios-simulator.ts - trước v1.86.5",
-    "c6.note1": "<b>Vấn đề:</b> <span><code>execAsync</code> là <code>exec()</code> của Node - luôn đi qua shell. Giá trị <code>udid</code> đến thẳng từ tham số của tool call, không hề được kiểm định dạng, trong khi một UDID hợp lệ chỉ gồm hex và dấu gạch ngang.</span>",
-    "c6.note2": "<b>Vì sao nháy kép không cứu được:</b> <span>Dấu nháy do template literal thêm vào bị chính payload đóng lại sớm. Phần <code>echo \"x</code> ở cuối chỉ để mở lại nháy cho vế sau, giúp câu lệnh vẫn hợp lệ và không văng lỗi cú pháp - lệnh chèn vào chạy trọn vẹn.</span>",
-    "c6.ver1": "Bị ảnh hưởng: ≥ 1.49.0, ≤ 1.86.4",
-    "c6.ver2": "Đã sửa: 1.86.5",
-    "c5.vector": "<b>CVSS 3.1 · tự chấm</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-    "badge.rewarded": "Đã được thưởng",
-
-    "c4.summary": "Bản vá v5.0.0 của CVE-2026-55849 thay <code>execSync</code> bằng <code>execFileSync</code>, nhưng đồng thời thêm một nhánh riêng cho Windows. Khi npm được phân giải thành một batch file (<code>npm.cmd</code>), tool chạy <code>execFileSync('cmd.exe', ['/c', execPath, ...args])</code>. Node escape tham số theo quy ước <code>CommandLineToArgvW</code>, nhưng <code>cmd.exe</code> lại parse dòng lệnh bằng bộ luật riêng: nó xử lý các metacharacter <code>&amp;</code>, <code>|</code>, <code>&gt;</code>, <code>^</code> trước và không hiểu escape kiểu <code>&#92;&quot;</code>. Vì vậy giá trị <code>--workspace</code> do người dùng cung cấp vẫn thoát ra được khỏi câu lệnh dự kiến - lần này chỉ trên Windows.",
-    "c4.impact": "Thực thi lệnh tùy ý với quyền của user đang chạy CLI trên máy Windows - rút dữ liệu, sửa hoặc xóa file, và tùy cách triển khai có thể dẫn tới leo thang đặc quyền. Vì đây vẫn là tool sinh SBOM chạy tự động trong pipeline, các Windows CI runner là mục tiêu trực tiếp. Đáng chú ý: đây là bản vá của một CVE trước đó, nên những ai đã nâng cấp lên 5.0.0 để tránh CVE-2026-55849 vẫn còn nằm trong vùng ảnh hưởng.",
-    "c4.path1": "src/npmRunner.ts - v5.0.0",
-    "c4.note1": "<b>Vấn đề:</b> <span><code>execFileSync</code> không đi qua shell của Node - nhưng ở đây chính <code>cmd.exe</code> mới là shell. Toàn bộ <code>args</code> được ghép lại thành một command line rồi giao cho <code>cmd.exe /c</code> diễn giải lại theo luật của nó.</span>",
-    "c4.note2": "<b>Cách sửa:</b> <span>v6.0.0 bỏ hẳn nhánh <code>cmd.exe</code>. Chỉ chấp nhận đường dẫn tới npm CLI dạng <code>.js</code>, còn lại thì throw, và luôn gọi qua <code>node -- npm-cli.js</code> với <code>shell: false</code>. Không còn shell nào trong luồng thì không còn metacharacter nào để diễn giải.</span>",
-    "c4.ver1": "Bị ảnh hưởng: 5.0.0 (chỉ trên Windows)",
-    "c4.ver2": "Đã sửa: 6.0.0",
-    "c4.ver3": "Tạm thời: trỏ npm_execpath tới npm-cli.js",
-
-    "c1.summary": "Chèn lệnh hệ điều hành qua option <code>--workspace &lt;value&gt;</code>. Khi biến môi trường <code>npm_execpath</code> được set, tool gọi thẳng npm executable nên an toàn. Nhưng nếu <code>npm_execpath</code> rỗng hoặc không set, tool rơi vào nhánh fallback: spawn một subshell và nối thẳng chuỗi <code>'npm ' + args.join(' ')</code> mà không escape. Các ký tự đặc biệt của shell như <code>;</code>, <code>&amp;&amp;</code>, <code>|</code> được shell diễn giải, cho phép thoát khỏi câu lệnh dự kiến.",
-    "c1.impact": "Thực thi lệnh tùy ý với quyền của user đang chạy CLI - rút dữ liệu, sửa hoặc xóa file, và tùy cách triển khai có thể dẫn tới leo thang đặc quyền. Đặc biệt đáng lo trong môi trường CI/CD, vì đây là tool sinh SBOM thường chạy tự động trong pipeline.",
-    "c1.path1": "src/npmRunner.ts - trước v5.0.0",
-    "c1.note1": "<b>Vấn đề:</b> <span><code>args</code> chứa giá trị <code>--workspace</code> do người dùng cung cấp, nhưng lại được nối thành chuỗi rồi đưa qua shell. Giả định “ta kiểm soát hoàn toàn args” trong comment là sai.</span>",
-    "c1.note2": "<b>Cách sửa:</b> <span>Thay <code>execSync</code> (đi qua shell) bằng <code>execFileSync</code> - truyền tham số dưới dạng mảng nên shell không còn diễn giải metacharacter.</span>",
-    "c1.ver1": "Bị ảnh hưởng: ≥ 2.1.0, &lt; 5.0.0",
-    "c1.ver2": "Đã sửa: 5.0.0",
-    "c1.ver3": "Tạm thời: set npm_execpath",
-
-    "c2.summary": "Endpoint <code>POST /webhooks/nextcloud</code> không xác thực theo mặc định, do hai nguyên nhân chồng lên nhau. Thứ nhất, <code>webhook_secret</code> mặc định là <code>None</code> và không có startup validator nào bắt buộc nó, kể cả khi vector sync đang bật. Thứ hai, toàn bộ phần kiểm tra nằm trong nhánh <code>if secret:</code> - nên khi secret không được set, nhánh kiểm tra bị bỏ qua hoàn toàn, chỉ ghi một dòng warning rồi vẫn xử lý request bình thường.",
-    "c2.impact": "Attacker không cần credential, chỉ cần tiếp cận được port 8000 là có thể xóa hoặc ép re-index vector embedding của bất kỳ user nào trong Qdrant. Kết hợp với việc <code>user_id</code> được lấy thẳng từ payload do attacker gửi, có thể giả mạo uid rồi loop qua doc ID để phá sạch semantic search index của toàn bộ user - muốn khôi phục phải re-scan lại từ đầu.",
-    "c2.note1": "<b>Vấn đề:</b> <span>Không có secret thì rơi vào nhánh <code>else</code> - chỉ log cảnh báo rồi tiếp tục xử lý request. Fail-open thay vì fail-closed.</span>",
-    "c2.note2": "<b>Vấn đề:</b> <span>Danh tính người dùng lấy thẳng từ body request, không đối chiếu với session hay token nào - vi phạm trust boundary, cho phép spoof uid.</span>",
-    "c2.ver1": "Bị ảnh hưởng: ≤ 0.117.1",
-    "c2.ver2": "Đã sửa: 0.117.2",
-
-    "c3.summary": "Khi chạy với <code>TRANSPORT=http</code>, endpoint MCP không có bất kỳ lớp xác thực nào. Project chỉ gắn <code>CORSMiddleware</code> và không bao giờ set <code>mcp.auth</code>, trong khi FastMCP chỉ bật auth middleware nếu <code>mcp.auth</code> có giá trị. Kết quả là ai chạm được tới port đều mở được session hợp lệ và gọi được cả 4 tool NetBox. Nghiêm trọng hơn, README hướng dẫn chạy Docker với <code>HOST=0.0.0.0</code> và <code>-p 8000:8000</code> ở ba chỗ mà không hề nhắc tới xác thực.",
-    "c3.impact": "Đọc được toàn bộ dữ liệu NetBox mà không cần credential - devices, IP, VLAN, rack, circuit, VM, và cả changelog có chứa username. Mất hoàn toàn tính bí mật, không ảnh hưởng tới tính toàn vẹn hay tính sẵn sàng.",
-    "c3.note1": "<b>Vấn đề:</b> <span>Không có dòng nào gán <code>mcp.auth</code> trong toàn bộ codebase. <code>\"Authorization\"</code> chỉ xuất hiện trong danh sách CORS header được phép - CORS là chính sách trình duyệt, không phải xác thực.</span>",
-    "c3.ver1": "Bị ảnh hưởng: ≤ 1.2.0",
-    "c3.ver2": "Đã sửa: 1.2.1",
-
-    "link.cve": "Xem bản ghi trên cve.org ↗",
-    "link.ghsa": "Xem advisory GHSA ↗",
-    "link.patch": "Xem bản vá (PR #149) ↗",
-
-    "journey.h2": "Hành <span class=\"grad-text\">trình</span>",
-    "journey.sub": "Các cột mốc theo thứ tự gần nhất trước, tính theo ngày advisory được công khai hoặc ngày báo cáo được ghi nhận.",
-    "tlb.time": "Đã vá 09/07/2026 · Mapbox Bug Bounty · HIGH",
-    "tlb.p": "<code>compile.js</code> sinh mã qua <code>new Function()</code> nhưng bỏ sót <code>field.tag</code> ở khâu kiểm định danh - một schema do attacker cung cấp chạy được JavaScript tùy ý. Mapbox vá chỉ một ngày sau khi mình báo cáo, ở phiên bản 5.1.2.",
-    "tl0.time": "Công khai 07/07/2026 · CVE-2026-71538 · HIGH",
-    "tla.time": "Công khai 28/06/2026 · GHSA (không CVE) · HIGH",
-    "tla.p": "Tham số <code>udid</code> của tool <code>prepare_ios_simulator</code> đi thẳng vào chuỗi lệnh shell, cho phép mọi MCP client chạy lệnh tùy ý trên máy host. Đã được sửa ở phiên bản 1.86.5. Advisory được publish và ghi nhận, nhưng maintainer không request CVE nên finding này không có CVE ID.",
-    "tl1.time": "Công khai 18/06/2026 · CVE-2026-57207 · MODERATE",
-    "tl2.time": "Công khai 16/06/2026 · CVE-2026-55849 · HIGH",
-    "tl3.time": "Công khai 14/06/2026 · CVE-2026-55640 · CRITICAL",
-    "tl0.p": "Bản vá của CVE-2026-55849 để lại một nhánh <code>cmd.exe /c</code> chỉ có trên Windows - <code>--workspace</code> vẫn chèn được lệnh. Đã được sửa ở phiên bản 6.0.0.",
-    "tl1.p": "Endpoint MCP không xác thực khi chạy <code>TRANSPORT=http</code>, đọc được toàn bộ dữ liệu hạ tầng NetBox mà không cần credential. Đã được sửa ở phiên bản 1.2.1.",
-    "tl2.p": "Chèn lệnh qua option <code>--workspace</code> khi <code>npm_execpath</code> không được set, dẫn tới thực thi lệnh tùy ý ngay trong pipeline CI/CD sinh SBOM. Đã được sửa ở phiên bản 5.0.0.",
-    "tl3.p": "Webhook endpoint không xác thực theo mặc định, cộng với uid lấy thẳng từ payload - cho phép phá sạch vector search index của mọi user. Đã được sửa ở phiên bản 0.117.2.",
-    "tl4.time": "NĂM NHẤT · HCMUTE",
-    "tl4.h3": "Bắt đầu nghiên cứu",
-    "tl4.sub": "An toàn thông tin - HCMUTE",
-    "tl4.p": "Ngay từ năm nhất, mình bắt đầu học nền tảng An toàn thông tin và tập đọc source code của các dự án mã nguồn mở để tìm lỗ hổng.",
-
-    "contact.h2": "Cùng <span class=\"grad-text\">kết nối</span> nhé",
-    "contact.p": "Nếu bạn muốn trao đổi về bảo mật, hợp tác nghiên cứu, hay đơn giản là làm quen - gửi mình một email hoặc kết nối qua các kênh bên dưới.",
-
-    "wu.h2": "Nhật ký <span class=\"grad-text\">săn lỗ hổng</span>",
-    "wu.sub": "Đằng sau mỗi CVE là một quá trình đọc code, đặt giả thuyết và kiểm chứng. Đây là cách mình đi từ dòng code đáng ngờ đến advisory được công bố.",
-    "wu1.s1h": "Vì sao chọn mục tiêu này",
-    "wu1.s1p": "Tool sinh SBOM là thứ chạy tự động trong pipeline CI/CD của rất nhiều dự án, thường với quyền khá rộng. Một lỗi thực thi lệnh ở đây có sức lan tỏa lớn hơn nhiều so với một ứng dụng đơn lẻ, nên mình ưu tiên đọc nhóm công cụ build-time trước.",
-    "wu1.s2h": "Manh mối đầu tiên",
-    "wu1.s2p": "Mình grep toàn bộ codebase tìm các hàm sinh process: <code>exec</code>, <code>execSync</code>, <code>spawn</code>. Ngay tại <code>npmRunner.ts</code> có một comment tự trấn an rằng “an toàn vì ta kiểm soát hoàn toàn args”. Comment kiểu này thường là dấu hiệu của một giả định chưa từng được kiểm chứng lại sau khi code thay đổi.",
-    "wu1.s3h": "Truy ngược luồng dữ liệu",
-    "wu1.s3p": "Lần ngược từ chỗ gọi <code>execSync</code> lên tới CLI, mình thấy giá trị của option <code>--workspace</code> đi thẳng vào mảng <code>args</code> mà không qua bất kỳ bước lọc nào. Giả định trong comment sụp đổ: một phần của <code>args</code> đến từ người dùng.",
-    "wu1.s4h": "Điều kiện kích hoạt",
-    "wu1.s4p": "Nhánh nguy hiểm chỉ chạy khi <code>npm_execpath</code> rỗng hoặc không được set - tức khi tool được gọi trực tiếp chứ không qua npm script. Đây chính là lý do lỗi sống sót lâu: ở luồng chạy phổ biến nhất, code đi vào nhánh an toàn.",
-    "wu1.s5h": "Báo cáo &amp; kết quả",
-    "wu1.s5p": "Mình gửi báo cáo riêng cho maintainer kèm PoC tối thiểu và đề xuất thay <code>execSync</code> bằng <code>execFileSync</code>. Bản vá ra mắt ở v5.0.0, CVE được cấp với điểm CVSS 4.0 là 8.5 (High).",
-    "wu2.s1h": "Bối cảnh",
-    "wu2.s1p": "MCP server là lớp phần mềm còn rất mới, mọc lên nhanh và phần lớn được viết với giả định “chỉ chạy trên máy cá nhân”. Giả định đó thường không còn đúng khi người dùng đem nó lên container và mở port ra ngoài.",
-    "wu2.s2h": "Điểm bất thường",
-    "wu2.s2p": "Mình rà các route nhận request từ bên ngoài và dừng lại ở webhook receiver. Toàn bộ đoạn kiểm tra chữ ký nằm gọn trong một khối <code>if secret:</code> - nghĩa là nếu secret không tồn tại, phần kiểm tra đơn giản là không chạy.",
-    "wu2.s3h": "Xác nhận giá trị mặc định",
-    "wu2.s3p": "Mình kiểm tra lớp settings: <code>webhook_secret</code> mặc định là <code>None</code>, và không có startup validator nào bắt buộc nó ngay cả khi tính năng vector sync đang bật. Vậy là cấu hình mặc định của dự án cũng chính là cấu hình không xác thực.",
-    "wu2.s4h": "Nâng mức nghiêm trọng",
-    "wu2.s4p": "Đọc tiếp phần parser, mình phát hiện <code>user_id</code> được lấy thẳng từ payload của request. Không chỉ vào được endpoint, attacker còn tự chọn được mình là ai - đủ để duyệt qua doc ID và xóa sạch vector index của mọi user.",
-    "wu2.s5h": "Báo cáo &amp; kết quả",
-    "wu2.s5p": "Mình báo cáo qua GitHub Security Advisory. Maintainer phản hồi nhanh, chuyển logic sang fail-closed và bắt buộc secret khi bật webhook. Đã sửa ở 0.117.2, điểm CVSS 3.1 là 9.1 (Critical).",
-    "wu3.s1h": "Mở rộng từ bài học trước",
-    "wu3.s1p": "Sau CVE-2026-55640, mình đặt giả thuyết rằng thiếu xác thực là vấn đề mang tính hệ thống của cả lớp MCP server, chứ không riêng một dự án. Mình lấy danh sách các MCP server phổ biến và rà lần lượt phần khởi tạo transport.",
-    "wu3.s2h": "Cái bẫy mang tên CORS",
-    "wu3.s2p": "Ở netbox-mcp-server, thoạt nhìn có vẻ ổn vì <code>\"Authorization\"</code> xuất hiện trong code. Nhưng nó chỉ nằm trong danh sách header được CORS cho phép. CORS là chính sách của trình duyệt, không hề chặn được một request gửi bằng curl.",
-    "wu3.s3h": "Kiểm chứng bằng cách tìm thứ không tồn tại",
-    "wu3.s3p": "FastMCP chỉ bật auth middleware khi <code>mcp.auth</code> có giá trị. Mình grep toàn bộ codebase và không tìm thấy một dòng nào gán thuộc tính đó. Đôi khi bằng chứng thuyết phục nhất của một lỗ hổng là sự vắng mặt hoàn toàn của đoạn code lẽ ra phải có.",
-    "wu3.s4h": "Tài liệu cũng là một phần của lỗ hổng",
-    "wu3.s4p": "README hướng dẫn chạy Docker với <code>HOST=0.0.0.0</code> và publish port ở ba chỗ khác nhau, không lần nào nhắc tới xác thực. Người dùng làm đúng theo tài liệu sẽ tự phơi dữ liệu hạ tầng của mình ra mạng - nên mình đưa thêm CWE-1059 vào báo cáo.",
-    "wu3.s5h": "Báo cáo &amp; kết quả",
-    "wu3.s5p": "NetBox Labs tiếp nhận và phát hành 1.2.1 kèm cập nhật tài liệu. CVE được cấp với điểm 5.9 (Moderate) - thấp hơn hai CVE trước vì chỉ ảnh hưởng tới tính bí mật.",
-    "wu4.s1h": "Đọc lại chính bản vá của mình",
-    "wu4.s1p": "Sau khi v5.0.0 ra mắt để vá CVE-2026-55849, mình không đóng hồ sơ mà đọc lại bản vá. Một thay đổi ở tầng sinh process là đúng chỗ dễ sinh ra lỗi mới nhất: người sửa đang bận nghĩ về lỗi cũ, không nghĩ về những đường đi khác.",
-    "wu4.s2h": "Bản vá không chỉ là một dòng",
-    "wu4.s2p": "v5.0.0 không đơn thuần đổi <code>execSync</code> thành <code>execFileSync</code>. Nó còn thêm một nhánh chỉ chạy trên Windows dành cho file <code>.cmd</code>/<code>.bat</code>, và nhánh đó gọi thẳng tên một shell: <code>cmd.exe</code>. Bất kỳ đoạn code nào tự tay gọi shell đều đáng xem lại lần hai.",
-    "wu4.s3h": "Node và cmd.exe không nói cùng một ngôn ngữ",
-    "wu4.s3p": "Node ghép mảng tham số thành command line theo quy ước <code>CommandLineToArgvW</code> - bọc dấu nháy kép, escape dấu nháy bằng dấu gạch chéo ngược. Nhưng <code>cmd.exe</code> không dùng bộ luật đó: nó xử lý <code>&amp;</code>, <code>|</code>, <code>&gt;</code>, <code>^</code> trước, và không hiểu <code>&#92;&quot;</code>. Đây đúng là lớp lỗi mà chính Node.js đã phải vá ở CVE-2024-27980.",
-    "wu4.s4h": "Nhánh nguy hiểm lại là nhánh mặc định",
-    "wu4.s4p": "Điểm khiến mức nghiêm trọng không giảm so với CVE cũ: trên Windows, việc dò npm hệ thống chạy <code>where npm</code>, và lệnh này gần như luôn trả về <code>npm.cmd</code>. Nghĩa là nhánh <code>cmd.exe</code> không phải trường hợp hiếm - nó là đường đi bình thường của mọi người dùng Windows.",
-    "wu4.s5h": "Báo cáo &amp; kết quả",
-    "wu4.s5p": "Mình báo cáo lại cho maintainer kèm PoC chạy trên Windows. Lần này họ bỏ hẳn nhánh <code>cmd.exe</code> thay vì chỉ escape thêm: v6.0.0 luôn phân giải về npm CLI dạng <code>.js</code> rồi gọi qua <code>node</code> với <code>shell: false</code>. CVE được cấp với điểm CVSS 4.0 là 8.5 (High) - bằng đúng CVE trước đó.",
-
-    "wu5.s1h": "Đổi lớp lỗi, giữ nguyên cách nghĩ",
-    "wu5.s1p": "Sau mấy CVE về command injection, mình chuyển sang một lớp lỗi họ hàng: code injection. Cách chọn mục tiêu vẫn thế - tìm nơi chương trình tự sinh ra mã rồi chạy chính nó bằng <code>new Function()</code> hay <code>eval</code>. pbf là thư viện protobuf nằm dưới Mapbox GL JS và rất nhiều pipeline vector tile, và <code>compile.js</code> của nó đúng là một code generator.",
-    "wu5.s2h": "Đã có hàng rào nghĩa là mối nguy đã được thừa nhận",
-    "wu5.s2p": "Một phiên bản trước đó đã thêm <code>validateIdentifier()</code> để chặn injection qua tên field. Với mình, một hàng rào có sẵn là tin tốt chứ không phải dấu hiệu nên bỏ qua: nó xác nhận mô hình nguy cơ đã được chính tác giả thừa nhận, và việc còn lại chỉ là kiểm kê xem hàng rào có phủ hết mọi lối vào hay chưa.",
-    "wu5.s3h": "Đối chiếu hai danh sách",
-    "wu5.s3p": "Mình liệt kê mọi giá trị lấy từ schema được nội suy vào chuỗi mã sinh ra, rồi đặt cạnh danh sách những giá trị thực sự đi qua <code>validateIdentifier()</code>. Tên message, tên field, tên oneof, tên enum value đều có mặt ở cả hai. <code>field.tag</code> chỉ có ở danh sách đầu - và nó xuất hiện ở cả nhánh đọc lẫn nhánh ghi.",
-    "wu5.s4h": "Vì sao lỗ hổng sống sót: kiểu dữ liệu nói dối",
-    "wu5.s4p": "Tag về mặt khái niệm là số nguyên, nên không ai nghĩ nó cần lọc. Nhưng đây là JavaScript và schema chỉ là object thuần - không có gì bắt buộc <code>tag</code> phải là number. Thêm nữa, parser <code>.proto</code> luôn ép tag qua <code>Number()</code>, nên đúng luồng được tài liệu hóa thì lỗi không bao giờ lộ ra. Vector chỉ mở khi ứng dụng nhận schema dạng object từ bên ngoài.",
-    "wu5.s5h": "Báo cáo &amp; kết quả",
-    "wu5.s5p": "Mình gửi báo cáo riêng qua chương trình bug bounty của Mapbox trên HackerOne. Họ xử lý rất nhanh: chỉ một ngày sau, v5.1.2 lên kệ với <code>validateTag()</code> thêm vào đúng vòng lặp đã có <code>validateIdentifier()</code>, kèm release note ghi rõ đây là bản vá cho một lỗ hổng của compiler. Báo cáo được ghi nhận hợp lệ và có thưởng. Điểm CVSS ở trên là mình tự chấm từ vector, không phải con số Mapbox công bố - và vì báo cáo gốc vẫn ở chế độ riêng tư, ở đây mình chỉ mô tả lớp lỗi, cách tiếp cận cùng bản vá công khai, không đăng PoC và không nêu chi tiết nội bộ của report.",
-    "wu6.s1h": "Đổi câu hỏi khi soi MCP server",
-    "wu6.s1p": "Hai finding MCP trước của mình đều xoay quanh câu hỏi “ai gọi được tool”. Lần này mình đổi sang “tham số của tool đi tới đâu”. MCP đưa tham số do mô hình sinh ra vào thẳng hàm xử lý, nên mọi sink thực thi lệnh trong một MCP server đều đáng đọc kỹ.",
-    "wu6.s2h": "Tìm sink trước, nguồn sau",
-    "wu6.s2p": "Mình grep các hàm sinh process trong repo và dừng ở <code>prepare-ios-simulator.ts</code>: bốn lời gọi <code>execAsync</code> đều dựng bằng template literal. Template literal đi kèm <code>exec</code> gần như luôn là dấu hiệu của chuỗi lệnh được ghép tay.",
-    "wu6.s3h": "Truy ngược tham số udid",
-    "wu6.s3p": "Lần ngược lên schema của tool, <code>udid</code> là một string tự do: không regex, không whitelist ký tự. Trong khi UDID thật của simulator chỉ là UUID hex - việc kiểm định dạng lẽ ra rất rẻ mà lại không hề có.",
-    "wu6.s4h": "Phá lớp nháy kép",
-    "wu6.s4p": "Giá trị được bọc trong nháy kép nên payload phải tự đóng nháy rồi mở lại để câu lệnh còn hợp lệ. Mình dựng payload đóng - chèn - mở và xác nhận bằng một lệnh vô hại ghi file ra <code>/tmp</code>, đủ chứng minh mà không đụng gì tới hệ thống.",
-    "wu6.s5h": "Báo cáo &amp; kết quả",
-    "wu6.s5p": "Mình báo cáo riêng qua GitHub Security Advisory kèm PoC, đề xuất chuyển sang <code>execFile</code> với mảng tham số và validate định dạng UDID. Bản vá ra ở 1.86.5, advisory được publish và ghi nhận mình là người báo cáo. Mình có đề nghị cấp CVE và đã trao đổi điều đó với maintainer, nhưng họ không gửi request - và đó vẫn là phần mình chưa hiểu của câu chuyện này.",
-
-    "av.cap1": "Nơi mọi thứ diễn ra - đọc source lúc nửa đêm",
-    "av.cap2": "Sài Gòn - Dinh Độc Lập",
-    "av.cap3": "Một khoảng lặng giữa ngày dài",
-
-    "btn.viewCode": "Xem đoạn code lỗi",
-    "btn.hideCode": "Ẩn đoạn code lỗi",
-    "btn.copy": "Copy",
-    "btn.copied": "Đã copy",
-    "btn.copyFail": "Lỗi",
-    "aria.menuOpen": "Mở menu",
-    "aria.menuClose": "Đóng menu",
-    "aria.top": "Lên đầu trang",
-    "aria.lang": "Switch to English",
-    "roles": ["Security Researcher","Sinh viên An toàn thông tin @ HCMUTE","Vulnerability Researcher","Responsible Disclosure"],
-
-    "term.hint": "Gõ lệnh, hoặc bấm nhanh:",
-    "term.welcome": "Terminal tương tác - gõ <b>help</b> để xem danh sách lệnh.",
-    "term.notfound": "không tìm thấy lệnh. Gõ 'help' để xem danh sách.",
-    "term.help": "Các lệnh khả dụng:",
-    "term.helpList": [
-      ["help", "hiện danh sách lệnh này"],
-      ["whoami", "thông tin nhanh về mình"],
-      ["findings", "liệt kê toàn bộ finding (alias: cve, ls)"],
-      ["writeup", "mở nhật ký săn lỗ hổng"],
-      ["contact", "email và các kênh liên lạc"],
-      ["banner", "vẽ lại banner đầu trang"],
-      ["clear", "xoá màn hình"]
-    ],
-    "term.whoami": [
-      ["handle", "fortress"],
-      ["tên", "Võ Phú Vinh"],
-      ["ngành", "An toàn thông tin - HCMUTE"],
-      ["năm", "sinh viên năm 2"],
-      ["gpa", "3.07 / 4.0"],
-      ["hướng đi", "vulnerability research, responsible disclosure"],
-      ["nơi ở", "TP. Hồ Chí Minh, Việt Nam"]
-    ],
-    "term.cveHead": "Finding đã được ghi nhận:",
-    "term.cveTail": "Xem chi tiết ở bản tin trang chủ.",
-    "term.contact": "Kênh liên lạc:",
-    "term.goWriteup": "Đang mở nhật ký săn lỗ hổng..."
-  },
-
-  en: {
-    "meta.title": "Fortress - Võ Phú Vinh | Security Researcher",
-    "meta.desc": "Võ Phú Vinh (Fortress) - Information Security student at HCMUTE, security researcher with multiple assigned CVEs.",
-
-    "nav.home": "Home",
-    "nav.writeup": "Writeups",
-    "nav.journey": "Journey",
-    "nav.contact": "Contact",
-
-    "hero.desc": "<strong>Information Security</strong> student at HCMUTE. I hunt for vulnerabilities in open-source projects and disclose them responsibly - <strong>multiple CVEs assigned</strong> so far.",
-    "hero.btn1": "View the CVE feed",
-    "hero.btn2": "Get in touch",
-
-    "about.h2": "About <span class=\"grad-text\">me</span>",
-    "about.sub": "A little about the person behind the advisories.",
-    "about.p1": "I'm <strong>Võ Phú Vinh (Fortress)</strong>. I'm a <strong>student</strong> majoring in <strong>Information Security</strong> at <strong>Ho Chi Minh City University of Technology and Engineering</strong> (formerly Ho Chi Minh City University of Technology and Education).",
-    "about.p2": "The path I'm currently pursuing is reading the source code of open-source projects to find vulnerabilities, then <strong>disclosing them responsibly</strong> to the maintainers before going public.",
-    "fact1.k": "Education",
-    "fact1.v": "Second-year student - Information Security, HCMUTE",
-    "fact4.k": "Grade average",
-    "fact4.v": "GPA 3.07 / 4.0",
-    "fact2.k": "Focus area",
-    "fact2.v": "Vulnerability research &amp; responsible disclosure",
-    "fact3.k": "Email",
-    "stat0": "Findings credited",
-    "stat1": "CVEs assigned",
-    "stat2": "Open-source projects",
-    "stat3": "Distinct CWE classes",
-    "stat4": "Paid bug bounty",
-
-    "home.h2": "Vulnerability <span class=\"grad-text\">feed</span>",
-    "home.sub": "Every finding I've reported - CVEs, advisories published without a CVE request, and credited bug bounty reports. Newest first; each card covers the technical summary, the impact, and the original code behind the flaw.",
-    "filter.aria": "Filter by finding type",
-    "filter.all": "All",
-    "filter.cve": "CVE",
-    "filter.advisory": "Advisory (no CVE)",
-    "filter.bounty": "Bug bounty",
-    "kind.advisory": "Advisory · no CVE",
-    "status.state": "Status",
-    "status.updated": "Last updated",
-    "feed.all": "See all writeups →",
-    "link.more": "Read the full writeup →",
-    "link.back": "← Back to all writeups",
-    "detail.code": "The code behind the flaw",
-    "detail.process": "How I found it",
-    "c5.teaser": "Mapbox's protobuf library builds its codec with <code>new Function()</code>; every schema identifier is validated except <code>field.tag</code> - enough to smuggle arbitrary JavaScript into the generated reader and writer.",
-    "c4.teaser": "The patch for CVE-2026-55849 kept the shell out on Linux but left a Windows-only <code>cmd.exe /c</code> branch behind - <code>--workspace</code> still injects commands.",
-    "c1.teaser": "OS command injection through the <code>--workspace</code> option of an SBOM generator that runs automatically inside CI/CD pipelines.",
-    "c2.teaser": "A webhook endpoint left unauthenticated by default, plus a uid read straight from the payload - enough to wipe every user's vector index.",
-    "c3.teaser": "An MCP endpoint wide open under <code>TRANSPORT=http</code>, exposing all NetBox infrastructure data without any credentials.",
-    "label.summary": "Summary",
-    "label.impact": "Impact",
-
-    "c5.summary": "pbf's <code>compile.js</code> builds JavaScript source as a string and then runs it through <code>new Function()</code>. Every identifier taken from the schema - message name, field name, oneof name, enum value name - is passed through <code>validateIdentifier()</code> first, except <code>field.tag</code>. The tag value is inserted straight into the generated code with no checks at all, so a schema whose <code>field.tag</code> is a string can carry arbitrary JavaScript into both the compiled reader and the compiled writer.",
-    "c5.impact": "Any application that calls <code>compile()</code> / <code>compileRaw()</code> on a protobuf schema coming from user-controlled input - a schema descriptor received as JSON or over an API, for instance - will execute attacker-supplied JavaScript inside its own process. The attacker only has to submit a schema where one field's tag is a crafted string; as soon as the victim compiles that schema, the code runs with the privileges of the victim process, while the message still decodes to a normal-looking value so the injection never shows up in the output. Scope: the documented <code>.proto</code> path (<code>schema.parse</code>) is not affected, since tags are always <code>Number()</code>-coerced there - the vector is the schema-object API only.",
-    "c5.path1": "compile.js - v5.1.1 and earlier",
-    "c5.note1": "<b>The flaw:</b> <span>That whole string eventually goes into <code>new Function()</code>. A tag is conceptually an integer, but the schema is just a plain JavaScript object - nothing forces <code>tag</code> to actually be a number, which turns it into an entrance nobody was watching.</span>",
-    "c5.note2": "<b>The fix:</b> <span>The patch adds <code>validateTag()</code> to the very loop that already ran <code>validateIdentifier()</code>: a tag must be an integer within <code>[1, 2^29 - 1]</code>, numeric strings are still accepted so the <code>.proto</code> path keeps working, and anything else throws.</span>",
-    "c5.ver1": "Affected: ≤ 5.1.1 (verified on 5.1.0)",
-    "c5.ver2": "Fixed in: 5.1.2",
-    "c5.ver3": "Not affected: the .proto path via schema.parse",
-    "c6.teaser": "The <code>udid</code> parameter flows straight into a shell command in the <code>prepare_ios_simulator</code> tool - any connected MCP client can run arbitrary commands on the host.",
-    "c6.summary": "The <code>prepare_ios_simulator</code> tool takes the <code>udid</code> parameter from the MCP client and interpolates it straight into shell commands through <code>execAsync</code>, at four separate call sites. The only protection is the pair of double quotes wrapped around the value - but those quotes sit inside a string the attacker controls, so closing the quote early is enough to break out of the intended command.",
-    "c6.impact": "Any MCP client connected to the server can execute arbitrary OS commands on the host with the privileges of the MCP server process - full filesystem access, credential theft, and lateral movement from there. It is especially uncomfortable in the MCP context, because tool-call parameters are usually generated by a model: untrusted content can reach <code>udid</code> without a human ever seeing it.",
-    "c6.nocve": "<b>Why there is no CVE:</b> <span>The advisory is published publicly on the appium/appium-mcp repository and credits me as the reporter, but no CVE ID was ever assigned. Requesting a CVE is the maintainer's call, and they did not request one - I did want a CVE for this finding and said so, and I still do not know the reason. The consequence is that it never entered the GitHub Global Advisory Database and does not surface in <code>npm audit</code>. I still list it here, labelled for exactly what it is: a published, credited finding - not a CVE.</span>",
-    "c6.path1": "src/tools/ios/prepare-ios-simulator.ts - before v1.86.5",
-    "c6.note1": "<b>The flaw:</b> <span><code>execAsync</code> is Node's <code>exec()</code> - it always goes through a shell. The <code>udid</code> value arrives straight from the tool-call parameters with no format validation at all, even though a legitimate UDID is nothing but hex digits and dashes.</span>",
-    "c6.note2": "<b>Why the quotes don't save it:</b> <span>The quotes added by the template literal are closed early by the payload itself. The trailing <code>echo \"x</code> exists only to reopen a quote for the rest of the command, keeping it syntactically valid so nothing errors out - and the injected command runs in full.</span>",
-    "c6.ver1": "Affected: ≥ 1.49.0, ≤ 1.86.4",
-    "c6.ver2": "Fixed in: 1.86.5",
-    "c5.vector": "<b>CVSS 3.1 · self-scored</b>&nbsp; AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-    "badge.rewarded": "Rewarded",
-
-    "c4.summary": "The v5.0.0 patch for CVE-2026-55849 replaced <code>execSync</code> with <code>execFileSync</code>, but it also introduced a Windows-only branch. When npm resolves to a batch file (<code>npm.cmd</code>), the tool runs <code>execFileSync('cmd.exe', ['/c', execPath, ...args])</code>. Node escapes arguments following the <code>CommandLineToArgvW</code> convention, but <code>cmd.exe</code> parses the command line with a completely different set of rules: it handles the metacharacters <code>&amp;</code>, <code>|</code>, <code>&gt;</code> and <code>^</code> first, and it does not understand <code>&#92;&quot;</code> escaping. So the user-supplied <code>--workspace</code> value can still break out of the intended command - this time only on Windows.",
-    "c4.impact": "Arbitrary command execution with the privileges of the user running the CLI on Windows machines - data exfiltration, modifying or deleting files, and depending on the deployment, possible privilege escalation. Since this is still an SBOM generator running automatically inside pipelines, Windows CI runners are a direct target. Worth noting: this is the patch for an earlier CVE, so anyone who upgraded to 5.0.0 to escape CVE-2026-55849 is still in scope.",
-    "c4.path1": "src/npmRunner.ts - v5.0.0",
-    "c4.note1": "<b>The flaw:</b> <span><code>execFileSync</code> does not go through Node's shell - but here <code>cmd.exe</code> <em>is</em> the shell. All of <code>args</code> gets joined back into a single command line and handed to <code>cmd.exe /c</code>, which then re-parses it under its own rules.</span>",
-    "c4.note2": "<b>The fix:</b> <span>v6.0.0 removes the <code>cmd.exe</code> branch entirely. It accepts only a path to the npm CLI <code>.js</code> file and throws otherwise, always spawning <code>node -- npm-cli.js</code> with <code>shell: false</code>. With no shell left in the chain, there are no metacharacters left to interpret.</span>",
-    "c4.ver1": "Affected: 5.0.0 (Windows only)",
-    "c4.ver2": "Fixed in: 6.0.0",
-    "c4.ver3": "Workaround: point npm_execpath at npm-cli.js",
-
-    "c1.summary": "OS command injection through the <code>--workspace &lt;value&gt;</code> option. When the <code>npm_execpath</code> environment variable is set, the tool invokes the npm executable directly and is safe. But if <code>npm_execpath</code> is empty or unset, the tool falls back to a path that spawns a subshell and concatenates <code>'npm ' + args.join(' ')</code> without escaping. Shell metacharacters such as <code>;</code>, <code>&amp;&amp;</code> and <code>|</code> are interpreted by the shell, letting an attacker break out of the intended command.",
-    "c1.impact": "Arbitrary command execution with the privileges of the user running the CLI - data exfiltration, modifying or deleting files, and depending on the deployment, possible privilege escalation. Especially concerning in CI/CD, since this is an SBOM generator that usually runs automatically inside pipelines.",
-    "c1.path1": "src/npmRunner.ts - before v5.0.0",
-    "c1.note1": "<b>The flaw:</b> <span><code>args</code> carries the user-supplied <code>--workspace</code> value, yet it is joined into a string and handed to a shell. The comment's assumption that “we have complete control over args” is simply wrong.</span>",
-    "c1.note2": "<b>The fix:</b> <span>Replace <code>execSync</code> (which goes through a shell) with <code>execFileSync</code> - arguments are passed as an array, so the shell never interprets metacharacters.</span>",
-    "c1.ver1": "Affected: ≥ 2.1.0, &lt; 5.0.0",
-    "c1.ver2": "Fixed in: 5.0.0",
-    "c1.ver3": "Workaround: set npm_execpath",
-
-    "c2.summary": "The <code>POST /webhooks/nextcloud</code> endpoint is unauthenticated by default, because two root causes stack up. First, <code>webhook_secret</code> defaults to <code>None</code> and no startup validator enforces it, even while vector sync is enabled. Second, the entire check sits inside an <code>if secret:</code> branch - so when the secret is unset, the check is skipped completely: it logs a single warning and then processes the request anyway.",
-    "c2.impact": "An attacker needs no credentials, only network access to port 8000, to delete or force a re-index of any user's vector embeddings in Qdrant. Combined with <code>user_id</code> being read straight from the attacker-supplied payload, they can spoof a uid and loop through document IDs to wipe every user's semantic search index - recovering requires a full re-scan.",
-    "c2.note1": "<b>The flaw:</b> <span>With no secret configured, execution falls into the <code>else</code> branch - it only logs a warning and keeps processing the request. Fail-open instead of fail-closed.</span>",
-    "c2.note2": "<b>The flaw:</b> <span>The user identity is read straight from the request body and never checked against a session or token - a trust boundary violation that allows uid spoofing.</span>",
-    "c2.ver1": "Affected: ≤ 0.117.1",
-    "c2.ver2": "Fixed in: 0.117.2",
-
-    "c3.summary": "When running with <code>TRANSPORT=http</code>, the MCP endpoint has no authentication layer at all. The project only attaches <code>CORSMiddleware</code> and never sets <code>mcp.auth</code>, while FastMCP enables its auth middleware only when <code>mcp.auth</code> has a value. As a result, anyone who can reach the port can open a valid session and call all four NetBox tools. Worse, the README documents Docker usage with <code>HOST=0.0.0.0</code> and <code>-p 8000:8000</code> in three places without mentioning authentication once.",
-    "c3.impact": "Full read access to all NetBox data without credentials - devices, IPs, VLANs, racks, circuits, VMs, and the changelog containing usernames. Complete loss of confidentiality; integrity and availability are unaffected.",
-    "c3.note1": "<b>The flaw:</b> <span>Nothing anywhere in the codebase assigns <code>mcp.auth</code>. <code>\"Authorization\"</code> appears only in the list of allowed CORS headers - and CORS is a browser policy, not authentication.</span>",
-    "c3.ver1": "Affected: ≤ 1.2.0",
-    "c3.ver2": "Fixed in: 1.2.1",
-
-    "link.cve": "View the record on cve.org ↗",
-    "link.ghsa": "View the GHSA advisory ↗",
-    "link.patch": "View the patch (PR #149) ↗",
-
-    "journey.h2": "My <span class=\"grad-text\">journey</span>",
-    "journey.sub": "Milestones, most recent first, dated by advisory publication or by the day the report was accepted.",
-    "tlb.time": "Patched Jul 9, 2026 · Mapbox bug bounty · HIGH",
-    "tlb.p": "<code>compile.js</code> generates code through <code>new Function()</code> but skipped <code>field.tag</code> during identifier validation - an attacker-supplied schema could run arbitrary JavaScript. Mapbox shipped the fix in version 5.1.2 just one day after I reported it.",
-    "tl0.time": "Disclosed Jul 7, 2026 · CVE-2026-71538 · HIGH",
-    "tla.time": "Disclosed Jun 28, 2026 · GHSA (no CVE) · HIGH",
-    "tla.p": "The <code>udid</code> parameter of the <code>prepare_ios_simulator</code> tool flows straight into a shell command, letting any MCP client run arbitrary commands on the host. Fixed in version 1.86.5. The advisory was published and credited, but the maintainers never requested a CVE, so this finding has no CVE ID.",
-    "tl1.time": "Disclosed Jun 18, 2026 · CVE-2026-57207 · MODERATE",
-    "tl2.time": "Disclosed Jun 16, 2026 · CVE-2026-55849 · HIGH",
-    "tl3.time": "Disclosed Jun 14, 2026 · CVE-2026-55640 · CRITICAL",
-    "tl0.p": "The patch for CVE-2026-55849 left behind a Windows-only <code>cmd.exe /c</code> branch - <code>--workspace</code> still injects commands. Fixed in version 6.0.0.",
-    "tl1.p": "The MCP endpoint has no authentication when running <code>TRANSPORT=http</code>, exposing all NetBox infrastructure data without credentials. Fixed in version 1.2.1.",
-    "tl2.p": "Command injection through the <code>--workspace</code> option when <code>npm_execpath</code> is unset, leading to arbitrary command execution inside SBOM-generating CI/CD pipelines. Fixed in version 5.0.0.",
-    "tl3.p": "The webhook endpoint is unauthenticated by default, and the uid comes straight from the payload - allowing every user's vector search index to be wiped. Fixed in version 0.117.2.",
-    "tl4.time": "FIRST YEAR · HCMUTE",
-    "tl4.h3": "Where the research started",
-    "tl4.sub": "Information Security - HCMUTE",
-    "tl4.p": "From my very first year I started learning the fundamentals of Information Security and reading the source code of open-source projects to hunt for vulnerabilities.",
-
-    "contact.h2": "Let's <span class=\"grad-text\">connect</span>",
-    "contact.p": "If you'd like to talk security, collaborate on research, or just say hello - send me an email or reach out through the links below.",
-
-    "wu.h2": "Bug hunting <span class=\"grad-text\">journal</span>",
-    "wu.sub": "Behind every CVE is a process of reading code, forming a hypothesis, and verifying it. Here is how I got from a suspicious line of code to a published advisory.",
-    "wu1.s1h": "Why I picked this target",
-    "wu1.s1p": "SBOM generators run automatically inside the CI/CD pipelines of a great many projects, usually with fairly broad permissions. A command execution flaw here reaches much further than one in a single application, so build-time tooling is where I look first.",
-    "wu1.s2h": "The first clue",
-    "wu1.s2p": "I grepped the whole codebase for process-spawning calls: <code>exec</code>, <code>execSync</code>, <code>spawn</code>. Right in <code>npmRunner.ts</code> sat a reassuring comment claiming it was “okay since we have complete control over args”. Comments like that usually mark an assumption nobody revisited after the code changed.",
-    "wu1.s3h": "Tracing the data flow",
-    "wu1.s3p": "Walking back from the <code>execSync</code> call up to the CLI, I found that the <code>--workspace</code> option value flows straight into the <code>args</code> array with no sanitisation anywhere along the way. The comment's assumption collapses: part of <code>args</code> comes from the user.",
-    "wu1.s4h": "What triggers it",
-    "wu1.s4p": "The dangerous branch only runs when <code>npm_execpath</code> is empty or unset - that is, when the tool is invoked directly rather than through an npm script. That is exactly why the bug survived so long: on the most common path, execution takes the safe branch.",
-    "wu1.s5h": "Report &amp; outcome",
-    "wu1.s5p": "I reported it privately to the maintainers with a minimal PoC and suggested replacing <code>execSync</code> with <code>execFileSync</code>. The patch shipped in v5.0.0, and the CVE was assigned a CVSS 4.0 score of 8.5 (High).",
-    "wu2.s1h": "The context",
-    "wu2.s1p": "MCP servers are a very young layer of software, appearing fast and mostly written on the assumption that they only ever run on someone's personal machine. That assumption tends to stop holding the moment a user puts one in a container and exposes a port.",
-    "wu2.s2h": "The anomaly",
-    "wu2.s2p": "I went through every route that accepts outside requests and stopped at the webhook receiver. The entire signature check sits inside a single <code>if secret:</code> block - meaning that if no secret exists, the check simply never runs.",
-    "wu2.s3h": "Confirming the default",
-    "wu2.s3p": "I checked the settings layer: <code>webhook_secret</code> defaults to <code>None</code>, and no startup validator enforces it even when vector sync is turned on. So the project's default configuration is also its unauthenticated configuration.",
-    "wu2.s4h": "Raising the severity",
-    "wu2.s4p": "Reading further into the parser, I found <code>user_id</code> being taken straight from the request payload. An attacker not only reaches the endpoint but also gets to choose who they are - enough to walk through document IDs and wipe every user's vector index.",
-    "wu2.s5h": "Report &amp; outcome",
-    "wu2.s5p": "I reported it through a GitHub Security Advisory. The maintainer responded quickly, switched the logic to fail-closed, and made the secret mandatory when webhooks are enabled. Fixed in 0.117.2, with a CVSS 3.1 score of 9.1 (Critical).",
-    "wu3.s1h": "Building on the previous lesson",
-    "wu3.s1p": "After CVE-2026-55640 I hypothesised that missing authentication was systemic across the whole MCP server ecosystem rather than specific to one project. I took a list of popular MCP servers and reviewed their transport setup one by one.",
-    "wu3.s2h": "The CORS trap",
-    "wu3.s2p": "In netbox-mcp-server things looked fine at first glance because <code>\"Authorization\"</code> did appear in the code. But it only appears in the list of headers CORS permits. CORS is a browser policy; it stops nothing sent with curl.",
-    "wu3.s3h": "Proving it by finding nothing",
-    "wu3.s3p": "FastMCP only enables its auth middleware when <code>mcp.auth</code> has a value. I grepped the entire codebase and found not one line assigning that attribute. Sometimes the most convincing evidence of a vulnerability is the complete absence of the code that should have been there.",
-    "wu3.s4h": "Documentation is part of the vulnerability",
-    "wu3.s4p": "The README shows Docker usage with <code>HOST=0.0.0.0</code> and a published port in three separate places, never once mentioning authentication. A user following the documentation correctly ends up exposing their own infrastructure data to the network - which is why I included CWE-1059 in the report.",
-    "wu3.s5h": "Report &amp; outcome",
-    "wu3.s5p": "NetBox Labs took it on and shipped 1.2.1 along with documentation updates. The CVE was assigned 5.9 (Moderate) - lower than the previous two because only confidentiality is affected.",
-    "wu4.s1h": "Re-reading my own patch",
-    "wu4.s1p": "After v5.0.0 shipped to fix CVE-2026-55849, I did not close the file - I read the patch again. A change at the process-spawning layer is exactly where a fresh bug tends to appear: whoever writes the fix is busy thinking about the old flaw, not about the other paths through the code.",
-    "wu4.s2h": "The patch was more than one line",
-    "wu4.s2p": "v5.0.0 did not simply swap <code>execSync</code> for <code>execFileSync</code>. It also added a Windows-only branch for <code>.cmd</code>/<code>.bat</code> files, and that branch names a shell outright: <code>cmd.exe</code>. Any code that reaches for a shell by hand deserves a second look.",
-    "wu4.s3h": "Node and cmd.exe do not speak the same language",
-    "wu4.s3p": "Node joins the argument array into a command line following the <code>CommandLineToArgvW</code> convention - wrap in double quotes, escape quotes with a backslash. But <code>cmd.exe</code> does not use those rules: it processes <code>&amp;</code>, <code>|</code>, <code>&gt;</code> and <code>^</code> first, and it has no idea what <code>&#92;&quot;</code> means. This is precisely the bug class Node.js itself had to patch in CVE-2024-27980.",
-    "wu4.s4h": "The dangerous branch is the default one",
-    "wu4.s4p": "This is what kept the severity level with the previous CVE: on Windows, the system npm lookup runs <code>where npm</code>, and that command almost always returns <code>npm.cmd</code> first. So the <code>cmd.exe</code> branch is not a rare edge case - it is the ordinary path for every Windows user.",
-    "wu4.s5h": "Report &amp; outcome",
-    "wu4.s5p": "I reported back to the maintainers with a PoC that runs on Windows. This time they dropped the <code>cmd.exe</code> branch altogether rather than adding more escaping: v6.0.0 always resolves to the npm CLI <code>.js</code> file and spawns it through <code>node</code> with <code>shell: false</code>. The CVE was assigned a CVSS 4.0 score of 8.5 (High) - the same as the previous one.",
-
-    "wu5.s1h": "A different bug class, the same way of thinking",
-    "wu5.s1p": "After a run of command injection CVEs I moved to a close relative: code injection. The way I pick targets did not change - look for places where a program writes its own source and then runs it through <code>new Function()</code> or <code>eval</code>. pbf is the protobuf library sitting underneath Mapbox GL JS and a great many vector tile pipelines, and its <code>compile.js</code> is exactly that: a code generator.",
-    "wu5.s2h": "An existing guard means the risk is already acknowledged",
-    "wu5.s2p": "An earlier release had added <code>validateIdentifier()</code> to block injection through field names. To me an existing guard is good news rather than a reason to move on: it confirms the threat model was accepted by the authors themselves, and all that remains is taking inventory of whether the guard covers every entrance.",
-    "wu5.s3h": "Comparing the two lists",
-    "wu5.s3p": "I listed every schema-derived value that gets interpolated into the generated source string, then placed it next to the list of values that actually pass through <code>validateIdentifier()</code>. Message names, field names, oneof names and enum value names appear on both. <code>field.tag</code> appears only on the first - and it shows up in the read path as well as the write path.",
-    "wu5.s4h": "Why it survived: the type lies",
-    "wu5.s4p": "A tag is conceptually an integer, so nobody thought it needed sanitising. But this is JavaScript and the schema is a plain object - nothing requires <code>tag</code> to be a number. On top of that, the <code>.proto</code> parser always coerces tags through <code>Number()</code>, so along the documented path the flaw never surfaces. The vector only opens when an application accepts a schema object from outside.",
-    "wu5.s5h": "Report &amp; outcome",
-    "wu5.s5p": "I submitted the report privately through Mapbox's bug bounty programme on HackerOne. They moved fast: just one day later v5.1.2 shipped with <code>validateTag()</code> added to the very loop that already ran <code>validateIdentifier()</code>, and the release notes state plainly that it fixes a vulnerability in the compiler. The report was accepted as valid and rewarded. The CVSS score above is my own, derived from the vector rather than published by Mapbox - and since the original report is still private, I only cover the bug class, the approach and the public patch here: no PoC and no internal report details.",
-    "wu6.s1h": "Changing the question I ask of an MCP server",
-    "wu6.s1p": "My two previous MCP findings both revolved around “who can call the tool”. This time I switched to “where do the tool's parameters end up”. MCP feeds model-generated parameters straight into the handler, which makes every command-execution sink in an MCP server worth reading closely.",
-    "wu6.s2h": "Sink first, source second",
-    "wu6.s2p": "I grepped the repository for process-spawning calls and stopped at <code>prepare-ios-simulator.ts</code>: four <code>execAsync</code> calls, all built from template literals. A template literal next to <code>exec</code> is almost always a hand-assembled command string.",
-    "wu6.s3h": "Tracing the udid parameter",
-    "wu6.s3p": "Walking back up to the tool schema, <code>udid</code> is a free-form string: no regex, no character allow-list. A real simulator UDID is just a hex UUID, so validating the format would have been cheap - and it simply was not there.",
-    "wu6.s4h": "Breaking out of the quotes",
-    "wu6.s4p": "The value is wrapped in double quotes, so the payload has to close the quote and reopen it to keep the command valid. I built a close-inject-reopen payload and confirmed it with a harmless command writing a file into <code>/tmp</code> - enough to prove the issue without touching anything on the system.",
-    "wu6.s5h": "Report &amp; outcome",
-    "wu6.s5p": "I reported it privately through a GitHub Security Advisory with a PoC, suggesting a switch to <code>execFile</code> with an argument array plus UDID format validation. The patch shipped in 1.86.5 and the advisory was published crediting me as the reporter. I did ask for a CVE and raised it with the maintainers, but no request was filed - and that part I still do not understand.",
-
-    "av.cap1": "Where it all happens - reading source at midnight",
-    "av.cap2": "Saigon - Independence Palace",
-    "av.cap3": "A quiet moment in a long day",
-
-    "btn.viewCode": "View vulnerable code",
-    "btn.hideCode": "Hide vulnerable code",
-    "btn.copy": "Copy",
-    "btn.copied": "Copied",
-    "btn.copyFail": "Failed",
-    "aria.menuOpen": "Open menu",
-    "aria.menuClose": "Close menu",
-    "aria.top": "Back to top",
-    "aria.lang": "Chuyển sang tiếng Việt",
-    "roles": ["Security Researcher","Information Security student @ HCMUTE","Vulnerability Researcher","Responsible Disclosure"],
-
-    "term.hint": "Type a command, or tap:",
-    "term.welcome": "Interactive terminal - type <b>help</b> to list the commands.",
-    "term.notfound": "command not found. Type 'help' for the list.",
-    "term.help": "Available commands:",
-    "term.helpList": [
-      ["help", "show this list of commands"],
-      ["whoami", "a quick rundown of who I am"],
-      ["findings", "list every finding (alias: cve, ls)"],
-      ["writeup", "open the bug hunting journal"],
-      ["contact", "email and other channels"],
-      ["banner", "redraw the header banner"],
-      ["clear", "clear the screen"]
-    ],
-    "term.whoami": [
-      ["handle", "fortress"],
-      ["name", "Võ Phú Vinh"],
-      ["major", "Information Security - HCMUTE"],
-      ["year", "second-year student"],
-      ["gpa", "3.07 / 4.0"],
-      ["focus", "vulnerability research, responsible disclosure"],
-      ["based in", "Ho Chi Minh City, Vietnam"]
-    ],
-    "term.cveHead": "Findings credited:",
-    "term.cveTail": "Full details are in the feed on the home page.",
-    "term.contact": "Contact channels:",
-    "term.goWriteup": "Opening the bug hunting journal..."
-  }
-};
-
-let lang = "vi";
-try{
-  const saved = localStorage.getItem("fortress-lang");
-  if(saved === "vi" || saved === "en") lang = saved;
-}catch(err){}
-
-const t = key => (I18N[lang][key] !== undefined ? I18N[lang][key] : I18N.vi[key]);
-
-const langBtn = document.getElementById("langBtn");
-const metaDesc = document.getElementById("metaDesc");
-const burger = document.getElementById("burger");
-const navLinks = document.getElementById("navLinks");
-const toTop = document.getElementById("toTop");
-const typingEl = document.getElementById("typing");
-
-// Mỗi card là một finding; data-kind cho biết nó được ghi nhận dưới dạng nào:
-// cve (có CVE ID), advisory (publish nhưng không xin CVE), bounty (bug bounty).
-// Đếm tách bạch để một finding không có CVE không bao giờ bị cộng vào số CVE.
-const findingCards = [...document.querySelectorAll("#cve .cve")];
-const countKind = kind => findingCards.filter(c => c.dataset.kind === kind).length;
-const statCounts = {
-  find: findingCards.length,
-  cve: countKind("cve"),
-  advisory: countKind("advisory"),
-  bounty: countKind("bounty"),
-  pkg: new Set([...document.querySelectorAll("#cve .pkg")].map(el => el.textContent.trim())).size,
-  cwe: new Set(
-    [...document.querySelectorAll("#cve .cwe-row .tag")]
-      .map(el => (el.textContent.match(/CWE-\d+/) || [])[0])
-      .filter(Boolean)
-  ).size
-};
-document.querySelectorAll(".stat .num[data-stat]").forEach(el => {
-  if(statCounts[el.dataset.stat] !== undefined) el.dataset.count = statCounts[el.dataset.stat];
-});
-
-const cveList = document.querySelector("#cve .cve-list");
-[...cveList.querySelectorAll(".cve")]
-  .sort((a, b) => (b.dataset.date || "").localeCompare(a.dataset.date || ""))
-  .forEach(el => { el.classList.remove("d1", "d2", "d3"); cveList.appendChild(el); });
-
-const wuIndex = document.getElementById("wuIndex");
-[...cveList.querySelectorAll(".cve")].forEach(card => wuIndex.appendChild(card.cloneNode(true)));
-
-// Bộ lọc theo loại finding. Loại nào chưa có card nào thì không hiện nút.
-const filterBar = document.getElementById("filters");
-const KINDS = ["all", "cve", "advisory", "bounty"];
-let activeKind = "all";
-function buildFilters(){
-  filterBar.innerHTML = "";
-  const legend = document.createElement("legend");
-  legend.className = "sr-only";
-  legend.textContent = t("filter.aria");
-  filterBar.appendChild(legend);
-  KINDS.forEach(kind => {
-    const n = kind === "all" ? findingCards.length : countKind(kind);
-    if(!n) return;
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.dataset.kind = kind;
-    btn.setAttribute("aria-pressed", String(kind === activeKind));
-    btn.innerHTML = t("filter." + kind) + '<span class="n">' + n + "</span>";
-    btn.addEventListener("click", () => { activeKind = kind; applyFilter(); });
-    filterBar.appendChild(btn);
-  });
-}
-function applyFilter(){
-  findingCards.forEach(c => {
-    c.classList.toggle("hide", activeKind !== "all" && c.dataset.kind !== activeKind);
-  });
-  filterBar.querySelectorAll("button").forEach(b => {
-    b.setAttribute("aria-pressed", String(b.dataset.kind === activeKind));
-  });
-}
-
-document.querySelectorAll(".cve[data-date]").forEach(card => {
-  const chip = document.createElement("span");
-  chip.className = "date-chip";
-  card.querySelector(".cve-head").appendChild(chip);
-});
-
-function fmtDate(d){
-  return lang === "vi"
-    ? d.toLocaleDateString("vi-VN", {day:"2-digit", month:"2-digit", year:"numeric"})
-    : d.toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"});
-}
-let lastPush = null;
-function renderStatus(){
-  document.querySelectorAll(".cve[data-date]").forEach(card => {
-    card.querySelector(".date-chip").textContent = fmtDate(new Date(card.dataset.date));
-  });
-  if(lastPush) document.getElementById("lastUpdate").textContent = fmtDate(lastPush);
-}
-
-fetch("https://api.github.com/repos/fortress07/profile/commits/main")
-  .then(r => r.ok ? r.json() : null)
-  .then(d => {
-    const iso = d && d.commit && d.commit.committer && d.commit.committer.date;
-    if(iso){ lastPush = new Date(iso); renderStatus(); }
-  })
-  .catch(() => {});
-
-function applyLang(){
-  document.documentElement.lang = lang;
-  document.title = t("meta.title");
-  metaDesc.setAttribute("content", t("meta.desc"));
-
-  document.querySelectorAll("[data-i18n]").forEach(el => {
-    const v = t(el.dataset.i18n);
-    if(typeof v === "string") el.innerHTML = v;
-  });
-
-  document.querySelectorAll(".code-toggle").forEach(btn => {
-    const open = btn.getAttribute("aria-expanded") === "true";
-    btn.querySelector(".lbl").textContent = open ? t("btn.hideCode") : t("btn.viewCode");
-  });
-  document.querySelectorAll(".copy").forEach(btn => {
-    if(!btn.classList.contains("done")) btn.textContent = t("btn.copy");
-  });
-  renderStatus();
-  buildFilters();
-  if(typeof buildHints === "function"){
-    buildHints();
-    termOut.innerHTML = "";
-    termBanner();
-    avCap.textContent = t("av.cap" + (avI + 1));
-  }
-
-  const menuOpen = navLinks.classList.contains("open");
-  burger.setAttribute("aria-label", menuOpen ? t("aria.menuClose") : t("aria.menuOpen"));
-  toTop.setAttribute("aria-label", t("aria.top"));
-  langBtn.setAttribute("aria-label", t("aria.lang"));
-  langBtn.querySelector(".vi").classList.toggle("on", lang === "vi");
-  langBtn.querySelector(".en").classList.toggle("on", lang === "en");
-
-  restartTyping();
-}
-
-langBtn.addEventListener("click", () => {
-  lang = lang === "vi" ? "en" : "vi";
-  try{ localStorage.setItem("fortress-lang", lang); }catch(err){}
-  applyLang();
-});
-
-let typeTimer = null, ri = 0, ci = 0, deleting = false;
-function restartTyping(){
-  clearTimeout(typeTimer);
-  ri = 0; ci = 0; deleting = false;
-  typingEl.textContent = "";
-  typeStep();
-}
-function typeStep(){
-  const roles = t("roles");
-  const word = roles[ri % roles.length];
-  typingEl.textContent = word.slice(0, ci);
-  let delay;
-  if(!deleting && ci < word.length){ ci++; delay = 58; }
-  else if(!deleting){ deleting = true; delay = 1900; }
-  else if(ci > 0){ ci--; delay = 24; }
-  else { deleting = false; ri = (ri + 1) % roles.length; delay = 320; }
-  typeTimer = setTimeout(typeStep, delay);
-}
-
-function runCounter(el){
-  if(el.dataset.done) return;
-  el.dataset.done = "1";
-  const target = parseFloat(el.dataset.count);
-  const dur = 1200, t0 = performance.now();
-  (function tick(now){
-    const p = Math.min((now - t0) / dur, 1);
-    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
-    if(p < 1) requestAnimationFrame(tick);
-  })(t0);
-}
-
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if(!e.isIntersecting) return;
-    const el = e.target;
-    el.classList.add("show");
-    if(el.dataset.count) runCounter(el);
-    el.querySelectorAll("[data-count]").forEach(runCounter);
-    el.querySelectorAll(".ring").forEach(r => {
-      setTimeout(() => r.style.setProperty("--p", r.dataset.p), 200);
-    });
-    io.unobserve(el);
-  });
-}, {threshold:.15, rootMargin:"0px 0px -40px 0px"});
-document.querySelectorAll(".reveal, h2").forEach(el => io.observe(el));
-
-document.querySelectorAll(".code-toggle").forEach(btn => {
-  const wrap = btn.nextElementSibling;
-  btn.addEventListener("click", () => {
-    const open = wrap.classList.toggle("open");
-    btn.setAttribute("aria-expanded", String(open));
-    btn.querySelector(".lbl").textContent = open ? t("btn.hideCode") : t("btn.viewCode");
-  });
-});
-
-document.querySelectorAll(".copy").forEach(btn => {
-  btn.addEventListener("click", async () => {
-    const pre = btn.closest(".code").querySelector("pre");
-    try{
-      await navigator.clipboard.writeText(pre.innerText);
-      btn.textContent = t("btn.copied");
-      btn.classList.add("done");
-    }catch(err){
-      btn.textContent = t("btn.copyFail");
-    }
-    setTimeout(() => {
-      btn.textContent = t("btn.copy");
-      btn.classList.remove("done");
-    }, 1800);
-  });
-});
-
-const fine = matchMedia("(pointer:fine)").matches;
-if(fine){
-  const spotlight = document.getElementById("spotlight");
-  addEventListener("pointermove", e => {
-    spotlight.style.opacity = "1";
-    spotlight.style.left = e.clientX + "px";
-    spotlight.style.top = e.clientY + "px";
-  }, {passive:true});
-  document.querySelectorAll(".card, .cve").forEach(c => {
-    c.addEventListener("pointermove", e => {
-      const r = c.getBoundingClientRect();
-      c.style.setProperty("--mx", (e.clientX - r.left) + "px");
-      c.style.setProperty("--my", (e.clientY - r.top) + "px");
-    }, {passive:true});
-  });
-}else{
-  const focusIO = new IntersectionObserver(entries => {
-    entries.forEach(e => e.target.classList.toggle("focus", e.isIntersecting));
-  }, {rootMargin:"-38% 0px -38% 0px", threshold:0});
-  document.querySelectorAll(".card, .cve, .tl-item").forEach(el => focusIO.observe(el));
-}
-
-burger.addEventListener("click", () => {
-  const open = navLinks.classList.toggle("open");
-  burger.classList.toggle("open", open);
-  burger.setAttribute("aria-expanded", String(open));
-  burger.setAttribute("aria-label", open ? t("aria.menuClose") : t("aria.menuOpen"));
-});
-navLinks.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
-  burger.classList.remove("open");
-  navLinks.classList.remove("open");
-  burger.setAttribute("aria-expanded", "false");
-  burger.setAttribute("aria-label", t("aria.menuOpen"));
-}));
-
-const reduceMotion = matchMedia("(prefers-reduced-motion:reduce)").matches;
-if(!reduceMotion){
-  const cv = document.getElementById("matrix");
-  const cx = cv.getContext("2d", {alpha:true});
-  const GLYPH = "0123456789ABCDEF0101<>{}[]()/\\|$#@&*+=!?;:_";
-  const STEP = 18;
-  let drops = [], vw = 0, vh = 0;
-  function sizeMatrix(){
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    vw = innerWidth; vh = innerHeight;
-    cv.width = vw * dpr; cv.height = vh * dpr;
-    cv.style.width = vw + "px"; cv.style.height = vh + "px";
-    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const cols = Math.ceil(vw / STEP);
-    drops = Array.from({length: cols}, (_, i) => drops[i] !== undefined ? drops[i] : Math.random() * -80);
-    drops.length = cols;
-  }
-  let last = 0;
-  function drawMatrix(now){
-    requestAnimationFrame(drawMatrix);
-    if(document.hidden || now - last < 55) return;
-    last = now;
-    cx.fillStyle = "rgba(10,7,9,.14)";
-    cx.fillRect(0, 0, vw, vh);
-    cx.font = "13px 'JetBrains Mono', monospace";
-    for(let i = 0; i < drops.length; i++){
-      const y = drops[i] * STEP;
-      if(y > 0){
-        const ch = GLYPH[(Math.random() * GLYPH.length) | 0];
-        cx.fillStyle = Math.random() < .06 ? "rgba(255,140,160,.55)" : "rgba(255,59,92,.26)";
-        cx.fillText(ch, i * STEP, y);
-      }
-      drops[i] = y > vh && Math.random() > .975 ? Math.random() * -30 : drops[i] + 1;
-    }
-  }
-  sizeMatrix();
-  addEventListener("resize", sizeMatrix, {passive:true});
-  requestAnimationFrame(drawMatrix);
-}
-
-const bootEl = document.getElementById("boot");
-const BOOT = [
-  ['<span class="hd">FORTRESS BIOS v2.6</span>  ::  initialising secure profile', 0],
-  ['[<span class="ok">  OK  </span>] mounting /dev/portfolio', 180],
-  ['[<span class="ok">  OK  </span>] loading module: vulnerability_research', 330],
-  ['[<span class="ok">  OK  </span>] loading module: responsible_disclosure', 470],
-  ['[<span class="warn"> WARN </span>] 0 unpatched assumptions found in scope', 620],
-  ['[<span class="ok">  OK  </span>] verifying advisory signatures', 780],
-  ['[<span class="ok">  OK  </span>] starting session for <span class="hd">root@fortress</span>', 950],
-  ['<span class="t-dim">welcome, operator.</span>', 1150]
-];
-function endBoot(){
-  if(bootEl.classList.contains("done")) return;
-  bootEl.classList.add("done");
-  bootEl.setAttribute("aria-hidden", "true");
-  setTimeout(() => bootEl.remove(), 600);
-  try{ sessionStorage.setItem("fortress-booted", "1"); }catch(err){}
-}
-let booted = false;
-try{ booted = sessionStorage.getItem("fortress-booted") === "1"; }catch(err){}
-if(booted || reduceMotion){
-  bootEl.remove();
-}else{
-  const lines = document.getElementById("bootLines");
-  BOOT.forEach(([html, delay]) => {
-    setTimeout(() => {
-      const el = document.createElement("span");
-      el.className = "bl";
-      el.innerHTML = html;
-      lines.appendChild(el);
-    }, delay);
-  });
-  setTimeout(endBoot, 1700);
-  document.getElementById("bootSkip").addEventListener("click", endBoot);
-}
-
-const avFrame = document.getElementById("avFrame");
-const avImgs = [...avFrame.querySelectorAll(".av-img")];
-const avDots = document.getElementById("avDots");
-const avCap = document.getElementById("avCap");
-const avIdxEl = document.getElementById("avIdx");
-let avI = 0, avTimer = null;
-
-avImgs.forEach((_, i) => {
-  const b = document.createElement("button");
-  b.type = "button";
-  b.setAttribute("aria-label", "Ảnh " + (i + 1));
-  b.addEventListener("click", () => { showAvatar(i); startAvatar(); });
-  avDots.appendChild(b);
-});
-
-function showAvatar(i){
-  avI = (i + avImgs.length) % avImgs.length;
-  avImgs.forEach((im, k) => im.classList.toggle("on", k === avI));
-  [...avDots.children].forEach((d, k) => d.setAttribute("aria-current", String(k === avI)));
-  avIdxEl.textContent = String(avI + 1).padStart(2, "0");
-  avCap.textContent = t("av.cap" + (avI + 1));
-  if(!reduceMotion){
-    avFrame.classList.remove("glitching");
-    void avFrame.offsetWidth;
-    avFrame.classList.add("glitching");
-  }
-}
-function startAvatar(){
-  clearInterval(avTimer);
-  if(!reduceMotion) avTimer = setInterval(() => showAvatar(avI + 1), 5200);
-}
-showAvatar(0);
-startAvatar();
-
-const termOut = document.getElementById("termOut");
-const termBody = document.getElementById("termBody");
-const termEcho = document.getElementById("termEcho");
-const termInput = document.getElementById("termInput");
-const termHint = document.getElementById("termHint");
-const CMDS = ["help", "whoami", "findings", "cve", "writeup", "contact", "banner", "clear"];
-const HINTS = ["help", "whoami", "findings", "contact"];
-let history = [], histI = -1;
-
-function esc(s){
-  return String(s).replace(/[&<>]/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;"}[c]));
-}
-function termPrint(html, cls){
-  const el = document.createElement("span");
-  el.className = "ln" + (cls ? " " + cls : "");
-  el.innerHTML = html;
-  termOut.appendChild(el);
-  termBody.scrollTop = termBody.scrollHeight;
-}
-function termPair(k, v, pad){
-  return '<span class="t-green">[+]</span> <span class="t-dim">' + esc(k).padEnd(pad, " ").replace(/ /g, "&nbsp;") +
-         ' :</span> <span class="t-txt">' + esc(v) + "</span>";
-}
-function termBanner(){
-  termPrint('<span class="t-red">$</span> <span class="t-txt">./recon --target fortress</span>');
-  termPrint("[*] " + statCounts.find + " findings · " + statCounts.cve + " CVEs · " +
-            statCounts.advisory + " advisory · " + statCounts.bounty + " bounty · " +
-            statCounts.pkg + " projects · " + statCounts.cwe + " CWE classes", "t-dim");
-  termPrint(t("term.welcome"), "t-dim");
-}
-function termRun(raw){
-  const line = raw.trim();
-  termPrint('<span class="t-red">$</span> <span class="t-txt">' + esc(line) + "</span>");
-  if(!line) return;
-  history.unshift(line); histI = -1;
-  const [cmd, ...rest] = line.toLowerCase().split(/\s+/);
-
-  if(cmd === "clear"){ termOut.innerHTML = ""; return; }
-  if(cmd === "banner"){ termBanner(); return; }
-  if(cmd === "help"){
-    termPrint(t("term.help"), "t-gold");
-    t("term.helpList").forEach(([c, d]) => {
-      termPrint('<span class="t-txt">' + c.padEnd(9, " ").replace(/ /g, "&nbsp;") + '</span><span class="t-dim">' + esc(d) + "</span>");
-    });
-    return;
-  }
-  if(cmd === "whoami"){
-    t("term.whoami").forEach(([k, v]) => termPrint(termPair(k, v, 9)));
-    return;
-  }
-  if(cmd === "findings" || cmd === "cve" || cmd === "ls"){
-    termPrint(t("term.cveHead"), "t-gold");
-    document.querySelectorAll("#cve .cve").forEach(c => {
-      const id = c.querySelector(".cve-id").textContent.trim();
-      const pkg = c.querySelector(".pkg").textContent.trim();
-      const sev = c.querySelector(".sev-label").textContent.trim();
-      const val = c.querySelector(".ring .val").textContent.trim();
-      // ID của CVE và của bug bounty đã tự nói lên loại, chỉ advisory mới cần nhãn.
-      let tag = "";
-      if(c.dataset.kind === "advisory") tag = ' <span class="t-dim">[no cve]</span>';
-      termPrint('<span class="t-green">[+]</span> <span class="t-txt">' + esc(id) + '</span>' + tag + ' <span class="t-gold">' +
-                esc(val) + " " + esc(sev) + '</span> <span class="t-dim">' + esc(pkg) + "</span>");
-    });
-    termPrint(t("term.cveTail"), "t-dim");
-    return;
-  }
-  if(cmd === "writeup"){
-    termPrint(t("term.goWriteup"), "t-dim");
-    setTimeout(() => { location.hash = "#/writeup"; }, 500);
-    return;
-  }
-  if(cmd === "contact"){
-    termPrint(t("term.contact"), "t-gold");
-    termPrint(termPair("email", "vophuvinh15012007@gmail.com", 7));
-    termPrint(termPair("github", "github.com/fortress07", 7));
-    termPrint(termPair("fb", "facebook.com/f0r7r355", 7));
-    return;
-  }
-  termPrint('<span class="t-red">' + esc(cmd) + ":</span> " + t("term.notfound"), "t-dim");
-}
-
-termInput.addEventListener("input", () => { termEcho.textContent = termInput.value; });
-termInput.addEventListener("keydown", e => {
-  if(e.key === "Enter"){
-    termRun(termInput.value);
-    termInput.value = ""; termEcho.textContent = "";
-  }else if(e.key === "ArrowUp"){
-    e.preventDefault();
-    if(histI + 1 < history.length){ histI++; termInput.value = history[histI]; termEcho.textContent = termInput.value; }
-  }else if(e.key === "ArrowDown"){
-    e.preventDefault();
-    histI = Math.max(histI - 1, -1);
-    termInput.value = histI < 0 ? "" : history[histI];
-    termEcho.textContent = termInput.value;
-  }else if(e.key === "Tab"){
-    e.preventDefault();
-    const hit = CMDS.find(c => c.startsWith(termInput.value.toLowerCase()) && termInput.value);
-    if(hit){ termInput.value = hit; termEcho.textContent = hit; }
-  }
-});
-termBody.addEventListener("click", () => termInput.focus());
-function buildHints(){
-  termHint.innerHTML = "";
-  const label = document.createElement("span");
-  label.style.cssText = "font-family:var(--mono);font-size:.63rem;color:var(--muted);align-self:center";
-  label.textContent = t("term.hint");
-  termHint.appendChild(label);
-  HINTS.forEach(c => {
-    const b = document.createElement("button");
-    b.type = "button";
-    b.textContent = c;
-    b.addEventListener("click", () => { termRun(c); termInput.focus(); });
-    termHint.appendChild(b);
-  });
-}
-
-const nav = document.getElementById("nav");
-const progress = document.getElementById("progress");
-const links = [...navLinks.querySelectorAll("a")];
-const blob1 = document.getElementById("blob1");
-const blob2 = document.getElementById("blob2");
-let ticking = false;
-
-function onScroll(){
-  const y = scrollY;
-  const max = document.documentElement.scrollHeight - innerHeight;
-  progress.style.width = (max > 0 ? (y / max) * 100 : 0) + "%";
-  nav.classList.toggle("scrolled", y > 20);
-  toTop.classList.toggle("show", y > 480);
-  blob1.style.transform = "translate3d(0," + (y * 0.16) + "px,0)";
-  blob2.style.transform = "translate3d(0," + (y * -0.1) + "px,0)";
-  ticking = false;
-}
-addEventListener("scroll", () => {
-  if(!ticking){ requestAnimationFrame(onScroll); ticking = true; }
-}, {passive:true});
-
-toTop.addEventListener("click", () => scrollTo({top:0, behavior:"smooth"}));
-
-// Nút trong hero cuộn xuống mục bản tin thay vì đổi trang.
-document.querySelectorAll("[data-scroll]").forEach(a => {
-  a.addEventListener("click", e => {
-    e.preventDefault();
-    const target = document.getElementById(a.dataset.scroll);
-    if(target) target.scrollIntoView({behavior: reduceMotion ? "auto" : "smooth"});
-  });
-});
-
-function route(){
-  const name = location.hash.replace(/^#\/?/, "") || "home";
-  const key = document.getElementById("page-" + name) ? name : "home";
-  // Trang chi tiết (#/wu-xxxxx) vẫn sáng mục "Writeup" trên thanh điều hướng.
-  const navKey = key.startsWith("wu-") ? "writeup" : key;
-  document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === "page-" + key));
-  links.forEach(l => l.classList.toggle("active", l.dataset.route === navKey));
-  // Reveal lại các phần tử của trang vừa mở (IntersectionObserver đã unobserve chúng).
-  document.querySelectorAll(".page.active .reveal, .page.active h2").forEach(el => el.classList.add("show"));
-  document.querySelectorAll(".page.active [data-count]").forEach(runCounter);
-  document.querySelectorAll(".page.active .ring").forEach(r => r.style.setProperty("--p", r.dataset.p));
-  scrollTo(0, 0);
-}
-addEventListener("hashchange", route);
-
-applyLang();
-route();
-onScroll();
-</script>
+<script src="app.js"></script>
 </body>
 </html>
